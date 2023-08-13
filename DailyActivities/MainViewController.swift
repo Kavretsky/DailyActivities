@@ -27,22 +27,25 @@ class MainViewController: UIViewController {
     
     private func setupUI() {
         view.addSubview(newActivityView)
-        NSLayoutConstraint.activate([
-            newActivityView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            newActivityView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-//            newActivityView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            newActivityView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+//        NSLayoutConstraint.activate([
+//            newActivityView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+//            newActivityView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+////            newActivityView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            newActivityView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+//        ])
         newActivityView.updateConstraints()
     }
     
     override func viewWillLayoutSubviews() {
         newActivityView.setupUI()
         NSLayoutConstraint.activate([
-            newActivityView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            newActivityView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            newActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//            newActivityView.heightAnchor.constraint(greaterThanOrEqualToConstant: 60)
 //            newActivityView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            newActivityView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+//            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: view.safeAreaInsets.bottom),
+//            newActivityView.heightAnchor.constraint(equalToConstant: 140)
         ])
         newActivityView.updateConstraints()
         

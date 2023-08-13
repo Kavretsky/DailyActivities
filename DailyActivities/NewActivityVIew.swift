@@ -41,12 +41,14 @@ class NewActivityVIew: UIView {
         newActivitySV.addArrangedSubview(controlsHStack)
         newActivitySV.addArrangedSubview(newActivityButton)
         self.addSubview(newActivitySV)
+        newActivitySV.alignment = .center
         newActivitySV.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            newActivitySV.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
-            newActivitySV.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
-            newActivitySV.bottomAnchor.constraint(equalTo: bottomAnchor),
-            newActivitySV.topAnchor.constraint(equalTo: topAnchor)
+            newActivitySV.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 15),
+            newActivitySV.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -15),
+            newActivitySV.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            newActivitySV.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+//            controlsHStack.heightAnchor.constraint(equalToConstant: 60)
         ])
         newActivitySV.backgroundColor = .tertiarySystemGroupedBackground
         newActivitySV.spacing = 12
@@ -59,7 +61,7 @@ class NewActivityVIew: UIView {
     
     func setupNewActivityButton() {
         newActivityButton.backgroundColor = UIColor.systemBlue
-        let plusSymbolConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .bold)
+        let plusSymbolConfig = UIImage.SymbolConfiguration(pointSize: 26, weight: .medium)
         let plusSymbolImage = UIImage(systemName: "plus", withConfiguration: plusSymbolConfig)?.withTintColor(UIColor.white)
         newActivityButton.setImage(plusSymbolImage, for: .normal)
         newActivityButton.layer.cornerRadius = newActivityButton.frame.size.width / 2
@@ -67,7 +69,9 @@ class NewActivityVIew: UIView {
         newActivityButton.clipsToBounds = true
         newActivityButton.addTarget(self, action: #selector(newActivityButtonTapped), for: .touchUpInside)
         newActivityButton.tintColor = .white
-        newActivityButton.widthAnchor.constraint(equalToConstant: 38).isActive = true
+        newActivityButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        newActivityButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        
     }
     
     @objc func newActivityButtonTapped() {
@@ -83,7 +87,7 @@ class NewActivityVIew: UIView {
         typeChangeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             typeChangeButton.heightAnchor.constraint(equalToConstant: 38),
-            typeChangeButton.widthAnchor.constraint(equalToConstant: 45)
+            typeChangeButton.widthAnchor.constraint(equalToConstant: 42)
         ])
         typeChangeButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         
@@ -117,7 +121,7 @@ class NewActivityVIew: UIView {
 //        controlsHStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15).isActive = true
 //        controlsHStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 15).isActive = true
 //        controlsHStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-//        controlsHStack.heightAnchor.constraint(equalToConstant: 38).isActive = true
+        
         controlsHStack.spacing = 6
         let maskView = UIView()
         maskView.backgroundColor = .black
