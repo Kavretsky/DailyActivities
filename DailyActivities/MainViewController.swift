@@ -33,12 +33,6 @@ class MainViewController: UIViewController {
     
     private func setupUI() {
         view.addSubview(newActivityView)
-//        NSLayoutConstraint.activate([
-//            newActivityView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//            newActivityView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-////            newActivityView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            newActivityView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-//        ])
         newActivityView.updateConstraints()
     }
     
@@ -48,8 +42,7 @@ class MainViewController: UIViewController {
             newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
-            newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
+//            newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
 //            newActivityView.heightAnchor.constraint(greaterThanOrEqualToConstant: 60)
 //            newActivityView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 //            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: view.safeAreaInsets.bottom),
@@ -61,7 +54,7 @@ class MainViewController: UIViewController {
 
 
     override func viewWillAppear(_ animated: Bool) {
-        self.view.backgroundColor = .cyan
+        self.view.backgroundColor = .white
     }
     
     
