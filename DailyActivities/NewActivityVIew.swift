@@ -20,11 +20,12 @@ class NewActivityVIew: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        setupUI()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupUI()
     }
     
     func setupUI() {
@@ -44,14 +45,16 @@ class NewActivityVIew: UIView {
         newActivitySV.alignment = .center
         newActivitySV.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            newActivitySV.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 15),
-            newActivitySV.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -15),
-            newActivitySV.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            newActivitySV.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            newActivitySV.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            newActivitySV.bottomAnchor.constraint(lessThanOrEqualTo: keyboardLayoutGuide.topAnchor, constant: -8),
+            newActivitySV.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor, constant: -8),
             newActivitySV.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            newActivitySV.heightAnchor.constraint(equalToConstant: 38),
+            newActivitySV.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -8)
 //            controlsHStack.heightAnchor.constraint(equalToConstant: 60)
         ])
-        newActivitySV.backgroundColor = .tertiarySystemGroupedBackground
-        newActivitySV.spacing = 12
+        newActivitySV.spacing = 8
 //        NSLayoutConstraint.activate([
 //            controlsHStack.leadingAnchor.constraint(equalTo: newActivitySV.leadingAnchor, constant: 15),
 //            newActivityButton.trailingAnchor.constraint(equalTo: newActivitySV.trailingAnchor, constant: 15)
@@ -114,7 +117,6 @@ class NewActivityVIew: UIView {
         controlsHStack.addArrangedSubview(typeChangeButton)
         controlsHStack.addArrangedSubview(descriptionTF)
         controlsHStack.axis = .horizontal
-//        controlsHStack.distribution = .fill
         controlsHStack.alignment = .center
         controlsHStack.backgroundColor = .white
         

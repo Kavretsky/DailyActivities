@@ -23,7 +23,13 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
     }
+    
+    @objc private func dismissKeyboard() {
+            view.endEditing(true) // Этот метод скрывает клавиатуру
+        }
     
     private func setupUI() {
         view.addSubview(newActivityView)
@@ -37,11 +43,13 @@ class MainViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
-        newActivityView.setupUI()
         NSLayoutConstraint.activate([
             newActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
+            newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
 //            newActivityView.heightAnchor.constraint(greaterThanOrEqualToConstant: 60)
 //            newActivityView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 //            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: view.safeAreaInsets.bottom),
