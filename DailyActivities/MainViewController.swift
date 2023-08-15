@@ -9,15 +9,8 @@ import UIKit
 
 class MainViewController: UIViewController {
     
-//    private var typeChangeButton: UIButton = UIButton(type: .custom)
-//    private var descriptionTF: UITextField = UITextField()
-//    private var controlsHStack: UIStackView = UIStackView()
-//    private var newActivityButton = UIButton()
-//    private var newActivitySV = UIStackView()
     
     private var newActivityView = NewActivityVIew()
-    
-    var activityType: ActivityType = ActivityType.sample()
     
 
     override func viewDidLoad() {
@@ -59,14 +52,4 @@ class MainViewController: UIViewController {
     
     
 
-}
-
-struct ActivityType {
-    var emoji: String
-    var color: UIColor
-    var description: String
-    
-    static func sample() -> ActivityType {
-        ActivityType(emoji: "🪿", color: .magenta, description: "Goose activity")
-    }
 }
