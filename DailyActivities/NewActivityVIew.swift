@@ -125,6 +125,7 @@ final class NewActivityVIew: UIView {
         rollAnimation.type = .push
         rollAnimation.subtype = .fromTop
         rollAnimation.duration = 0.3
+        rollAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         
         typeButton.layer.add(rollAnimation, forKey: nil)
         if !descriptionTF.hasText {

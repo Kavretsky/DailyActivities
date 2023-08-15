@@ -10,6 +10,7 @@
 		760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE732A8BFF55000C8776 /* TypeStore.swift */; };
 		760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE752A8BFF73000C8776 /* ActivityType.swift */; };
 		760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */; };
+		760EFE7A2A8C13D6000C8776 /* TypeManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE792A8C13D6000C8776 /* TypeManagerViewController.swift */; };
 		7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5C82A86B461003F75ED /* AppDelegate.swift */; };
 		7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5CA2A86B461003F75ED /* SceneDelegate.swift */; };
 		7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5CC2A86B461003F75ED /* MainViewController.swift */; };
@@ -22,6 +23,7 @@
 		760EFE732A8BFF55000C8776 /* TypeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeStore.swift; sourceTree = "<group>"; };
 		760EFE752A8BFF73000C8776 /* ActivityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityType.swift; sourceTree = "<group>"; };
 		760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityExtensions.swift; sourceTree = "<group>"; };
+		760EFE792A8C13D6000C8776 /* TypeManagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerViewController.swift; sourceTree = "<group>"; };
 		7669F5C52A86B461003F75ED /* DailyActivities.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyActivities.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7669F5C82A86B461003F75ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7669F5CA2A86B461003F75ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,10 +67,11 @@
 				7669F5C82A86B461003F75ED /* AppDelegate.swift */,
 				7669F5CA2A86B461003F75ED /* SceneDelegate.swift */,
 				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
+				7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */,
 				760EFE732A8BFF55000C8776 /* TypeStore.swift */,
 				760EFE752A8BFF73000C8776 /* ActivityType.swift */,
 				760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */,
-				7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */,
+				760EFE792A8C13D6000C8776 /* TypeManagerViewController.swift */,
 				7669F5D12A86B462003F75ED /* Assets.xcassets */,
 				7669F5D32A86B462003F75ED /* LaunchScreen.storyboard */,
 				7669F5D62A86B462003F75ED /* Info.plist */,
@@ -152,6 +155,7 @@
 				760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */,
 				7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */,
 				760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */,
+				760EFE7A2A8C13D6000C8776 /* TypeManagerViewController.swift in Sources */,
 				760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
