@@ -98,7 +98,7 @@ final class NewActivityVIew: UIView {
         typeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             typeButtonBackground.heightAnchor.constraint(equalToConstant: 38),
-            typeButtonBackground.widthAnchor.constraint(equalToConstant: 42),
+            typeButtonBackground.widthAnchor.constraint(equalToConstant: 45),
             typeButton.leadingAnchor.constraint(equalTo: typeButtonBackground.leadingAnchor),
             typeButton.trailingAnchor.constraint(equalTo: typeButtonBackground.trailingAnchor),
             typeButton.topAnchor.constraint(equalTo: typeButtonBackground.topAnchor),
@@ -109,8 +109,10 @@ final class NewActivityVIew: UIView {
         typeButton.titleLabel?.font = .boldSystemFont(ofSize: 22)
         
         typeButton.addTarget(self, action: #selector(typeButtonTapped), for: .touchUpInside)
+        
+        let interaction = UIContextMenuInteraction(delegate: self)
+        typeButtonBackground.addInteraction(interaction)
     }
-    
     
     
     @objc private func typeButtonTapped() {
@@ -128,8 +130,8 @@ final class NewActivityVIew: UIView {
         if !descriptionTF.hasText {
             descriptionTF.layer.add(rollAnimation, forKey: nil)
         }
-        descriptionTF.placeholder = chosenType.description
         typeButton.setTitle(chosenType.emoji, for: .normal)
+        descriptionTF.placeholder = chosenType.description
         
         UIView.animate(withDuration: 0.3) {
             self.typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
@@ -184,4 +186,44 @@ final class NewActivityVIew: UIView {
     }
 
 
+}
+
+extension NewActivityVIew: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil,
+            actionProvider:
+                {  _ in
+                    
+                    let managerAction = UIAction(
+                        title: NSLocalizedString("Type Manager", comment: ""),
+                        image: UIImage(systemName: "slider.vertical.3")
+                    ) { action in
+                        print("open type manager")
+                    }
+                    
+                    var typeSelectionActions = [UIAction]()
+                    self.typeStore.activeTypes.forEach { [weak self] type in
+                        guard let self else { return }
+                        let action = UIAction(title: type.emoji + " " + type.description,
+                                              image: type == self.chosenType ? UIImage(systemName: "checkmark") : nil
+                        ) { [weak self]  _ in
+                            guard let self else { return }
+                            self.chosenIndex = self.typeStore.activeTypes.firstIndex(of: type) ?? 0
+                            self.animateTypeChange()
+                        }
+                        typeSelectionActions.append(action)
+                    }
+                    
+                    let goToMenu = UIMenu(title: "Go to", children: typeSelectionActions)
+                    
+                    
+                    
+                    
+                    return UIMenu(title: "", children: [managerAction, goToMenu])
+                })
+    }
+    
+    
 }
