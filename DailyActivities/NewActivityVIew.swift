@@ -30,6 +30,7 @@ final class NewActivityVIew: UIView {
     
     func setupUI() {
         self.translatesAutoresizingMaskIntoConstraints = false
+        setupDivider()
         setupTypeButton()
         setupTextField()
         setupNewActivityButton()
@@ -123,6 +124,19 @@ final class NewActivityVIew: UIView {
         formHStack.backgroundColor = .white
         formHStack.spacing = 6
         formHStack.layer.cornerRadius = 19
+    }
+    
+    func setupDivider() {
+        let divider = UIView()
+        divider.backgroundColor = UIColor(red: 227/255, green: 227/255, blue: 233/255, alpha: 1.0)
+        self.addSubview(divider)
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            divider.topAnchor.constraint(equalTo: topAnchor),
+            divider.leadingAnchor.constraint(equalTo: leadingAnchor),
+            divider.trailingAnchor.constraint(equalTo: trailingAnchor),
+            divider.heightAnchor.constraint(equalToConstant: 1)
+        ])
     }
 
 
