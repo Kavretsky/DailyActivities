@@ -11,7 +11,9 @@ class TypeManagerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .white
+        title = "Type manager"
+        self.navigationItem.title = "Type manager"
         // Do any additional setup after loading the view.
     }
     

@@ -9,19 +9,30 @@ import UIKit
 
 class MainViewController: UIViewController {
     
+    private let typeStore: TypeStore
+    private let newActivityView: NewActivityView
     
-    private var newActivityView = NewActivityVIew()
+    init(typeStore: TypeStore) {
+        self.typeStore = typeStore
+        newActivityView = NewActivityView(typeStore: self.typeStore)
+        super.init(nibName: nil, bundle: nil)
+    }
     
-
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        newActivityView.delegate = self
+        title = "Today"
     }
     
     @objc private func dismissKeyboard() {
-            view.endEditing(true) // Этот метод скрывает клавиатуру
+            view.endEditing(true)
         }
     
     private func setupUI() {
@@ -50,6 +61,15 @@ class MainViewController: UIViewController {
         self.view.backgroundColor = .white
     }
     
-    
+}
 
+extension MainViewController: NewActivityViewDelegate {
+    func showTypeManager() {
+        let typeManagerVC = TypeManagerViewController()
+        let typeManagerNC = UINavigationController(rootViewController: typeManagerVC)
+        typeManagerVC.title = "Type manager"
+        self.present(typeManagerNC, animated: true)
+    }
+    
+    
 }

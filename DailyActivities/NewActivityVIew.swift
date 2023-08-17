@@ -7,13 +7,19 @@
 
 import UIKit
 
-final class NewActivityVIew: UIView {
+protocol NewActivityViewDelegate: AnyObject {
+    func showTypeManager()
+}
+
+final class NewActivityView: UIView {
     
-    private let typeStore = TypeStore()
+    private let typeStore: TypeStore
     private var chosenIndex = 0
     private var chosenType: ActivityType {
         typeStore.activeTypes[chosenIndex]
     }
+    
+    weak var delegate: NewActivityViewDelegate?
 
     private var typeButton: UIButton = UIButton(type: .custom)
     private var typeButtonBackground = UIView()
@@ -22,16 +28,14 @@ final class NewActivityVIew: UIView {
     private var newActivityButton = UIButton()
     private var newActivitySV = UIStackView()
     
-    
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(typeStore: TypeStore) {
+        self.typeStore = typeStore
+        super.init(frame: .null)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func setupUI() {
@@ -189,23 +193,23 @@ final class NewActivityVIew: UIView {
 
 }
 
-extension NewActivityVIew: UIContextMenuInteractionDelegate {
+extension NewActivityView: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(
             identifier: nil,
             previewProvider: nil,
             actionProvider:
-                {  _ in
+                { [weak self] _ in
                     
                     let managerAction = UIAction(
                         title: NSLocalizedString("Type Manager", comment: ""),
                         image: UIImage(systemName: "slider.vertical.3")
-                    ) { action in
-                        print("open type manager")
+                    ) { [weak self] action in
+                        self?.delegate?.showTypeManager()
                     }
                     
                     var typeSelectionActions = [UIAction]()
-                    self.typeStore.activeTypes.forEach { [weak self] type in
+                    self?.typeStore.activeTypes.forEach { [weak self] type in
                         guard let self else { return }
                         let action = UIAction(title: type.emoji + " " + type.description,
                                               image: type == self.chosenType ? UIImage(systemName: "checkmark") : nil
@@ -225,6 +229,4 @@ extension NewActivityVIew: UIContextMenuInteractionDelegate {
                     return UIMenu(title: "", children: [managerAction, goToMenu])
                 })
     }
-    
-    
 }
