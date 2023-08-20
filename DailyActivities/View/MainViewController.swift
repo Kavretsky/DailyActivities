@@ -12,6 +12,8 @@ class MainViewController: UIViewController {
     private let typeStore: TypeStore
     private let newActivityView: NewActivityView
     
+    let label = UILabel()
+    
     init(typeStore: TypeStore) {
         self.typeStore = typeStore
         newActivityView = NewActivityView(typeStore: self.typeStore)
@@ -29,6 +31,11 @@ class MainViewController: UIViewController {
         view.addGestureRecognizer(tap)
         newActivityView.delegate = self
         title = "Today"
+        
+        label.text = "init(coder:) has not been implemented"
+        label.numberOfLines = 0
+        view.addSubview(label)
+        
     }
     
     @objc private func dismissKeyboard() {
@@ -54,6 +61,13 @@ class MainViewController: UIViewController {
         ])
         newActivityView.updateConstraints()
         
+        
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            label.heightAnchor.constraint(equalToConstant: 40),
+            label.widthAnchor.constraint(equalToConstant:  60)
+        ])
     }
 
 
@@ -65,7 +79,7 @@ class MainViewController: UIViewController {
 
 extension MainViewController: NewActivityViewDelegate {
     func showTypeManager() {
-        let typeManagerVC = TypeManagerViewController()
+        let typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
         let typeManagerNC = UINavigationController(rootViewController: typeManagerVC)
         typeManagerVC.title = "Type manager"
         self.present(typeManagerNC, animated: true)
