@@ -30,9 +30,7 @@ final class TypeManagerTableViewController: UITableViewController {
         tableView.dataSource = self
         tableView.delegate = self
         view.backgroundColor = .secondarySystemBackground
-        tableView.rowHeight = UITableView.automaticDimension
-//        tableView.estimatedRowHeight = 100
-        // Do any additional setup after loading the view.
+//        tableView.rowHeight = UITableView.automaticDimension
     }
     
 
@@ -49,10 +47,17 @@ final class TypeManagerTableViewController: UITableViewController {
 
         let index = indexPath.row
         cell.type = typeStore.activeTypes[index]
+        cell.accessoryType = .disclosureIndicator
 //        cell.label.text = typeStore.activeTypes[index].description
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let index = indexPath.row
+        let activityType = typeStore.activeTypes[index]
+        let typeEditVC = TypeEditorViewController(activityType: activityType)
+        self.navigationController?.pushViewController(typeEditVC, animated: true)
+    }
 
 }
 

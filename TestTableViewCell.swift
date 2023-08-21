@@ -29,7 +29,6 @@ class TestTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        label.text = "mlksmfksdmkl msklfm ksm km klfsm klsdmf klm klmsdlkm lksdm klmd lkm"
 
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
@@ -55,11 +54,6 @@ class TestTableViewCell: UITableViewCell {
             
             emojiBGView.heightAnchor.constraint(equalToConstant: 38),
             emojiBGView.widthAnchor.constraint(equalToConstant: 44),
-//            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-//            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-//            label.topAnchor.constraint(equalTo: contentView.topAnchor),
-//            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-//            label.heightAnchor.constraint(greaterThanOrEqualToConstant: 60),
         ])
     }
 

@@ -55,28 +55,22 @@ class TypeManagerTableViewCell: UITableViewCell {
         cellStack.addArrangedSubview(typeDescription)
         
         contentView.addSubview(cellStack)
-        layoutIfNeeded()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
         NSLayoutConstraint.activate([
             emojiBGView.heightAnchor.constraint(equalToConstant: 38),
             emojiBGView.widthAnchor.constraint(equalToConstant: 41),
             
             emoji.centerXAnchor.constraint(equalTo: emojiBGView.centerXAnchor),
             emoji.centerYAnchor.constraint(equalTo: emojiBGView.centerYAnchor),
-            
+
             cellStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             cellStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             cellStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             cellStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
         ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 }

@@ -12,7 +12,7 @@ class MainViewController: UIViewController {
     private let typeStore: TypeStore
     private let newActivityView: NewActivityView
     
-    let label = UILabel()
+
     
     init(typeStore: TypeStore) {
         self.typeStore = typeStore
@@ -32,9 +32,9 @@ class MainViewController: UIViewController {
         newActivityView.delegate = self
         title = "Today"
         
-        label.text = "init(coder:) has not been implemented"
-        label.numberOfLines = 0
-        view.addSubview(label)
+        
+    
+    
         
     }
     
@@ -53,21 +53,9 @@ class MainViewController: UIViewController {
             newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
-//            newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
-//            newActivityView.heightAnchor.constraint(greaterThanOrEqualToConstant: 60)
-//            newActivityView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: view.safeAreaInsets.bottom),
-//            newActivityView.heightAnchor.constraint(equalToConstant: 140)
         ])
-        newActivityView.updateConstraints()
         
-        
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            label.heightAnchor.constraint(equalToConstant: 40),
-            label.widthAnchor.constraint(equalToConstant:  60)
-        ])
+
     }
 
 

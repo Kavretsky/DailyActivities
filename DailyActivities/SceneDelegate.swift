@@ -18,7 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         let typeStore = TypeStore()
         let mainVC = MainViewController(typeStore: typeStore)
-        let navigationVC = UINavigationController(rootViewController: mainVC)
+        let testVC = TypeManagerTableViewController(typeStore: typeStore)
+        let navigationVC = UINavigationController(rootViewController: testVC)
         window.rootViewController = navigationVC
         window.makeKeyAndVisible()
         
