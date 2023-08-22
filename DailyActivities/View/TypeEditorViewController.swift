@@ -7,14 +7,36 @@
 
 import UIKit
 
+protocol TypeEditorViewControllerDelegate: AnyObject {
+    func deleteType(type: ActivityType)
+    func updateType(type: ActivityType, with data: ActivityType.Data)
+}
+
+//class EmojiTextField: UITextField {
+//    override var textInputMode: UITextInputMode? {
+//        .activeInputModes.first(where: { $0.primaryLanguage == "emoji" })
+//    }
+//}
+
 class TypeEditorViewController: UIViewController {
     
-    let activityType: ActivityType
+    let typeToEdit: ActivityType
+    
+    private var typeData: ActivityType.Data
+    {
+        didSet{
+            delegate?.updateType(type: typeToEdit, with: typeData)
+            emojiTF.text = typeData.emoji
+        }
+    }
+    
+    weak var delegate: TypeEditorViewControllerDelegate?
     
     let emojiTF: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.cornerRadius = 28
+        textField.clipsToBounds = true
         textField.textAlignment = .center
         textField.font = .systemFont(ofSize: 22)
         textField.heightAnchor.constraint(equalToConstant: 56).isActive = true
@@ -27,7 +49,7 @@ class TypeEditorViewController: UIViewController {
         descriptionTF.translatesAutoresizingMaskIntoConstraints = false
         descriptionTF.layer.cornerRadius = 10
         descriptionTF.placeholder = NSLocalizedString("Type description", comment: "Type description")
-        descriptionTF.heightAnchor.constraint(greaterThanOrEqualToConstant: 56).isActive = true
+        descriptionTF.heightAnchor.constraint(equalToConstant: 56).isActive = true
         
         descriptionTF.backgroundColor = .white
         descriptionTF.textAlignment = .center
@@ -52,14 +74,24 @@ class TypeEditorViewController: UIViewController {
         return colorPickerSection
     }()
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
     private let colorPicker = UIColorPickerViewController()
     
     init(activityType: ActivityType) {
-        self.activityType = activityType
+        self.typeToEdit = activityType
+        self.typeData = activityType.data
         super.init(nibName: nil, bundle: nil)
         self.emojiTF.text = activityType.emoji
         self.descriptionTF.text = activityType.description
         self.colorPickerSection.color = UIColor(rgbaColor: activityType.backgroundRGBA)
+        self.colorPickerSection.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -68,39 +100,71 @@ class TypeEditorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGroupedBackground
         colorPicker.delegate = self
         colorPicker.supportsAlpha = false
-        colorPicker.selectedColor = UIColor(rgbaColor: activityType.backgroundRGBA)
+        colorPicker.selectedColor = UIColor(rgbaColor: typeToEdit.backgroundRGBA)
         let tap = UITapGestureRecognizer(target: self, action: #selector(presentColorPicker))
         colorPickerSection.addGestureRecognizer(tap)
+        
+        descriptionTF.delegate = self
+        emojiTF.delegate = self
+        
         setupUI()
     }
     
 
     private func setupUI() {
+        view.backgroundColor = .systemGroupedBackground
         setupEmojiTF()
         setupDescriptionTF()
         
         stack.addArrangedSubview(emojiTF)
         stack.addArrangedSubview(descriptionTF)
         stack.addArrangedSubview(colorPickerSection)
-        view.addSubview(stack)
+        scrollView.addSubview(stack)
+        view.addSubview(scrollView)
         
+        setupConstraints()
+        
+       
+        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
-            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
+            
+            
+            stack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 15),
+            stack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -15),
+            stack.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
+            stack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20),
+            stack.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -30),
+            
             descriptionTF.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
             descriptionTF.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
             colorPickerSection.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
             colorPickerSection.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
             colorPickerSection.heightAnchor.constraint(equalToConstant: 56),
+            
+            
+//            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+//            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
+//            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+//            descriptionTF.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
+//            descriptionTF.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
+//            colorPickerSection.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
+//            colorPickerSection.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
+//            colorPickerSection.heightAnchor.constraint(equalToConstant: 56),
+//            stack.bottomAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor)
         ])
     }
     
     private func setupEmojiTF() {
-        emojiTF.backgroundColor = UIColor(rgbaColor: activityType.backgroundRGBA)
+        emojiTF.backgroundColor = UIColor(rgbaColor: typeToEdit.backgroundRGBA)
         
     }
     
@@ -118,5 +182,32 @@ extension TypeEditorViewController: UIColorPickerViewControllerDelegate {
         colorPickerSection.color = color
         emojiTF.backgroundColor = colorPickerSection.color
     }
+    
+}
+
+extension TypeEditorViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == descriptionTF {
+            typeData.description = textField.text ?? "Type Description"
+        }
+        if textField == emojiTF {
+            typeData.emoji = textField.text ?? ""
+        }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard textField == emojiTF else { return true }
+        guard !string.isEmpty else { return false }
+        typeData.emoji = string
+        textField.text = ""
+        return true
+    }
+}
+
+extension TypeEditorViewController: ColorPickerSectionDelegate {
+    func updateColor(color: UIColor) {
+        typeData.backgroundRGBA = RGBAColor(color: color)
+    }
+    
     
 }

@@ -7,12 +7,19 @@
 
 import UIKit
 
+protocol ColorPickerSectionDelegate: AnyObject {
+    func updateColor(color: UIColor)
+}
+
 class ColorPickerSection: UIView {
+    
+    weak var delegate: ColorPickerSectionDelegate?
     
     var color: UIColor
     {
         willSet {
             colorCircle.backgroundColor = newValue
+            delegate?.updateColor(color: newValue)
         }
     }
     

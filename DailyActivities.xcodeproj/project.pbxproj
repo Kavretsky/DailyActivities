@@ -20,6 +20,7 @@
 		767B106E2A927D3100E55ED8 /* TestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B106D2A927D3100E55ED8 /* TestTableViewCell.swift */; };
 		767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */; };
 		767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */; };
+		767B10742A9541FB00E55ED8 /* EmojiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10732A9541FB00E55ED8 /* EmojiTextField.swift */; };
 		768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +40,7 @@
 		767B106D2A927D3100E55ED8 /* TestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewCell.swift; sourceTree = "<group>"; };
 		767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeEditorViewController.swift; sourceTree = "<group>"; };
 		767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSection.swift; sourceTree = "<group>"; };
+		767B10732A9541FB00E55ED8 /* EmojiTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTextField.swift; sourceTree = "<group>"; };
 		768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,6 +78,7 @@
 				768A1AEB2A914CFC008C4CAC /* Model */,
 				768A1AE72A914CB5008C4CAC /* ViewModel */,
 				768A1AEA2A914CDF008C4CAC /* View */,
+				767B10732A9541FB00E55ED8 /* EmojiTextField.swift */,
 				7669F5C82A86B461003F75ED /* AppDelegate.swift */,
 				7669F5CA2A86B461003F75ED /* SceneDelegate.swift */,
 				760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */,
@@ -186,6 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */,
+				767B10742A9541FB00E55ED8 /* EmojiTextField.swift in Sources */,
 				7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */,
 				7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */,
 				7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */,

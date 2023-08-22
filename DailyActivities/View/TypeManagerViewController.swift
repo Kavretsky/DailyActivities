@@ -56,9 +56,28 @@ final class TypeManagerTableViewController: UITableViewController {
         let index = indexPath.row
         let activityType = typeStore.activeTypes[index]
         let typeEditVC = TypeEditorViewController(activityType: activityType)
+        typeEditVC.delegate = self
         self.navigationController?.pushViewController(typeEditVC, animated: true)
     }
 
+}
+
+extension TypeManagerTableViewController: TypeEditorViewControllerDelegate {
+    func deleteType(type: ActivityType) {
+        typeStore.removeType(type)
+        tableView.reloadData()
+    }
+    
+    func updateType(type: ActivityType, with data: ActivityType.Data) {
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            self?.typeStore.updateType(type, with: data)
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    
 }
 
 
