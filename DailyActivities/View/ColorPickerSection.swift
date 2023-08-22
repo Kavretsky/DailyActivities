@@ -9,7 +9,12 @@ import UIKit
 
 class ColorPickerSection: UIView {
     
-    private var color: UIColor
+    var color: UIColor
+    {
+        willSet {
+            colorCircle.backgroundColor = newValue
+        }
+    }
     
     private let stack: UIStackView = {
         let stack = UIStackView()
@@ -19,22 +24,22 @@ class ColorPickerSection: UIView {
         
         let label = UILabel()
         label.text = NSLocalizedString("Color", comment: "Type color pick section on TypeEdit screen")
-        label.font = .systemFont(ofSize: 17)
+        label.font = .boldSystemFont(ofSize: 17)
         stack.addArrangedSubview(label)
         return stack
     }()
     
-    private let colorPicker: UIView = {
+    private let gradientCircle: UIView = {
         let backgroundView = UIView()
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.layer.cornerRadius = 16
-//        backgroundView.backgroundColor = UIColor.clear
+        backgroundView.clipsToBounds = true
+
         let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = .init(origin: .zero, size: .init(width: 32, height: 32))
         gradientLayer.type = .conic
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        
-        let lit = #colorLiteral(red: 0.3254901961, green: 0.01176470611, blue: 0.1921568662, alpha: 1)
         
         let gradientColors = [
             UIColor(red: 0.83, green: 0.33, blue: 0.34, alpha: 1),
@@ -45,15 +50,44 @@ class ColorPickerSection: UIView {
             ]
         
         gradientLayer.colors = gradientColors.map { $0.cgColor }
-        backgroundView.layer.addSublayer(gradientLayer)
         
-//        gradientLayer.frame = backgroundView.bounds
+        
+        backgroundView.layer.addSublayer(gradientLayer)
+    
+        NSLayoutConstraint.activate([
+            backgroundView.heightAnchor.constraint(equalToConstant: 32),
+            backgroundView.widthAnchor.constraint(equalToConstant: 32),
+        ])
         
         return backgroundView
     }()
     
+    private let whiteCircle: UIView = {
+        let whiteCircle = UIView()
+        whiteCircle.layer.cornerRadius = 13
+        whiteCircle.backgroundColor = .white
+        whiteCircle.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            whiteCircle.heightAnchor.constraint(equalToConstant: 26),
+            whiteCircle.widthAnchor.constraint(equalToConstant: 26),
+        ])
+        return whiteCircle
+    }()
+    
+    private let colorCircle: UIView = {
+        let colorCircle = UIView()
+        colorCircle.translatesAutoresizingMaskIntoConstraints = false
+        colorCircle.layer.cornerRadius = 11.5
+        NSLayoutConstraint.activate([
+            colorCircle.heightAnchor.constraint(equalToConstant: 21),
+            colorCircle.widthAnchor.constraint(equalToConstant: 21),
+        ])
+        return colorCircle
+    }()
+    
     init(color: UIColor) {
         self.color = color
+        colorCircle.backgroundColor = color
         super.init(frame: .null)
         setupUI()
     }
@@ -64,7 +98,9 @@ class ColorPickerSection: UIView {
     
     private func setupUI() {
         self.layer.cornerRadius = 10
-        stack.addArrangedSubview(colorPicker)
+        gradientCircle.addSubview(whiteCircle)
+        gradientCircle.addSubview(colorCircle)
+        stack.addArrangedSubview(gradientCircle)
         
         self.addSubview(stack)
         NSLayoutConstraint.activate([
@@ -72,17 +108,13 @@ class ColorPickerSection: UIView {
             stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
             stack.topAnchor.constraint(equalTo: topAnchor),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            colorPicker.heightAnchor.constraint(equalToConstant: 32),
-            colorPicker.widthAnchor.constraint(equalToConstant: 32),
+            gradientCircle.heightAnchor.constraint(equalToConstant: 32),
+            gradientCircle.widthAnchor.constraint(equalToConstant: 32),
+            whiteCircle.centerXAnchor.constraint(equalTo: gradientCircle.centerXAnchor),
+            whiteCircle.centerYAnchor.constraint(equalTo: gradientCircle.centerYAnchor),
+            colorCircle.centerXAnchor.constraint(equalTo: gradientCircle.centerXAnchor),
+            colorCircle.centerYAnchor.constraint(equalTo: gradientCircle.centerYAnchor),
         ])
     }
-    
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
 
 }

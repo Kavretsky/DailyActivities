@@ -52,12 +52,14 @@ class TypeEditorViewController: UIViewController {
         return colorPickerSection
     }()
     
+    private let colorPicker = UIColorPickerViewController()
+    
     init(activityType: ActivityType) {
         self.activityType = activityType
-        
         super.init(nibName: nil, bundle: nil)
         self.emojiTF.text = activityType.emoji
         self.descriptionTF.text = activityType.description
+        self.colorPickerSection.color = UIColor(rgbaColor: activityType.backgroundRGBA)
     }
     
     required init?(coder: NSCoder) {
@@ -67,6 +69,11 @@ class TypeEditorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
+        colorPicker.delegate = self
+        colorPicker.supportsAlpha = false
+        colorPicker.selectedColor = UIColor(rgbaColor: activityType.backgroundRGBA)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(presentColorPicker))
+        colorPickerSection.addGestureRecognizer(tap)
         setupUI()
     }
     
@@ -77,14 +84,19 @@ class TypeEditorViewController: UIViewController {
         
         stack.addArrangedSubview(emojiTF)
         stack.addArrangedSubview(descriptionTF)
-//        stack.addArrangedSubview(colorPickerSection)
+        stack.addArrangedSubview(colorPickerSection)
         view.addSubview(stack)
         
-//        NSLayoutConstraint.activate([
-//            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-//            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 15),
-//            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-//        ])
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            descriptionTF.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
+            descriptionTF.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
+            colorPickerSection.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
+            colorPickerSection.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
+            colorPickerSection.heightAnchor.constraint(equalToConstant: 56),
+        ])
     }
     
     private func setupEmojiTF() {
@@ -95,18 +107,16 @@ class TypeEditorViewController: UIViewController {
     private func setupDescriptionTF() {
         descriptionTF.backgroundColor = .white
     }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
-            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            descriptionTF.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
-            descriptionTF.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
-//            colorPickerSection.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
-//            colorPickerSection.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
-//            colorPickerSection.heightAnchor.constraint(equalToConstant: 56),
-        ])
+
+    @objc private func presentColorPicker() {
+        self.present(colorPicker, animated: true)
     }
+}
+
+extension TypeEditorViewController: UIColorPickerViewControllerDelegate {
+    func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
+        colorPickerSection.color = color
+        emojiTF.backgroundColor = colorPickerSection.color
+    }
+    
 }
