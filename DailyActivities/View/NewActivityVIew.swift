@@ -24,11 +24,63 @@ final class NewActivityView: UIView {
     
     weak var delegate: NewActivityViewDelegate?
 
-    private var typeButton: UIButton = UIButton(type: .custom)
-    private var typeButtonBackground = UIView()
-    private var descriptionTF: UITextField = UITextField()
-    private var formSV: UIStackView = UIStackView()
-    private var newActivityButton = UIButton()
+    private var typeButton: UIButton = {
+        let typeButton = UIButton(type: .custom)
+        typeButton.translatesAutoresizingMaskIntoConstraints = false
+        typeButton.titleLabel?.font = .boldSystemFont(ofSize: 22)
+        
+        return typeButton
+    }()
+    
+    private var typeButtonBackground = {
+        let typeButtonBackground = UIView()
+        typeButtonBackground.translatesAutoresizingMaskIntoConstraints = false
+        typeButtonBackground.layer.cornerRadius = 19
+        typeButtonBackground.clipsToBounds = true
+        
+        return typeButtonBackground
+    }()
+    
+    private var descriptionTF: UITextField = {
+        let descriptionTF = UITextField()
+        descriptionTF.clearButtonMode = .never
+        descriptionTF.translatesAutoresizingMaskIntoConstraints = false
+        descriptionTF.adjustsFontSizeToFitWidth = true
+        
+        return descriptionTF
+    }()
+    
+    private var formSV: UIStackView = {
+        let formSV = UIStackView()
+        formSV.translatesAutoresizingMaskIntoConstraints = false
+        formSV.axis = .horizontal
+        formSV.alignment = .center
+        formSV.backgroundColor = .white
+        formSV.spacing = 6
+        formSV.layer.cornerRadius = 19
+        
+        return formSV
+    }()
+    
+    
+    private var newActivityButton = {
+        let newActivityButton = UIButton()
+        
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseBackgroundColor = .systemBlue
+        configuration.baseForegroundColor = .white
+        newActivityButton.configuration = configuration
+        
+        let plusSymbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .heavy)
+        let plusSymbolImage = UIImage(systemName: "plus", withConfiguration: plusSymbolConfig)?.withTintColor(UIColor.white)
+        newActivityButton.setImage(plusSymbolImage, for: .normal)
+        
+        newActivityButton.layer.cornerRadius = 18
+        newActivityButton.clipsToBounds = true
+        newActivityButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        return newActivityButton
+    }()
     private var newActivitySV = UIStackView()
     
     init(typeStore: TypeStore) {
@@ -86,18 +138,6 @@ final class NewActivityView: UIView {
     }
     
     private func setupNewActivityButton() {
-        var configuration = UIButton.Configuration.filled()
-        configuration.baseBackgroundColor = .systemBlue
-        configuration.baseForegroundColor = .white
-        newActivityButton.configuration = configuration
-        
-        let plusSymbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .heavy)
-        let plusSymbolImage = UIImage(systemName: "plus", withConfiguration: plusSymbolConfig)?.withTintColor(UIColor.white)
-        newActivityButton.setImage(plusSymbolImage, for: .normal)
-        
-        newActivityButton.layer.cornerRadius = 18
-        newActivityButton.clipsToBounds = true
-        newActivityButton.translatesAutoresizingMaskIntoConstraints = false
         newActivityButton.widthAnchor.constraint(equalToConstant: 36).isActive = true
         newActivityButton.heightAnchor.constraint(equalToConstant: 36).isActive = true
         
@@ -110,11 +150,8 @@ final class NewActivityView: UIView {
 
     private func setupTypeButton() {
         typeButtonBackground.addSubview(typeButton)
-        typeButtonBackground.translatesAutoresizingMaskIntoConstraints = false
         typeButtonBackground.backgroundColor = UIColor(rgbaColor: chosenType.backgroundRGBA)
-        typeButtonBackground.layer.cornerRadius = 19
-        typeButtonBackground.clipsToBounds = true
-        typeButton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             typeButtonBackground.heightAnchor.constraint(equalToConstant: 38),
             typeButtonBackground.widthAnchor.constraint(equalToConstant: 45),
@@ -125,8 +162,6 @@ final class NewActivityView: UIView {
         ])
         
         typeButton.setTitle(chosenType.emoji, for: .normal)
-        typeButton.titleLabel?.font = .boldSystemFont(ofSize: 22)
-        
         typeButton.addTarget(self, action: #selector(typeButtonTapped), for: .touchUpInside)
         
         let interaction = UIContextMenuInteraction(delegate: self)
@@ -160,14 +195,10 @@ final class NewActivityView: UIView {
     
     private func setupTextField() {
         descriptionTF.placeholder = chosenType.description
-        descriptionTF.clearButtonMode = .never
-        descriptionTF.translatesAutoresizingMaskIntoConstraints = false
-        descriptionTF.adjustsFontSizeToFitWidth = true
-        
     }
     
     private func setupFormSV() {
-        formSV.translatesAutoresizingMaskIntoConstraints = false
+        
         formSV.addArrangedSubview(typeButtonBackground)
         
         let descriptionTFBackground = UIView()
@@ -183,13 +214,6 @@ final class NewActivityView: UIView {
             descriptionTFBackground.topAnchor.constraint(equalTo: formSV.topAnchor),
             descriptionTFBackground.bottomAnchor.constraint(equalTo: formSV.bottomAnchor),
         ])
-        
-        
-        formSV.axis = .horizontal
-        formSV.alignment = .center
-        formSV.backgroundColor = .white
-        formSV.spacing = 6
-        formSV.layer.cornerRadius = 19
     }
     
     private func setupDivider() {

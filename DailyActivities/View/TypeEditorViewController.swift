@@ -18,7 +18,7 @@ protocol TypeEditorViewControllerDelegate: AnyObject {
 //    }
 //}
 
-class TypeEditorViewController: UIViewController {
+final class TypeEditorViewController: UIViewController {
     
     let typeToEdit: ActivityType
     
