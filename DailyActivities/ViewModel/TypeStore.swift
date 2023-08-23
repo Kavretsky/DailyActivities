@@ -7,9 +7,15 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class TypeStore {
     private var types = [ActivityType]()
+    {
+        didSet {
+            typeSubject.send(true)
+        }
+    }
     
     init() {
         addDefaultTypes()
@@ -18,6 +24,12 @@ class TypeStore {
     
     deinit {
         print("deinit")
+    }
+    
+    private var typeSubject = CurrentValueSubject<Bool, Never>(true)
+    
+    var typesPublisher: AnyPublisher<Bool, Never> {
+        typeSubject.eraseToAnyPublisher()
     }
     
     private func addDefaultTypes() {

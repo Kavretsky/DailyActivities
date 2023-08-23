@@ -103,13 +103,21 @@ class TypeEditorViewController: UIViewController {
         colorPicker.delegate = self
         colorPicker.supportsAlpha = false
         colorPicker.selectedColor = UIColor(rgbaColor: typeToEdit.backgroundRGBA)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(presentColorPicker))
-        colorPickerSection.addGestureRecognizer(tap)
+        let presentCPTap = UITapGestureRecognizer(target: self, action: #selector(presentColorPicker))
+        colorPickerSection.addGestureRecognizer(presentCPTap)
         
         descriptionTF.delegate = self
         emojiTF.delegate = self
         
         setupUI()
+        
+        let dismissKeyboardTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(dismissKeyboardTap)
+    }
+    
+    
+    @objc private func dismissKeyboard() {
+            view.endEditing(true)
     }
     
 

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 protocol NewActivityViewDelegate: AnyObject {
     func showTypeManager()
@@ -18,6 +19,8 @@ final class NewActivityView: UIView {
     private var chosenType: ActivityType {
         typeStore.activeTypes[chosenIndex]
     }
+    
+    private var cancellables = Set<AnyCancellable>()
     
     weak var delegate: NewActivityViewDelegate?
 
@@ -32,6 +35,18 @@ final class NewActivityView: UIView {
         self.typeStore = typeStore
         super.init(frame: .null)
         setupUI()
+        
+        typeStore.typesPublisher
+            .receive(on: DispatchQueue.global(qos: .userInteractive))
+            .sink { [weak self] bool in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    self.descriptionTF.placeholder = self.chosenType.description
+                    self.typeButton.setTitle(self.chosenType.emoji, for: .normal)
+                    self.typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
+                }
+            }
+            .store(in: &cancellables)
     }
 
     required init?(coder: NSCoder) {
@@ -190,6 +205,9 @@ final class NewActivityView: UIView {
         ])
     }
 
+    deinit {
+        cancellables.forEach { $0.cancel() }
+    }
 
 }
 

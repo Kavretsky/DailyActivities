@@ -6,12 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 class MainViewController: UIViewController {
     
     private let typeStore: TypeStore
     private let newActivityView: NewActivityView
-    
 
     
     init(typeStore: TypeStore) {
@@ -31,11 +31,6 @@ class MainViewController: UIViewController {
         view.addGestureRecognizer(tap)
         newActivityView.delegate = self
         title = "Today"
-        
-        
-    
-    
-        
     }
     
     @objc private func dismissKeyboard() {
@@ -60,8 +55,15 @@ class MainViewController: UIViewController {
 
 
     override func viewWillAppear(_ animated: Bool) {
+        print("appear")
         self.view.backgroundColor = .white
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print("did apear")
+    }
+    
+    
     
 }
 
