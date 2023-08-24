@@ -93,6 +93,7 @@ final class NewActivityView: UIView {
             .sink { [weak self] bool in
                 guard let self else { return }
                 DispatchQueue.main.async {
+                    self.chosenIndex %= typeStore.activeTypes.count
                     self.descriptionTF.placeholder = self.chosenType.description
                     self.typeButton.setTitle(self.chosenType.emoji, for: .normal)
                     self.typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)

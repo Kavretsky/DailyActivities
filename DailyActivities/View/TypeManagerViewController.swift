@@ -77,6 +77,9 @@ extension TypeManagerTableViewController: TypeEditorViewControllerDelegate {
         }
     }
     
+    var isTypeDeletable: Bool {
+        typeStore.activeTypes.count > 2
+    }
     
 }
 

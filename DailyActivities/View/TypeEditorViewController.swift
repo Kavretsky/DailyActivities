@@ -10,6 +10,7 @@ import UIKit
 protocol TypeEditorViewControllerDelegate: AnyObject {
     func deleteType(type: ActivityType)
     func updateType(type: ActivityType, with data: ActivityType.Data)
+    var isTypeDeletable: Bool { get }
 }
 
 //class EmojiTextField: UITextField {
@@ -63,6 +64,7 @@ final class TypeEditorViewController: UIViewController {
         stack.axis = .vertical
         stack.spacing = 30
         stack.alignment = .center
+        stack.distribution = .fillEqually
         return stack
     }()
     
@@ -72,6 +74,19 @@ final class TypeEditorViewController: UIViewController {
         colorPickerSection.translatesAutoresizingMaskIntoConstraints = false
         colorPickerSection.backgroundColor = .white
         return colorPickerSection
+    }()
+    
+    let deleteButton: UIButton = {
+        let deleteButton = UIButton()
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        let configuration = UIButton.Configuration.plain()
+        
+        deleteButton.configuration = configuration
+        deleteButton.tintColor = .red
+//        deleteButton.backgroundColor = .clear
+        deleteButton.setTitle("Delete type", for: .normal)
+        
+        return deleteButton
     }()
     
     private let scrollView: UIScrollView = {
@@ -93,6 +108,11 @@ final class TypeEditorViewController: UIViewController {
         self.colorPickerSection.color = UIColor(rgbaColor: activityType.backgroundRGBA)
         self.colorPickerSection.delegate = self
     }
+    
+    let deleteTypeAlert: UIAlertController = {
+        let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        return sheetAlert
+    }()
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -131,11 +151,43 @@ final class TypeEditorViewController: UIViewController {
         stack.addArrangedSubview(colorPickerSection)
         scrollView.addSubview(stack)
         view.addSubview(scrollView)
-        
+        if delegate?.isTypeDeletable ?? false {
+            view.addSubview(deleteButton)
+            setupDeleteButton()
+            setupDeleteTypeAlert()
+        }
         setupConstraints()
         
-       
+    }
+    
+    
+    
+    private func setupDeleteButton() {
+        deleteButton.addTarget(nil, action: #selector(showDeleteSheet), for: .touchUpInside)
+        deleteButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
+        deleteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
+        
+    }
+    
+    private func setupDeleteTypeAlert() {
+        let confirmDeleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.deleteType()
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        deleteTypeAlert.addAction(confirmDeleteAction)
+        deleteTypeAlert.addAction(cancel)
+    }
+    
+    @objc private func showDeleteSheet() {
+        deleteTypeAlert.title = descriptionTF.text
+        self.present(deleteTypeAlert, animated: true)
+        
+    }
+    
+    private func deleteType() {
+        delegate?.deleteType(type: typeToEdit)
+        self.navigationController?.popViewController(animated: true)
     }
     
     private func setupConstraints() {
@@ -158,16 +210,6 @@ final class TypeEditorViewController: UIViewController {
             colorPickerSection.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
             colorPickerSection.heightAnchor.constraint(equalToConstant: 56),
             
-            
-//            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-//            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-//            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-//            descriptionTF.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
-//            descriptionTF.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
-//            colorPickerSection.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
-//            colorPickerSection.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
-//            colorPickerSection.heightAnchor.constraint(equalToConstant: 56),
-//            stack.bottomAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor)
         ])
     }
     
@@ -182,6 +224,10 @@ final class TypeEditorViewController: UIViewController {
 
     @objc private func presentColorPicker() {
         self.present(colorPicker, animated: true)
+    }
+    
+    deinit {
+        print("typeEditorViewController deinit")
     }
 }
 
