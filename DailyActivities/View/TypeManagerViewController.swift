@@ -25,11 +25,11 @@ final class TypeManagerTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = "Type manager"
         self.navigationItem.title = "Type manager"
         tableView.dataSource = self
         tableView.delegate = self
         view.backgroundColor = .secondarySystemBackground
+        setupToolBar()
 //        tableView.rowHeight = UITableView.automaticDimension
     }
     
@@ -48,17 +48,35 @@ final class TypeManagerTableViewController: UITableViewController {
         let index = indexPath.row
         cell.type = typeStore.activeTypes[index]
         cell.accessoryType = .disclosureIndicator
-//        cell.label.text = typeStore.activeTypes[index].description
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let index = indexPath.row
-        let activityType = typeStore.activeTypes[index]
-        let typeEditVC = TypeEditorViewController(activityType: activityType)
+        let selectedType = typeStore.activeTypes[index]
+        presentTypeEditorVC(with: selectedType)
+    }
+    
+    private func presentTypeEditorVC(with type: ActivityType) {
+        let typeEditVC = TypeEditorViewController(activityType: type)
         typeEditVC.delegate = self
         self.navigationController?.pushViewController(typeEditVC, animated: true)
     }
+    
+    private func setupToolBar() {
+        let addTypeButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewType))
+        addTypeButton.title = NSLocalizedString("New type", comment: "New type button")
+        navigationItem.rightBarButtonItem = addTypeButton
+    }
+    
+    @objc private func addNewType() {
+        guard let newType = typeStore.addType(with: ActivityType.sampleData()) else { return }
+        presentTypeEditorVC(with: newType)
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+    
 
 }
 

@@ -69,7 +69,7 @@ class TypeStore {
     
     @discardableResult
     func addType(with data: ActivityType.Data) -> ActivityType? {
-        guard !data.emoji.isEmpty, data.emoji.first!.isEmoji else { return nil }
+        guard !data.emoji.isEmpty else { return nil }
         
         types.append(ActivityType(data: data))
         return activeTypes.last

@@ -225,10 +225,6 @@ final class TypeEditorViewController: UIViewController {
     @objc private func presentColorPicker() {
         self.present(colorPicker, animated: true)
     }
-    
-    deinit {
-        print("typeEditorViewController deinit")
-    }
 }
 
 extension TypeEditorViewController: UIColorPickerViewControllerDelegate {

@@ -55,12 +55,7 @@ class MainViewController: UIViewController {
 
 
     override func viewWillAppear(_ animated: Bool) {
-        print("appear")
         self.view.backgroundColor = .white
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        print("did apear")
     }
     
     
@@ -71,7 +66,6 @@ extension MainViewController: NewActivityViewDelegate {
     func showTypeManager() {
         let typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
         let typeManagerNC = UINavigationController(rootViewController: typeManagerVC)
-        typeManagerVC.title = "Type manager"
         self.present(typeManagerNC, animated: true)
     }
     
