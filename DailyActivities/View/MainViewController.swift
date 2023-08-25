@@ -10,6 +10,7 @@ import Combine
 
 class MainViewController: UIViewController {
     
+    
     private let typeStore: TypeStore
     private let newActivityView: NewActivityView
 

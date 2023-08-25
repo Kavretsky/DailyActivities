@@ -88,9 +88,9 @@ final class NewActivityView: UIView {
         super.init(frame: .null)
         setupUI()
         
-        typeStore.typesPublisher
+        typeStore.objectWillChange
             .receive(on: DispatchQueue.global(qos: .userInteractive))
-            .sink { [weak self] bool in
+            .sink { [weak self] in
                 guard let self else { return }
                 DispatchQueue.main.async {
                     self.chosenIndex %= typeStore.activeTypes.count
