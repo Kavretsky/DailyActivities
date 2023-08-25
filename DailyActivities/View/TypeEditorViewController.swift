@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TypeEditorViewControllerDelegate: AnyObject {
-    func deleteType(type: ActivityType)
+    func deleteType(_ type: ActivityType)
     func updateType(type: ActivityType, with data: ActivityType.Data)
     var isTypeDeletable: Bool { get }
 }
@@ -28,6 +28,7 @@ final class TypeEditorViewController: UIViewController {
         didSet{
             delegate?.updateType(type: typeToEdit, with: typeData)
             emojiTF.text = typeData.emoji
+            descriptionTF.text = typeData.description
         }
     }
     
@@ -92,7 +93,7 @@ final class TypeEditorViewController: UIViewController {
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
+        scrollView.contentInsetAdjustmentBehavior = .always
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
@@ -157,13 +158,12 @@ final class TypeEditorViewController: UIViewController {
             setupDeleteTypeAlert()
         }
         setupConstraints()
-        
     }
     
     
     
     private func setupDeleteButton() {
-        deleteButton.addTarget(nil, action: #selector(showDeleteSheet), for: .touchUpInside)
+        deleteButton.addTarget(nil, action: #selector(showDeleteTypeAlert), for: .touchUpInside)
         deleteButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
         deleteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
@@ -179,14 +179,14 @@ final class TypeEditorViewController: UIViewController {
         deleteTypeAlert.addAction(cancel)
     }
     
-    @objc private func showDeleteSheet() {
+    @objc private func showDeleteTypeAlert() {
         deleteTypeAlert.title = descriptionTF.text
         self.present(deleteTypeAlert, animated: true)
         
     }
     
     private func deleteType() {
-        delegate?.deleteType(type: typeToEdit)
+        delegate?.deleteType(typeToEdit)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -195,13 +195,12 @@ final class TypeEditorViewController: UIViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
-            
+            scrollView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -15),
             
             stack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 15),
             stack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -15),
             stack.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
-            stack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20),
+//            stack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
             stack.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -30),
             
             descriptionTF.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
@@ -247,10 +246,14 @@ extension TypeEditorViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard textField == emojiTF else { return true }
-        guard !string.isEmpty else { return false }
+//        guard !string.isEmpty else { return false }
         typeData.emoji = string
-        textField.text = ""
-        return true
+        return false
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return false
     }
 }
 

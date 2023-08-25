@@ -81,7 +81,7 @@ final class TypeManagerTableViewController: UITableViewController {
 }
 
 extension TypeManagerTableViewController: TypeEditorViewControllerDelegate {
-    func deleteType(type: ActivityType) {
+    func deleteType(_ type: ActivityType) {
         typeStore.removeType(type)
         tableView.reloadData()
     }
