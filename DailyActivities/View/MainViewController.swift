@@ -8,16 +8,22 @@
 import UIKit
 import Combine
 
-class MainViewController: UIViewController {
+final class MainViewController: UIViewController {
     
     
     private let typeStore: TypeStore
-    private let newActivityView: NewActivityView
+    private let activityStore: ActivityStore
+    private let createActivityView: NewActivityView
+    private let activityListDate: Date
+    
+    private let activitiesTableView = UITableView(frame: .zero, style: .insetGrouped)
 
     
-    init(typeStore: TypeStore) {
+    init(typeStore: TypeStore, activityStore: ActivityStore) {
+        self.activityStore = activityStore
         self.typeStore = typeStore
-        newActivityView = NewActivityView(typeStore: self.typeStore)
+        activityListDate = .now
+        createActivityView = NewActivityView(typeStore: self.typeStore)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -28,10 +34,8 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-        newActivityView.delegate = self
-        title = "Today"
+        setupActivitiesTableview()
+        
     }
     
     @objc private func dismissKeyboard() {
@@ -39,16 +43,31 @@ class MainViewController: UIViewController {
         }
     
     private func setupUI() {
-        view.addSubview(newActivityView)
-        newActivityView.updateConstraints()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        createActivityView.delegate = self
+        title = "Today"
+        view.addSubview(activitiesTableView)
+        view.addSubview(createActivityView)
+        createActivityView.updateConstraints()
+    }
+    
+    private func setupActivitiesTableview() {
+        activitiesTableView.dataSource = self
+        activitiesTableView.delegate = self
     }
     
     override func viewWillLayoutSubviews() {
         NSLayoutConstraint.activate([
-            newActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
+            createActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            createActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            createActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            createActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
+            
+            activitiesTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            activitiesTableView.bottomAnchor.constraint(equalTo: createActivityView.topAnchor),
+            activitiesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            activitiesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
         
 
@@ -69,6 +88,18 @@ extension MainViewController: NewActivityViewDelegate {
         let typeManagerNC = UINavigationController(rootViewController: typeManagerVC)
         self.present(typeManagerNC, animated: true)
     }
+}
+
+extension MainViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return activityStore.activities(for: activityListDate).count
+    }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        <#code#>
+    }
+}
+
+extension MainViewController: UITableViewDelegate {
     
 }

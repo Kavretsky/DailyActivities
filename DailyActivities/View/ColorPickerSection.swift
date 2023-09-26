@@ -11,7 +11,7 @@ protocol ColorPickerSectionDelegate: AnyObject {
     func updateColor(color: UIColor)
 }
 
-class ColorPickerSection: UIView {
+final class ColorPickerSection: UIView {
     
     weak var delegate: ColorPickerSectionDelegate?
     

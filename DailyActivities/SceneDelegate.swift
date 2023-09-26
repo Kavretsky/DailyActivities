@@ -17,7 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         let typeStore = TypeStore()
-        let mainVC = MainViewController(typeStore: typeStore)
+        let activityStore = ActivityStore()
+        let mainVC = MainViewController(typeStore: typeStore, activityStore: activityStore)
 //        let testVC = TypeManagerTableViewController(typeStore: typeStore)
         let navigationVC = UINavigationController(rootViewController: mainVC)
         window.rootViewController = navigationVC

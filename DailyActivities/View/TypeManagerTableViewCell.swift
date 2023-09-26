@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TypeManagerTableViewCell: UITableViewCell {
+final class TypeManagerTableViewCell: UITableViewCell {
     var type: ActivityType?
     {
         didSet {

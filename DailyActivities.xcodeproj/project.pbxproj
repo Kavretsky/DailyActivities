@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D32F9ED2AC3741E00D82544 /* ActivittiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D32F9EC2AC3741E00D82544 /* ActivittiesTableViewCell.swift */; };
 		760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE732A8BFF55000C8776 /* TypeStore.swift */; };
 		760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE752A8BFF73000C8776 /* ActivityType.swift */; };
 		760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5D32F9EC2AC3741E00D82544 /* ActivittiesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivittiesTableViewCell.swift; sourceTree = "<group>"; };
 		760EFE732A8BFF55000C8776 /* TypeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeStore.swift; sourceTree = "<group>"; };
 		760EFE752A8BFF73000C8776 /* ActivityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityType.swift; sourceTree = "<group>"; };
 		760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityExtensions.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */,
 				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
 				760EFE792A8C13D6000C8776 /* TypeManagerViewController.swift */,
+				5D32F9EC2AC3741E00D82544 /* ActivittiesTableViewCell.swift */,
 				767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */,
 				768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */,
 			);
@@ -199,6 +202,7 @@
 				764A92732A9914B3006402BE /* Activity.swift in Sources */,
 				7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */,
 				7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */,
+				5D32F9ED2AC3741E00D82544 /* ActivittiesTableViewCell.swift in Sources */,
 				7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */,
 				760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */,
 				7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */,
