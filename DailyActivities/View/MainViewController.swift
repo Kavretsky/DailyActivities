@@ -16,7 +16,7 @@ final class MainViewController: UIViewController {
     private let createActivityView: NewActivityView
     private let activityListDate: Date
     
-    private let activitiesTableView = UITableView(frame: .zero, style: .insetGrouped)
+    private let activitiesTableView = UITableView(frame: .zero)
 
     
     init(typeStore: TypeStore, activityStore: ActivityStore) {
@@ -50,9 +50,11 @@ final class MainViewController: UIViewController {
         view.addSubview(activitiesTableView)
         view.addSubview(createActivityView)
         createActivityView.updateConstraints()
+        activitiesTableView.register(ActivittiesTableViewCell.self, forCellReuseIdentifier: "ActivityTableViewCellIdentifier")
     }
     
     private func setupActivitiesTableview() {
+        activitiesTableView.translatesAutoresizingMaskIntoConstraints = false 
         activitiesTableView.dataSource = self
         activitiesTableView.delegate = self
     }
@@ -64,8 +66,8 @@ final class MainViewController: UIViewController {
             createActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             createActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
             
-            activitiesTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            activitiesTableView.bottomAnchor.constraint(equalTo: createActivityView.topAnchor),
+            activitiesTableView.topAnchor.constraint(equalTo: view.topAnchor),
+            activitiesTableView.bottomAnchor.constraint(lessThanOrEqualTo: createActivityView.topAnchor),
             activitiesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             activitiesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
@@ -96,7 +98,13 @@ extension MainViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath)
+        let activity = activityStore.activities(for: activityListDate)[indexPath.row]
+//        cell.activityDescription = activity.name
+        var cellConfiguration = UIListContentConfiguration.cell()
+        cellConfiguration.text = activity.name
+        cell.contentConfiguration = cellConfiguration
+        return cell
     }
 }
 
