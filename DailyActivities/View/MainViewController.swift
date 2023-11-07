@@ -16,7 +16,7 @@ final class MainViewController: UIViewController {
     private let createActivityView: NewActivityView
     private let activityListDate: Date
     
-    private let activitiesTableView = UITableView(frame: .zero)
+    private let activitiesTableView = UITableView(frame: .zero, style: .insetGrouped)
 
     
     init(typeStore: TypeStore, activityStore: ActivityStore) {
@@ -98,13 +98,21 @@ extension MainViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivittiesTableViewCell
         let activity = activityStore.activities(for: activityListDate)[indexPath.row]
-//        cell.activityDescription = activity.name
-        var cellConfiguration = UIListContentConfiguration.cell()
-        cellConfiguration.text = activity.name
-        cell.contentConfiguration = cellConfiguration
+        if activity.finishDateTime != nil {
+            cell.duration = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
+        } else {
+            cell.duration = "Started at \(activity.startDateTime.formatted(date: .omitted, time: .shortened))"
+            
+        }
+        cell.activityDescription = activity.name
+        cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Activities"
     }
 }
 

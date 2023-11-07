@@ -10,8 +10,25 @@ import UIKit
 final class ActivittiesTableViewCell: UITableViewCell {
     
     var activityDescription: String?
+    {
+        didSet {
+            descriptionLabel.text = activityDescription
+        }
+    }
+    
     var duration: String?
-    var type: String?
+    {
+        didSet {
+            durationLabel.text = duration
+        }
+    }
+    
+    var typeEmoji: String?
+    {
+        didSet {
+            typeLabel.text = typeEmoji
+        }
+    }
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
@@ -43,7 +60,38 @@ final class ActivittiesTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        let durationAndTypeSV = UIStackView()
+        durationAndTypeSV.translatesAutoresizingMaskIntoConstraints = false
+        durationAndTypeSV.axis = .horizontal
+        durationAndTypeSV.distribution = .fill
+        durationAndTypeSV.alignment = .fill
+        durationAndTypeSV.addArrangedSubview(durationLabel)
+        durationAndTypeSV.addArrangedSubview(typeLabel)
         
+        let contentSV = UIStackView(arrangedSubviews: [descriptionLabel, durationAndTypeSV])
+        contentSV.translatesAutoresizingMaskIntoConstraints = false
+        contentSV.axis = .vertical
+        contentSV.spacing = 5
+        contentSV.alignment = .fill
+        contentSV.distribution = .fill
+        
+        
+        contentView.addSubview(contentSV)
+        
+        NSLayoutConstraint.activate([
+            contentSV.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            contentSV.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            contentSV.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            contentSV.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            
+            durationAndTypeSV.leadingAnchor.constraint(equalTo: contentSV.leadingAnchor),
+            durationAndTypeSV.trailingAnchor.constraint(equalTo: contentSV.trailingAnchor),
+            
+//            typeLabel.topAnchor.constraint(equalTo: durationAndTypeSV.topAnchor, constant: 4),
+//            typeLabel.bottomAnchor.constraint(equalTo: durationAndTypeSV.bottomAnchor, constant: -4),
+//            typeLabel.trailingAnchor.constraint(equalTo: durationAndTypeSV.trailingAnchor, constant: -6),
+            
+        ])
     }
     
 }
