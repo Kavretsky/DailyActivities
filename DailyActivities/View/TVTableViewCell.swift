@@ -7,26 +7,52 @@
 
 import UIKit
 
-class TVTableViewCell: UITableViewCell {
+protocol TVTableViewCellDelegate: AnyObject {
+    func textViewDidChange(_ cell: TVTableViewCell)
+}
 
+final class TVTableViewCell: UITableViewCell {
     var text: String = ""
+    {
+        willSet {
+            if textView.text != newValue {
+                textView.text = newValue
+            }
+        }
+    }
     
-    private let textfield: UITextView = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.scrollEna
-        return tf
+    weak var delegate: TVTableViewCellDelegate?
+    
+    private let textView: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.isScrollEnabled = false
+        textView.sizeToFit()
+        textView.font = .systemFont(ofSize: 17)
+        return textView
     }()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.addSubview(textView)
+        textView.delegate = self
+        NSLayoutConstraint.activate([
+            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+        ])
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
+}
 
+extension TVTableViewCell: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        delegate?.textViewDidChange(self)
+    }
 }

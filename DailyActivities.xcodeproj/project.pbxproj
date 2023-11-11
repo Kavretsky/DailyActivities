@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5D32F9ED2AC3741E00D82544 /* ActivittiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D32F9EC2AC3741E00D82544 /* ActivittiesTableViewCell.swift */; };
+		5D32F9ED2AC3741E00D82544 /* ActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */; };
 		760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE732A8BFF55000C8776 /* TypeStore.swift */; };
 		760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE752A8BFF73000C8776 /* ActivityType.swift */; };
 		760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */; };
-		760EFE7A2A8C13D6000C8776 /* TypeManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE792A8C13D6000C8776 /* TypeManagerViewController.swift */; };
+		760EFE7A2A8C13D6000C8776 /* TypeManagerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */; };
+		76456DED2AFBAC6100690A21 /* ActivityEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */; };
 		764A92732A9914B3006402BE /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92722A9914B3006402BE /* Activity.swift */; };
 		764A92752A991759006402BE /* ActivityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92742A991759006402BE /* ActivityStore.swift */; };
 		7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5C82A86B461003F75ED /* AppDelegate.swift */; };
@@ -20,19 +21,21 @@
 		7669F5D22A86B462003F75ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7669F5D12A86B462003F75ED /* Assets.xcassets */; };
 		7669F5D52A86B462003F75ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7669F5D32A86B462003F75ED /* LaunchScreen.storyboard */; };
 		7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */; };
-		767B106E2A927D3100E55ED8 /* TestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B106D2A927D3100E55ED8 /* TestTableViewCell.swift */; };
 		767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */; };
 		767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */; };
 		767B10742A9541FB00E55ED8 /* EmojiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10732A9541FB00E55ED8 /* EmojiTextField.swift */; };
+		767CEDF32AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF22AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift */; };
 		768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */; };
+		76F764FC2AFCE8210086C269 /* TVTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F764FB2AFCE8210086C269 /* TVTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5D32F9EC2AC3741E00D82544 /* ActivittiesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivittiesTableViewCell.swift; sourceTree = "<group>"; };
+		5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTableViewCell.swift; sourceTree = "<group>"; };
 		760EFE732A8BFF55000C8776 /* TypeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeStore.swift; sourceTree = "<group>"; };
 		760EFE752A8BFF73000C8776 /* ActivityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityType.swift; sourceTree = "<group>"; };
 		760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityExtensions.swift; sourceTree = "<group>"; };
-		760EFE792A8C13D6000C8776 /* TypeManagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerViewController.swift; sourceTree = "<group>"; };
+		760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewController.swift; sourceTree = "<group>"; };
+		76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityEditTableViewController.swift; sourceTree = "<group>"; };
 		764A92722A9914B3006402BE /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		764A92742A991759006402BE /* ActivityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityStore.swift; sourceTree = "<group>"; };
 		7669F5C52A86B461003F75ED /* DailyActivities.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyActivities.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,11 +46,12 @@
 		7669F5D42A86B462003F75ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7669F5D62A86B462003F75ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewActivityVIew.swift; sourceTree = "<group>"; };
-		767B106D2A927D3100E55ED8 /* TestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewCell.swift; sourceTree = "<group>"; };
 		767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeEditorViewController.swift; sourceTree = "<group>"; };
 		767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSection.swift; sourceTree = "<group>"; };
 		767B10732A9541FB00E55ED8 /* EmojiTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTextField.swift; sourceTree = "<group>"; };
+		767CEDF22AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerTableViewCell.swift; sourceTree = "<group>"; };
 		768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewCell.swift; sourceTree = "<group>"; };
+		76F764FB2AFCE8210086C269 /* TVTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +68,6 @@
 		7669F5BC2A86B461003F75ED = {
 			isa = PBXGroup;
 			children = (
-				767B106D2A927D3100E55ED8 /* TestTableViewCell.swift */,
 				7669F5C72A86B461003F75ED /* DailyActivities */,
 				7669F5C62A86B461003F75ED /* Products */,
 			);
@@ -107,11 +110,14 @@
 		768A1AEA2A914CDF008C4CAC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
+				76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */,
+				767CEDF22AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift */,
+				76F764FB2AFCE8210086C269 /* TVTableViewCell.swift */,
 				767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */,
 				7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */,
-				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
-				760EFE792A8C13D6000C8776 /* TypeManagerViewController.swift */,
-				5D32F9EC2AC3741E00D82544 /* ActivittiesTableViewCell.swift */,
+				760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */,
+				5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */,
 				767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */,
 				768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */,
 			);
@@ -200,19 +206,21 @@
 				767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */,
 				767B10742A9541FB00E55ED8 /* EmojiTextField.swift in Sources */,
 				764A92732A9914B3006402BE /* Activity.swift in Sources */,
+				76F764FC2AFCE8210086C269 /* TVTableViewCell.swift in Sources */,
 				7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */,
 				7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */,
-				5D32F9ED2AC3741E00D82544 /* ActivittiesTableViewCell.swift in Sources */,
+				5D32F9ED2AC3741E00D82544 /* ActivityTableViewCell.swift in Sources */,
 				7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */,
+				767CEDF32AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift in Sources */,
 				760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */,
 				7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */,
 				760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */,
-				760EFE7A2A8C13D6000C8776 /* TypeManagerViewController.swift in Sources */,
+				76456DED2AFBAC6100690A21 /* ActivityEditTableViewController.swift in Sources */,
+				760EFE7A2A8C13D6000C8776 /* TypeManagerTableViewController.swift in Sources */,
 				768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */,
 				764A92752A991759006402BE /* ActivityStore.swift in Sources */,
 				760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */,
 				767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */,
-				767B106E2A927D3100E55ED8 /* TestTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

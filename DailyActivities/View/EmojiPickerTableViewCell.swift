@@ -9,15 +9,23 @@ import UIKit
 
 class EmojiPickerTableViewCell: UITableViewCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    var selectedEmojiID: Int = 0
+    
+    let emojiCollection: UICollectionView = {
+        let emojiCollection = UICollectionView()
+        emojiCollection.translatesAutoresizingMaskIntoConstraints = false
+        return emojiCollection
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        emojiCollection.dataSource = self
+        
+        
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
+    
 }

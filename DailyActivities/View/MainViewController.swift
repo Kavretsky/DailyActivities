@@ -9,8 +9,6 @@ import UIKit
 import Combine
 
 final class MainViewController: UIViewController {
-    
-    
     private let typeStore: TypeStore
     private let activityStore: ActivityStore
     private let createActivityView: NewActivityView
@@ -25,6 +23,7 @@ final class MainViewController: UIViewController {
         activityListDate = .now
         createActivityView = NewActivityView(typeStore: self.typeStore)
         super.init(nibName: nil, bundle: nil)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -35,7 +34,7 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActivitiesTableview()
-        
+
     }
     
     @objc private func dismissKeyboard() {
@@ -43,20 +42,18 @@ final class MainViewController: UIViewController {
         }
     
     private func setupUI() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
         createActivityView.delegate = self
         title = "Today"
         view.addSubview(activitiesTableView)
         view.addSubview(createActivityView)
         createActivityView.updateConstraints()
-        activitiesTableView.register(ActivittiesTableViewCell.self, forCellReuseIdentifier: "ActivityTableViewCellIdentifier")
     }
     
     private func setupActivitiesTableview() {
         activitiesTableView.translatesAutoresizingMaskIntoConstraints = false 
-        activitiesTableView.dataSource = self
         activitiesTableView.delegate = self
+        activitiesTableView.dataSource = self
+        activitiesTableView.register(ActivityTableViewCell.self, forCellReuseIdentifier: "ActivityTableViewCellIdentifier")
     }
     
     override func viewWillLayoutSubviews() {
@@ -71,15 +68,11 @@ final class MainViewController: UIViewController {
             activitiesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             activitiesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-        
-
     }
-
 
     override func viewWillAppear(_ animated: Bool) {
         self.view.backgroundColor = .white
     }
-    
     
     
 }
@@ -98,7 +91,7 @@ extension MainViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivittiesTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
         let activity = activityStore.activities(for: activityListDate)[indexPath.row]
         if activity.finishDateTime != nil {
             cell.duration = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
@@ -114,8 +107,19 @@ extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Activities"
     }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
 }
 
 extension MainViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        dismissKeyboard()
+        let activityEditVC = ActivityEditTableViewController(types: typeStore.activeTypes, activity: activityStore.activities(for: activityListDate)[indexPath.row])
+        let activityEditNC = UINavigationController(rootViewController: activityEditVC)
+        self.present(activityEditNC, animated: true)
+    }
 }

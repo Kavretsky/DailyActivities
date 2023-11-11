@@ -1,5 +1,5 @@
 //
-//  TypeManagerViewController.swift
+//  TypeManagerTableViewController.swift
 //  DailyActivities
 //
 //  Created by Nikolay Kavretsky on 16.08.2023.
