@@ -1,5 +1,5 @@
 //
-//  ActivittiesTableViewCell.swift
+//  ActivityTableViewCell.swift
 //  DailyActivities
 //
 //  Created by Anastasia Yunak on 27.09.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ActivittiesTableViewCell: UITableViewCell {
+final class ActivityTableViewCell: UITableViewCell {
     
     var activityDescription: String?
     {
