@@ -57,10 +57,11 @@ final class ActivityEditTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier", for: indexPath) as! ActivityTypePickerTableViewCell
             cell.types = types
             cell.selectedTypeID = activity.typeID
+            print(cell.activityTypeCollection.contentSize)
             return cell
             
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TVTableViewCellReuseIdentifier", for: indexPath) as! TextViewTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as! TextViewTableViewCell
             
             cell.text = activity.name
             cell.delegate = self

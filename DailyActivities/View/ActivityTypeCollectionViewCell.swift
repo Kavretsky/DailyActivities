@@ -20,7 +20,6 @@ final class ActivityTypeCollectionViewCell: UICollectionViewCell {
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         emojiLabel.font = .systemFont(ofSize: 22)
         emojiLabel.textAlignment = .center
-        emojiLabel.numberOfLines = 1
         return emojiLabel
     }()
     
@@ -37,11 +36,19 @@ final class ActivityTypeCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(emojiLabel)
         
         NSLayoutConstraint.activate([
+            emojiLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 28),
+            emojiLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 32),
             emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             emojiLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             emojiLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             emojiLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
+    }
+    
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+//        let targetSize = CGSize(width: layoutAttributes.frame.width, height: layoutAttributes.frame.height)
+        layoutAttributes.frame.size = contentView.systemLayoutSizeFitting(CGSize(width: 32, height: 28), withHorizontalFittingPriority: .dragThatCanResizeScene, verticalFittingPriority: .dragThatCanResizeScene)
+        return layoutAttributes
     }
     
 }
