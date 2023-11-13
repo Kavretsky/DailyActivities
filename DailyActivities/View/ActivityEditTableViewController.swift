@@ -24,7 +24,8 @@ final class ActivityEditTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(TVTableViewCell.self, forCellReuseIdentifier: "TVTableViewCellReuseIdentifier")
+        tableView.register(TextViewTableViewCell.self, forCellReuseIdentifier: "TextViewTableViewCellReuseIdentifier")
+        tableView.register(ActivityTypePickerTableViewCell.self, forCellReuseIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier")
         self.navigationItem.title = "Activity"
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -47,15 +48,19 @@ final class ActivityEditTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch (indexPath.section, indexPath.row) {
         case (0,0):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TVTableViewCellReuseIdentifier", for: indexPath) as! TVTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as! TextViewTableViewCell
             
             cell.text = activity.name
             cell.delegate = self
             return cell
-            
+        case (0,1):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier", for: indexPath) as! ActivityTypePickerTableViewCell
+            cell.types = types
+            cell.selectedTypeID = activity.typeID
+            return cell
             
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TVTableViewCellReuseIdentifier", for: indexPath) as! TVTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TVTableViewCellReuseIdentifier", for: indexPath) as! TextViewTableViewCell
             
             cell.text = activity.name
             cell.delegate = self
@@ -113,7 +118,7 @@ final class ActivityEditTableViewController: UITableViewController {
 }
 
 extension ActivityEditTableViewController: TVTableViewCellDelegate {
-    func textViewDidChange(_ cell: TVTableViewCell) {
+    func textViewDidChange(_ cell: TextViewTableViewCell) {
         if let _ = tableView.indexPath(for: cell) {
             tableView.beginUpdates()
             tableView.endUpdates()

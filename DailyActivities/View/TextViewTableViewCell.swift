@@ -1,5 +1,5 @@
 //
-//  TVTableViewCell.swift
+//  TextViewTableViewCell.swift
 //  DailyActivities
 //
 //  Created by Nikolay Kavretsky on 09.11.2023.
@@ -8,10 +8,10 @@
 import UIKit
 
 protocol TVTableViewCellDelegate: AnyObject {
-    func textViewDidChange(_ cell: TVTableViewCell)
+    func textViewDidChange(_ cell: TextViewTableViewCell)
 }
 
-final class TVTableViewCell: UITableViewCell {
+final class TextViewTableViewCell: UITableViewCell {
     var text: String = ""
     {
         willSet {
@@ -51,7 +51,7 @@ final class TVTableViewCell: UITableViewCell {
     }
 }
 
-extension TVTableViewCell: UITextViewDelegate {
+extension TextViewTableViewCell: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         delegate?.textViewDidChange(self)
     }

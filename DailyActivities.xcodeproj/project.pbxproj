@@ -24,9 +24,10 @@
 		767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */; };
 		767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */; };
 		767B10742A9541FB00E55ED8 /* EmojiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10732A9541FB00E55ED8 /* EmojiTextField.swift */; };
-		767CEDF32AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF22AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift */; };
+		767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */; };
+		767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */; };
 		768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */; };
-		76F764FC2AFCE8210086C269 /* TVTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F764FB2AFCE8210086C269 /* TVTableViewCell.swift */; };
+		76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,9 +50,10 @@
 		767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeEditorViewController.swift; sourceTree = "<group>"; };
 		767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSection.swift; sourceTree = "<group>"; };
 		767B10732A9541FB00E55ED8 /* EmojiTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTextField.swift; sourceTree = "<group>"; };
-		767CEDF22AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerTableViewCell.swift; sourceTree = "<group>"; };
+		767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypePickerTableViewCell.swift; sourceTree = "<group>"; };
+		767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypeCollectionViewCell.swift; sourceTree = "<group>"; };
 		768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewCell.swift; sourceTree = "<group>"; };
-		76F764FB2AFCE8210086C269 /* TVTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVTableViewCell.swift; sourceTree = "<group>"; };
+		76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,8 +114,9 @@
 			children = (
 				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
 				76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */,
-				767CEDF22AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift */,
-				76F764FB2AFCE8210086C269 /* TVTableViewCell.swift */,
+				767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */,
+				767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */,
+				76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */,
 				767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */,
 				7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */,
 				760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */,
@@ -206,12 +209,12 @@
 				767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */,
 				767B10742A9541FB00E55ED8 /* EmojiTextField.swift in Sources */,
 				764A92732A9914B3006402BE /* Activity.swift in Sources */,
-				76F764FC2AFCE8210086C269 /* TVTableViewCell.swift in Sources */,
+				76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */,
 				7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */,
 				7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */,
 				5D32F9ED2AC3741E00D82544 /* ActivityTableViewCell.swift in Sources */,
 				7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */,
-				767CEDF32AFD63FD009CEA4D /* EmojiPickerTableViewCell.swift in Sources */,
+				767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */,
 				760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */,
 				7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */,
 				760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */,
@@ -220,6 +223,7 @@
 				768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */,
 				764A92752A991759006402BE /* ActivityStore.swift in Sources */,
 				760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */,
+				767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */,
 				767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
