@@ -39,10 +39,10 @@ final class TextViewTableViewCell: UITableViewCell {
         contentView.addSubview(textView)
         textView.delegate = self
         NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
         ])
     }
     

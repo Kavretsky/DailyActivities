@@ -22,8 +22,8 @@ final class ActivityTypePickerTableViewCell: UITableViewCell {
     
     private let selectedTypeBackground: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 19
-        view.frame.size = .init(width: 45, height: 38)
+        view.layer.cornerRadius = 16
+        view.frame.size = .init(width: 38, height: 32)
         return view
     }()
     
@@ -88,9 +88,9 @@ extension ActivityTypePickerTableViewCell: UICollectionViewDelegate {
     }
 }
 
-fileprivate struct ConstraintsConstants {
+struct ConstraintsConstants {
     static let leadingAnchorConstant: CGFloat = 20
     static let trailingAnchorConstant: CGFloat = -20
-    static let topAnchorConstant: CGFloat = 10
-    static let bottomAnchorConstant: CGFloat = -10
+    static let topAnchorConstant: CGFloat = 5
+    static let bottomAnchorConstant: CGFloat = -5
 }

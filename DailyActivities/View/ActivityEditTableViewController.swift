@@ -26,21 +26,19 @@ final class ActivityEditTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.register(TextViewTableViewCell.self, forCellReuseIdentifier: "TextViewTableViewCellReuseIdentifier")
         tableView.register(ActivityTypePickerTableViewCell.self, forCellReuseIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier")
+        tableView.register(TimeStartTableViewCell.self, forCellReuseIdentifier: "TimeStartTableViewCellReuseIdentifier")
+        tableView.register(TimeFinishTableViewCell.self, forCellReuseIdentifier: "TimeFinishTableViewCellReuseIdentifier")
         self.navigationItem.title = "Activity"
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
         tableView.allowsSelection = false
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return 2
     }
 
@@ -57,6 +55,19 @@ final class ActivityEditTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier", for: indexPath) as! ActivityTypePickerTableViewCell
             cell.types = types
             cell.selectedTypeID = activity.typeID
+            cell.layoutIfNeeded()
+            return cell
+            
+        case (1,0):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TimeStartTableViewCellReuseIdentifier", for: indexPath) as! TimeStartTableViewCell
+            cell.time = activity.startDateTime
+            cell.delegate = self
+            return cell
+            
+        case (1,1):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TimeFinishTableViewCellReuseIdentifier", for: indexPath) as! TimeFinishTableViewCell
+            cell.time = activity.finishDateTime
+            cell.minimumDate = activity.startDateTime
             cell.layoutIfNeeded()
             return cell
             
@@ -124,6 +135,15 @@ extension ActivityEditTableViewController: TVTableViewCellDelegate {
             tableView.beginUpdates()
             tableView.endUpdates()
         }
+    }
+}
+
+extension ActivityEditTableViewController: TimeStartTableViewCellDelegate {
+    func startTimeChanged() {
+        let startTimeCell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! TimeStartTableViewCell
+        let finishTimeCell = tableView.cellForRow(at: IndexPath(row: 1, section: 1)) as! TimeFinishTableViewCell
+        print("startTimeCell")
+        finishTimeCell.minimumDate = startTimeCell.time
     }
     
     

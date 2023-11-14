@@ -13,6 +13,8 @@
 		760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */; };
 		760EFE7A2A8C13D6000C8776 /* TypeManagerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */; };
 		7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */; };
+		7642D7462B03E0B90035E225 /* TimeStartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */; };
+		7642D7482B03E8BB0035E225 /* TimeFinishTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642D7472B03E8BB0035E225 /* TimeFinishTableViewCell.swift */; };
 		76456DED2AFBAC6100690A21 /* ActivityEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */; };
 		764A92732A9914B3006402BE /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92722A9914B3006402BE /* Activity.swift */; };
 		764A92752A991759006402BE /* ActivityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92742A991759006402BE /* ActivityStore.swift */; };
@@ -38,6 +40,8 @@
 		760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityExtensions.swift; sourceTree = "<group>"; };
 		760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewController.swift; sourceTree = "<group>"; };
 		7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
+		7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStartTableViewCell.swift; sourceTree = "<group>"; };
+		7642D7472B03E8BB0035E225 /* TimeFinishTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFinishTableViewCell.swift; sourceTree = "<group>"; };
 		76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityEditTableViewController.swift; sourceTree = "<group>"; };
 		764A92722A9914B3006402BE /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		764A92742A991759006402BE /* ActivityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityStore.swift; sourceTree = "<group>"; };
@@ -116,6 +120,8 @@
 			children = (
 				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
 				76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */,
+				7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */,
+				7642D7472B03E8BB0035E225 /* TimeFinishTableViewCell.swift */,
 				767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */,
 				7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */,
 				767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */,
@@ -212,7 +218,9 @@
 				767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */,
 				767B10742A9541FB00E55ED8 /* EmojiTextField.swift in Sources */,
 				764A92732A9914B3006402BE /* Activity.swift in Sources */,
+				7642D7482B03E8BB0035E225 /* TimeFinishTableViewCell.swift in Sources */,
 				76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */,
+				7642D7462B03E0B90035E225 /* TimeStartTableViewCell.swift in Sources */,
 				7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */,
 				7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */,
 				5D32F9ED2AC3741E00D82544 /* ActivityTableViewCell.swift in Sources */,
