@@ -8,24 +8,22 @@
 import UIKit
 
 final class ActivityTypePickerTableViewCell: UITableViewCell {
-
     var selectedTypeID: String = ""
-    
     var types: [ActivityType] = []
     
     private let activityTypeCollection: SelfSizingCollectionView!
     private let activityTypeCollectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.minimumLineSpacing = 2
-        layout.minimumInteritemSpacing = 2
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
         return layout
     }()
     
     private let selectedTypeBackground: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 17
-        view.frame.size = .init(width: 34, height: 30)
+        view.layer.cornerRadius = 19
+        view.frame.size = .init(width: 45, height: 38)
         return view
     }()
     
@@ -49,18 +47,13 @@ final class ActivityTypePickerTableViewCell: UITableViewCell {
     }
     
     private func moveBackgroundTo(_ cell: UICollectionViewCell) {
-        
-        UIView.animate(withDuration: 0.2) {
-            self.selectedTypeBackground.center = CGPoint(x: cell.center.x + ConstraintsConstants.leadingAnchorConstant, y: cell.center.y + ConstraintsConstants.topAnchorConstant)
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3) {
             if let selectedType = self.types.first(where: {$0.id == self.selectedTypeID}) {
                 self.selectedTypeBackground.backgroundColor = UIColor(rgbaColor: selectedType.backgroundRGBA)
             }
+            self.selectedTypeBackground.center = CGPoint(x: cell.center.x + ConstraintsConstants.leadingAnchorConstant, y: cell.center.y + ConstraintsConstants.topAnchorConstant)
         }
-        print(cell.center)
-        print(selectedTypeBackground.center)
-        
     }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -78,10 +71,10 @@ extension ActivityTypePickerTableViewCell: UICollectionViewDataSource {
         let type = types[indexPath.row]
         cell.emoji = type.emoji
         if type.id == selectedTypeID {
-            selectedTypeBackground.center = CGPoint(x: cell.center.x + ConstraintsConstants.leadingAnchorConstant / 2, y: cell.center.y + ConstraintsConstants.topAnchorConstant / 2)
-            selectedTypeBackground.backgroundColor = UIColor(rgbaColor: type.backgroundRGBA)
+            DispatchQueue.main.async {
+                self.moveBackgroundTo(cell)
+            }
         }
-//        cell.backgroundColor = .red
         return cell
     }
 }
