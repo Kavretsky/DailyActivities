@@ -12,6 +12,7 @@
 		760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE752A8BFF73000C8776 /* ActivityType.swift */; };
 		760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */; };
 		760EFE7A2A8C13D6000C8776 /* TypeManagerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */; };
+		7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */; };
 		76456DED2AFBAC6100690A21 /* ActivityEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */; };
 		764A92732A9914B3006402BE /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92722A9914B3006402BE /* Activity.swift */; };
 		764A92752A991759006402BE /* ActivityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92742A991759006402BE /* ActivityStore.swift */; };
@@ -36,6 +37,7 @@
 		760EFE752A8BFF73000C8776 /* ActivityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityType.swift; sourceTree = "<group>"; };
 		760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityExtensions.swift; sourceTree = "<group>"; };
 		760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewController.swift; sourceTree = "<group>"; };
+		7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
 		76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityEditTableViewController.swift; sourceTree = "<group>"; };
 		764A92722A9914B3006402BE /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		764A92742A991759006402BE /* ActivityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityStore.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
 				76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */,
 				767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */,
+				7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */,
 				767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */,
 				76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */,
 				767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */,
@@ -224,6 +227,7 @@
 				764A92752A991759006402BE /* ActivityStore.swift in Sources */,
 				760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */,
 				767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */,
+				7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */,
 				767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

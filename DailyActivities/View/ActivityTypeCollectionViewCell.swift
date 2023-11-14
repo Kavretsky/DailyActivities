@@ -18,7 +18,7 @@ final class ActivityTypeCollectionViewCell: UICollectionViewCell {
     private let emojiLabel: UILabel = {
         let emojiLabel = UILabel()
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
-        emojiLabel.font = .systemFont(ofSize: 22)
+        emojiLabel.font = .systemFont(ofSize: 17)
         emojiLabel.textAlignment = .center
         return emojiLabel
     }()
@@ -33,22 +33,15 @@ final class ActivityTypeCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupViews(){
+        contentView.backgroundColor = .clear
         contentView.addSubview(emojiLabel)
         
         NSLayoutConstraint.activate([
-            emojiLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 28),
-            emojiLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 32),
-            emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            emojiLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            emojiLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            emojiLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 7),
+            emojiLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -7),
+            emojiLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 7),
+            emojiLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -7)
         ])
-    }
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-//        let targetSize = CGSize(width: layoutAttributes.frame.width, height: layoutAttributes.frame.height)
-        layoutAttributes.frame.size = contentView.systemLayoutSizeFitting(CGSize(width: 32, height: 28), withHorizontalFittingPriority: .dragThatCanResizeScene, verticalFittingPriority: .dragThatCanResizeScene)
-        return layoutAttributes
     }
     
 }

@@ -57,7 +57,7 @@ final class ActivityEditTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier", for: indexPath) as! ActivityTypePickerTableViewCell
             cell.types = types
             cell.selectedTypeID = activity.typeID
-            print(cell.activityTypeCollection.contentSize)
+            cell.layoutIfNeeded()
             return cell
             
         default:

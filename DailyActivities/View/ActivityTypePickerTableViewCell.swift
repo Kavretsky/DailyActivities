@@ -13,38 +13,53 @@ final class ActivityTypePickerTableViewCell: UITableViewCell {
     
     var types: [ActivityType] = []
     
-    let activityTypeCollection: UICollectionView!
-    let activityTypeCollectionViewFlowLayout: UICollectionViewFlowLayout = {
+    private let activityTypeCollection: SelfSizingCollectionView!
+    private let activityTypeCollectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 320, height: 28)
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.minimumLineSpacing = 2
         layout.minimumInteritemSpacing = 2
-//        layout.scrollDirection = .vertical
         return layout
     }()
     
+    private let selectedTypeBackground: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 17
+        view.frame.size = .init(width: 34, height: 30)
+        return view
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        activityTypeCollection = UICollectionView(frame: .zero, collectionViewLayout: activityTypeCollectionViewFlowLayout)
+        activityTypeCollection = SelfSizingCollectionView(frame: .zero, collectionViewLayout: activityTypeCollectionViewFlowLayout)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        activityTypeCollection.backgroundColor = .clear
         activityTypeCollection.dataSource = self
         activityTypeCollection.delegate = self
         activityTypeCollection.register(ActivityTypeCollectionViewCell.self, forCellWithReuseIdentifier: "ActivityTypeCollectionViewCellIdentifier")
         activityTypeCollection.translatesAutoresizingMaskIntoConstraints = false
-//        activityTypeCollection.sizeToFit()
-        
+        contentView.addSubview(selectedTypeBackground)
         contentView.addSubview(activityTypeCollection)
         NSLayoutConstraint.activate([
-//            activityTypeCollection.heightAnchor.constraint(greaterThanOrEqualToConstant: 32),
             activityTypeCollection.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             activityTypeCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             activityTypeCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             activityTypeCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-//            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: activityTypeCollection.collectionViewLayout.collectionViewContentSize.height)
         ])
         
     }
     
-    
+    private func moveBackgroundToSelectedTypeCell(_ cell: UICollectionViewCell) {
+        
+        UIView.animate(withDuration: 0.2) {
+            self.selectedTypeBackground.frame.origin = CGPoint(x: cell.frame.midX, y: cell.frame.midY)
+            if let selectedType = self.types.first(where: {$0.id == self.selectedTypeID}) {
+                self.selectedTypeBackground.backgroundColor = UIColor(rgbaColor: selectedType.backgroundRGBA)
+            }
+        }
+        print(cell.center)
+        print(selectedTypeBackground.center)
+        
+    }
     
     
     required init?(coder: NSCoder) {
@@ -61,18 +76,16 @@ extension ActivityTypePickerTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActivityTypeCollectionViewCellIdentifier", for: indexPath) as! ActivityTypeCollectionViewCell
         cell.emoji = types[indexPath.row].emoji
-        cell.backgroundColor = .red
-        print(cell.contentView.frame.size)
-        print(collectionView.contentSize)
+//        cell.backgroundColor = .red
         return cell
     }
 }
 
-extension ActivityTypePickerTableViewCell: UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        CGSize(width: 32, height: 28)
-//    }
-    
-  
+extension ActivityTypePickerTableViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedTypeID = types[indexPath.row].id
+        if let selectedCell = collectionView.cellForItem(at: indexPath) {
+            moveBackgroundToSelectedTypeCell(selectedCell)
+        }
+    }
 }
-
