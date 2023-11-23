@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TimeStartTableViewCellDelegate: AnyObject {
-    func startTimeChanged()
+    func startTimeChanged(to dateTime: Date)
 }
 
 final class TimeStartTableViewCell: UITableViewCell {
@@ -16,8 +16,9 @@ final class TimeStartTableViewCell: UITableViewCell {
         didSet {
             if timePicker.date != time, time != nil {
                 timePicker.date = time!
+                delegate?.startTimeChanged(to: time!)
             }
-            delegate?.startTimeChanged()
+            
         }
     }
     

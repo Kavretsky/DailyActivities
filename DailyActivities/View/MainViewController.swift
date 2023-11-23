@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Combine
+//import Combine
 
 final class MainViewController: UIViewController {
     private let typeStore: TypeStore
@@ -119,7 +119,17 @@ extension MainViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         dismissKeyboard()
         let activityEditVC = ActivityEditTableViewController(types: typeStore.activeTypes, activity: activityStore.activities(for: activityListDate)[indexPath.row])
+        activityEditVC.delegate = self
         let activityEditNC = UINavigationController(rootViewController: activityEditVC)
         self.present(activityEditNC, animated: true)
     }
+}
+
+extension MainViewController: ActivityEditTableViewControllerDelegate {
+    func updateActivity(_ activity: Activity, with data: Activity.Data) {
+        activityStore.updateActivity(activity, with: data)
+        activitiesTableView.reloadData()
+    }
+    
+    
 }

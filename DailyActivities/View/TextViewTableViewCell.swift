@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TVTableViewCellDelegate: AnyObject {
+protocol TextViewTableViewCellDelegate: AnyObject {
     func textViewDidChange(_ cell: TextViewTableViewCell)
 }
 
@@ -21,7 +21,7 @@ final class TextViewTableViewCell: UITableViewCell {
         }
     }
     
-    weak var delegate: TVTableViewCellDelegate?
+    weak var delegate: TextViewTableViewCellDelegate?
     
     private let textView: UITextView = {
         let textView = UITextView()
@@ -53,6 +53,7 @@ final class TextViewTableViewCell: UITableViewCell {
 
 extension TextViewTableViewCell: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
+        text = textView.text
         delegate?.textViewDidChange(self)
     }
 }

@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol ActivityTypePickerTableViewCellDelegate: AnyObject {
+    func selectedTypeChanged(to selectedTypeID: String)
+}
+
 final class ActivityTypePickerTableViewCell: UITableViewCell {
     var selectedTypeID: String = ""
     var types: [ActivityType] = []
+    
+    weak var delegate: ActivityTypePickerTableViewCellDelegate?
     
     private let activityTypeCollection: SelfSizingCollectionView!
     private let activityTypeCollectionViewFlowLayout: UICollectionViewFlowLayout = {
@@ -82,6 +88,7 @@ extension ActivityTypePickerTableViewCell: UICollectionViewDataSource {
 extension ActivityTypePickerTableViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedTypeID = types[indexPath.row].id
+        delegate?.selectedTypeChanged(to: selectedTypeID)
         if let selectedCell = collectionView.cellForItem(at: indexPath) {
             moveBackgroundTo(selectedCell)
         }

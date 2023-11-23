@@ -7,13 +7,28 @@
 
 import UIKit
 
+protocol ActivityEditTableViewControllerDelegate: AnyObject {
+    func updateActivity(_ activity: Activity, with data: Activity.Data)
+}
+
 final class ActivityEditTableViewController: UITableViewController {
     private let types:[ActivityType]
     private let activity: Activity
+    private var activityData: Activity.Data
+    {
+        willSet{
+            print("willSet data")
+            navigationItem.rightBarButtonItem?.isEnabled = !newValue.name.isEmpty
+            print(newValue.name)
+        }
+    }
+    
+    weak var delegate: ActivityEditTableViewControllerDelegate?
     
     init(types: [ActivityType], activity: Activity) {
         self.types = types
         self.activity = activity
+        activityData = activity.data
         super.init(style: .insetGrouped)
     }
     
@@ -30,9 +45,25 @@ final class ActivityEditTableViewController: UITableViewController {
         tableView.register(TimeFinishTableViewCell.self, forCellReuseIdentifier: "TimeFinishTableViewCellReuseIdentifier")
         self.navigationItem.title = "Activity"
         tableView.allowsSelection = false
+        setupToolBar()
     }
 
-    // MARK: - Table view data source
+    private func setupToolBar() {
+        let saveButton = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveButtonTapped))
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonTapped))
+        navigationItem.rightBarButtonItem = saveButton
+        navigationItem.leftBarButtonItem = cancelButton
+    }
+    
+    @objc private func saveButtonTapped() {
+        delegate?.updateActivity(activity, with: activityData)
+        dismiss(animated: true)
+        
+    }
+    
+    @objc private func cancelButtonTapped() {
+        dismiss(animated: true)
+    }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -55,6 +86,7 @@ final class ActivityEditTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier", for: indexPath) as! ActivityTypePickerTableViewCell
             cell.types = types
             cell.selectedTypeID = activity.typeID
+            cell.delegate = self
             cell.layoutIfNeeded()
             return cell
             
@@ -68,6 +100,7 @@ final class ActivityEditTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TimeFinishTableViewCellReuseIdentifier", for: indexPath) as! TimeFinishTableViewCell
             cell.time = activity.finishDateTime
             cell.minimumDate = activity.startDateTime
+            cell.delegate = self
             cell.layoutIfNeeded()
             return cell
             
@@ -80,58 +113,13 @@ final class ActivityEditTableViewController: UITableViewController {
         }
         
     }
-    
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
-extension ActivityEditTableViewController: TVTableViewCellDelegate {
+extension ActivityEditTableViewController: TextViewTableViewCellDelegate {
     func textViewDidChange(_ cell: TextViewTableViewCell) {
         if let _ = tableView.indexPath(for: cell) {
+            activityData.name = cell.text
             tableView.beginUpdates()
             tableView.endUpdates()
         }
@@ -139,11 +127,27 @@ extension ActivityEditTableViewController: TVTableViewCellDelegate {
 }
 
 extension ActivityEditTableViewController: TimeStartTableViewCellDelegate {
-    func startTimeChanged() {
-        let startTimeCell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! TimeStartTableViewCell
-        let finishTimeCell = tableView.cellForRow(at: IndexPath(row: 1, section: 1)) as! TimeFinishTableViewCell
-        print("startTimeCell")
-        finishTimeCell.minimumDate = startTimeCell.time
+    func startTimeChanged(to dateTime: Date) {
+        if let finishTimeCell = tableView.cellForRow(at: IndexPath(row: 1, section: 1)) as? TimeFinishTableViewCell {
+            finishTimeCell.minimumDate = dateTime
+            activityData.startDateTime = dateTime
+        }
+    }
+}
+
+extension ActivityEditTableViewController: ActivityTypePickerTableViewCellDelegate {
+    func selectedTypeChanged(to selectedTypeID: String) {
+        if types.contains(where: {$0.id == selectedTypeID}) {
+            activityData.typeID = selectedTypeID
+        }
+    }
+}
+
+extension ActivityEditTableViewController: TimeFinishTableViewCellDelegate {
+    func finishTimeChanged(to dateTime: Date) {
+        if activityData.startDateTime.isSameDay(with: dateTime) {
+            activityData.finishDateTime = dateTime
+        }
     }
     
     

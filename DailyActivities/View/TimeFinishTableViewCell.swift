@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol TimeFinishTableViewCellDelegate: AnyObject {
+    func finishTimeChanged(to dateTime: Date)
+}
+
 class TimeFinishTableViewCell: UITableViewCell {
 
     var time: Date? {
@@ -15,6 +19,7 @@ class TimeFinishTableViewCell: UITableViewCell {
                 timePicker.date = time!
                 timeStack.isHidden = false
                 finishButton.isHidden = true
+                delegate?.finishTimeChanged(to: time!)
             }
         }
     }
@@ -22,10 +27,11 @@ class TimeFinishTableViewCell: UITableViewCell {
     var minimumDate: Date!
     {
         didSet {
-            print("minimudDate set for timePicker")
             timePicker.minimumDate = minimumDate
         }
     }
+    
+    weak var delegate: TimeFinishTableViewCellDelegate?
     
     private  let timePicker: UIDatePicker = {
         let timePicker = UIDatePicker()
