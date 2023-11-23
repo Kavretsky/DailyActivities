@@ -78,6 +78,11 @@ final class MainViewController: UIViewController {
 }
 
 extension MainViewController: NewActivityViewDelegate {
+    func addNewActivity(description: String, typeID: String) {
+        activityStore.addActivity(description: description, typeID: typeID)
+        activitiesTableView.reloadData()
+    }
+    
     func showTypeManager() {
         let typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
         let typeManagerNC = UINavigationController(rootViewController: typeManagerVC)
@@ -99,7 +104,7 @@ extension MainViewController: UITableViewDataSource {
             cell.duration = "Started at \(activity.startDateTime.formatted(date: .omitted, time: .shortened))"
             
         }
-        cell.activityDescription = activity.name
+        cell.activityDescription = activity.description
         cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
         return cell
     }

@@ -9,6 +9,7 @@ import UIKit
 import Combine
 
 protocol NewActivityViewDelegate: AnyObject {
+    func addNewActivity(description: String, typeID: String)
     func showTypeManager()
 }
 
@@ -146,7 +147,12 @@ final class NewActivityView: UIView {
     }
     
     @objc private func newActivityButtonTapped() {
-        print("newActivityButtonTapped tapped")
+        if let description = descriptionTF.text, !description.isEmpty {
+            delegate?.addNewActivity(description: description, typeID: chosenType.id)
+            descriptionTF.text = nil
+        } else {
+            descriptionTF.becomeFirstResponder()
+        }
     }
 
     private func setupTypeButton() {

@@ -19,7 +19,7 @@ final class ActivityEditTableViewController: UITableViewController {
     private var activityData: Activity.Data
     {
         willSet{
-            navigationItem.rightBarButtonItem?.isEnabled = !newValue.name.isEmpty
+            navigationItem.rightBarButtonItem?.isEnabled = !newValue.description.isEmpty
         }
     }
     
@@ -84,7 +84,7 @@ final class ActivityEditTableViewController: UITableViewController {
     }
     
     @objc private func showDeleteActivityAlert() {
-        deleteActivityAlert.title = activityData.name.isEmpty ? activity.name : activityData.name
+        deleteActivityAlert.title = activityData.description.isEmpty ? activity.description : activityData.description
         self.present(deleteActivityAlert, animated: true)
         
     }
@@ -127,7 +127,7 @@ final class ActivityEditTableViewController: UITableViewController {
         case (0,0):
             let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as! TextViewTableViewCell
             
-            cell.text = activity.name
+            cell.text = activity.description
             cell.delegate = self
             return cell
         case (0,1):
@@ -155,7 +155,7 @@ final class ActivityEditTableViewController: UITableViewController {
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as! TextViewTableViewCell
             
-            cell.text = activity.name
+            cell.text = activity.description
             cell.delegate = self
             return cell
         }
@@ -167,7 +167,7 @@ final class ActivityEditTableViewController: UITableViewController {
 extension ActivityEditTableViewController: TextViewTableViewCellDelegate {
     func textViewDidChange(_ cell: TextViewTableViewCell) {
         if let _ = tableView.indexPath(for: cell) {
-            activityData.name = cell.text
+            activityData.description = cell.text
             tableView.beginUpdates()
             tableView.endUpdates()
         }
