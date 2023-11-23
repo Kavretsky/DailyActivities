@@ -116,19 +116,46 @@ extension MainViewController: UITableViewDataSource {
 
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
         dismissKeyboard()
         let activityEditVC = ActivityEditTableViewController(types: typeStore.activeTypes, activity: activityStore.activities(for: activityListDate)[indexPath.row])
         activityEditVC.delegate = self
+        activityEditVC.isModalInPresentation = true
         let activityEditNC = UINavigationController(rootViewController: activityEditVC)
         self.present(activityEditNC, animated: true)
+        
     }
 }
 
 extension MainViewController: ActivityEditTableViewControllerDelegate {
+    func deleteActivity(_ activity: Activity) {
+        if let indexPath = activitiesTableView.indexPathsForSelectedRows {
+            activitiesTableView.beginUpdates()
+            activitiesTableView.deleteRows(at: indexPath, with: .automatic)
+            activityStore.deleteActivity(activity)
+            activitiesTableView.endUpdates()
+        }
+    }
+    
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
-        activityStore.updateActivity(activity, with: data)
-        activitiesTableView.reloadData()
+        
+//        activitiesTableView.reloadData()
+        if let indexPath = activitiesTableView.indexPathsForSelectedRows {
+            activitiesTableView.beginUpdates()
+            activitiesTableView.reloadRows(at: indexPath, with: .automatic)
+            activityStore.updateActivity(activity, with: data)
+            activitiesTableView.endUpdates()
+//            print(activityStore.activities(for: .now))
+        }
+    }
+    
+    func cancelButtonTapped() {
+        if let indexPath = activitiesTableView.indexPathForSelectedRow {
+            activitiesTableView.beginUpdates()
+            activitiesTableView.deselectRow(at: indexPath, animated: true)
+            
+            activitiesTableView.endUpdates()
+//            print(activityStore.activities(for: .now))
+        }
     }
     
     

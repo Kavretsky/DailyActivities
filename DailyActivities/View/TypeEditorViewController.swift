@@ -110,7 +110,7 @@ final class TypeEditorViewController: UIViewController {
         self.colorPickerSection.delegate = self
     }
     
-    let deleteTypeAlert: UIAlertController = {
+    private let deleteTypeAlert: UIAlertController = {
         let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         return sheetAlert
     }()

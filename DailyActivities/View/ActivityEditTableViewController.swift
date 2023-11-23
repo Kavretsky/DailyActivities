@@ -9,6 +9,8 @@ import UIKit
 
 protocol ActivityEditTableViewControllerDelegate: AnyObject {
     func updateActivity(_ activity: Activity, with data: Activity.Data)
+    func deleteActivity(_ activity: Activity)
+    func cancelButtonTapped()
 }
 
 final class ActivityEditTableViewController: UITableViewController {
@@ -17,13 +19,28 @@ final class ActivityEditTableViewController: UITableViewController {
     private var activityData: Activity.Data
     {
         willSet{
-            print("willSet data")
             navigationItem.rightBarButtonItem?.isEnabled = !newValue.name.isEmpty
-            print(newValue.name)
         }
     }
     
     weak var delegate: ActivityEditTableViewControllerDelegate?
+    
+    let deleteButton: UIButton = {
+        let deleteButton = UIButton()
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        let configuration = UIButton.Configuration.plain()
+        
+        deleteButton.configuration = configuration
+        deleteButton.tintColor = .red
+        deleteButton.setTitle("Delete type", for: .normal)
+        
+        return deleteButton
+    }()
+    
+    private let deleteActivityAlert: UIAlertController = {
+        let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        return sheetAlert
+    }()
     
     init(types: [ActivityType], activity: Activity) {
         self.types = types
@@ -46,6 +63,35 @@ final class ActivityEditTableViewController: UITableViewController {
         self.navigationItem.title = "Activity"
         tableView.allowsSelection = false
         setupToolBar()
+        setupDeleteButton()
+        setupDeleteActivityAlert()
+    }
+    
+    private func setupDeleteButton() {
+        view.addSubview(deleteButton)
+        deleteButton.addTarget(nil, action: #selector(showDeleteActivityAlert), for: .touchUpInside)
+        deleteButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
+        deleteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+    
+    private func setupDeleteActivityAlert() {
+        let confirmDeleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.deleteActivityButtonTapped()
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        deleteActivityAlert.addAction(confirmDeleteAction)
+        deleteActivityAlert.addAction(cancel)
+    }
+    
+    @objc private func showDeleteActivityAlert() {
+        deleteActivityAlert.title = activityData.name.isEmpty ? activity.name : activityData.name
+        self.present(deleteActivityAlert, animated: true)
+        
+    }
+    
+    private func deleteActivityButtonTapped() {
+        delegate?.deleteActivity(activity)
+        dismiss(animated: true)
     }
 
     private func setupToolBar() {
@@ -53,6 +99,7 @@ final class ActivityEditTableViewController: UITableViewController {
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonTapped))
         navigationItem.rightBarButtonItem = saveButton
         navigationItem.leftBarButtonItem = cancelButton
+        
     }
     
     @objc private func saveButtonTapped() {
@@ -62,6 +109,7 @@ final class ActivityEditTableViewController: UITableViewController {
     }
     
     @objc private func cancelButtonTapped() {
+        delegate?.cancelButtonTapped()
         dismiss(animated: true)
     }
 
