@@ -6,7 +6,7 @@
 //
 
 import UIKit
-//import Combine
+import Combine
 
 final class MainViewController: UIViewController {
     private let typeStore: TypeStore
@@ -15,11 +15,24 @@ final class MainViewController: UIViewController {
     private let activityListDate: Date
     private var lastSelectedIndexPath: IndexPath?
     
-    private let activitiesTableView = UITableView(frame: .zero, style: .insetGrouped)
+    private var cancellables = Set<AnyCancellable>()
+    
+    private lazy var activitiesTableView = UITableView(frame: .zero, style: .insetGrouped)
 
     private let deleteActivityAlert: UIAlertController = {
         let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         return sheetAlert
+    }()
+    
+    private let emptyPlaceholder: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = NSLocalizedString("There are no logged activities today.\nLet's start log your day below.", comment: "placeholder when there are no activities per day")
+        label.font = .systemFont(ofSize: 17)
+        label.tintColor = .gray
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
     }()
     
     init(typeStore: TypeStore, activityStore: ActivityStore) {
@@ -48,6 +61,7 @@ final class MainViewController: UIViewController {
     private func setupUI() {
         createActivityView.delegate = self
         title = "Today"
+        view.addSubview(emptyPlaceholder)
         view.addSubview(activitiesTableView)
         view.addSubview(createActivityView)
         createActivityView.updateConstraints()
@@ -71,11 +85,16 @@ final class MainViewController: UIViewController {
             activitiesTableView.bottomAnchor.constraint(lessThanOrEqualTo: createActivityView.topAnchor),
             activitiesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             activitiesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            emptyPlaceholder.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            emptyPlaceholder.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            emptyPlaceholder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyPlaceholder.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
         ])
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .tertiarySystemGroupedBackground
     }
     
     private func setupDeleteActivityAlert() {
@@ -106,10 +125,13 @@ final class MainViewController: UIViewController {
 extension MainViewController: NewActivityViewDelegate {
     func addNewActivity(description: String, typeID: String) {
         activityStore.addActivity(description: description, typeID: typeID)
+        activitiesTableView.isHidden = false
         let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: 0)
         activitiesTableView.beginUpdates()
-        activitiesTableView.reloadRows(at: [IndexPath(row: indexPath.row - 1, section: indexPath.section)], with: .none)
-        activitiesTableView.insertRows(at: [indexPath], with: .top)
+        if activityStore.activities(for: activityListDate).count > 1 {
+            activitiesTableView.reloadRows(at: [IndexPath(row: indexPath.row - 1, section: indexPath.section)], with: .none)
+        }
+        activitiesTableView.insertRows(at: [indexPath], with: .fade)
         activitiesTableView.endUpdates()
         activitiesTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
     }
@@ -182,6 +204,9 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
             activitiesTableView.deleteRows(at: [indexPath], with: .automatic)
             activityStore.deleteActivity(activity)
             activitiesTableView.endUpdates()
+            if activityStore.activities(for: activityListDate).isEmpty {
+                activitiesTableView.isHidden = true
+            }
         }
     }
     

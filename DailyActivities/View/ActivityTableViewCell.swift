@@ -86,11 +86,6 @@ final class ActivityTableViewCell: UITableViewCell {
             
             durationAndTypeSV.leadingAnchor.constraint(equalTo: contentSV.leadingAnchor),
             durationAndTypeSV.trailingAnchor.constraint(equalTo: contentSV.trailingAnchor),
-            
-//            typeLabel.topAnchor.constraint(equalTo: durationAndTypeSV.topAnchor, constant: 4),
-//            typeLabel.bottomAnchor.constraint(equalTo: durationAndTypeSV.bottomAnchor, constant: -4),
-//            typeLabel.trailingAnchor.constraint(equalTo: durationAndTypeSV.trailingAnchor, constant: -6),
-            
         ])
     }
     

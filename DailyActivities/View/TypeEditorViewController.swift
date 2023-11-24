@@ -13,12 +13,6 @@ protocol TypeEditorViewControllerDelegate: AnyObject {
     var isTypeDeletable: Bool { get }
 }
 
-//class EmojiTextField: UITextField {
-//    override var textInputMode: UITextInputMode? {
-//        .activeInputModes.first(where: { $0.primaryLanguage == "emoji" })
-//    }
-//}
-
 final class TypeEditorViewController: UIViewController {
     
     let typeToEdit: ActivityType
@@ -84,7 +78,6 @@ final class TypeEditorViewController: UIViewController {
         
         deleteButton.configuration = configuration
         deleteButton.tintColor = .red
-//        deleteButton.backgroundColor = .clear
         deleteButton.setTitle("Delete type", for: .normal)
         
         return deleteButton
