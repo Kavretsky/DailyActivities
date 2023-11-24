@@ -148,8 +148,21 @@ final class NewActivityView: UIView {
     
     @objc private func newActivityButtonTapped() {
         if let description = descriptionTF.text, !description.isEmpty {
-            delegate?.addNewActivity(description: description, typeID: chosenType.id)
-            descriptionTF.text = nil
+            
+            UIView.animate(withDuration: 0.05) {
+                self.newActivityButton.transform = .init(scaleX: 0.85, y: 0.85)
+                
+            } completion: { _ in
+                self.delegate?.addNewActivity(description: description, typeID: self.chosenType.id)
+                self.descriptionTF.text = nil
+                UIView.animate(withDuration: 0.05) {
+                    self.newActivityButton.transform = .init(scaleX: 1, y: 1)
+                }
+            }
+           
+
+
+
         } else {
             descriptionTF.becomeFirstResponder()
         }
