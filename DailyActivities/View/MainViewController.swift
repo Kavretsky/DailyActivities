@@ -23,7 +23,6 @@ final class MainViewController: UIViewController {
         activityListDate = .now
         createActivityView = NewActivityView(typeStore: self.typeStore)
         super.init(nibName: nil, bundle: nil)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -80,7 +79,10 @@ final class MainViewController: UIViewController {
 extension MainViewController: NewActivityViewDelegate {
     func addNewActivity(description: String, typeID: String) {
         activityStore.addActivity(description: description, typeID: typeID)
-        activitiesTableView.reloadData()
+        activitiesTableView.beginUpdates()
+        let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: 0)
+        activitiesTableView.insertRows(at: [indexPath], with: .automatic)
+        activitiesTableView.endUpdates()
     }
     
     func showTypeManager() {
@@ -127,7 +129,6 @@ extension MainViewController: UITableViewDelegate {
         activityEditVC.isModalInPresentation = true
         let activityEditNC = UINavigationController(rootViewController: activityEditVC)
         self.present(activityEditNC, animated: true)
-        
     }
 }
 
@@ -142,14 +143,11 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
     }
     
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
-        
-//        activitiesTableView.reloadData()
         if let indexPath = activitiesTableView.indexPathsForSelectedRows {
             activitiesTableView.beginUpdates()
             activitiesTableView.reloadRows(at: indexPath, with: .automatic)
             activityStore.updateActivity(activity, with: data)
             activitiesTableView.endUpdates()
-//            print(activityStore.activities(for: .now))
         }
     }
     
