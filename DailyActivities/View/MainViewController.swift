@@ -106,9 +106,11 @@ final class MainViewController: UIViewController {
 extension MainViewController: NewActivityViewDelegate {
     func addNewActivity(description: String, typeID: String) {
         activityStore.addActivity(description: description, typeID: typeID)
-        activitiesTableView.beginUpdates()
         let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: 0)
-        activitiesTableView.insertRows(at: [indexPath], with: .automatic)
+        print(indexPath)
+        activitiesTableView.beginUpdates()
+        activitiesTableView.reloadRows(at: [IndexPath(row: indexPath.row - 1, section: indexPath.section)], with: .none)
+        activitiesTableView.insertRows(at: [indexPath], with: .top)
         activitiesTableView.endUpdates()
     }
     
