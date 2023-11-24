@@ -13,9 +13,14 @@ final class MainViewController: UIViewController {
     private let activityStore: ActivityStore
     private let createActivityView: NewActivityView
     private let activityListDate: Date
+    private var lastSelectedIndexPath: IndexPath?
     
     private let activitiesTableView = UITableView(frame: .zero, style: .insetGrouped)
 
+    private let deleteActivityAlert: UIAlertController = {
+        let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        return sheetAlert
+    }()
     
     init(typeStore: TypeStore, activityStore: ActivityStore) {
         self.activityStore = activityStore
@@ -33,7 +38,7 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActivitiesTableview()
-
+        setupDeleteActivityAlert()
     }
     
     @objc private func dismissKeyboard() {
@@ -73,6 +78,28 @@ final class MainViewController: UIViewController {
         self.view.backgroundColor = .white
     }
     
+    private func setupDeleteActivityAlert() {
+        let confirmDeleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] handler in
+            self?.deleteActivityButtonTapped()
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        deleteActivityAlert.addAction(confirmDeleteAction)
+        deleteActivityAlert.addAction(cancel)
+    }
+    
+    private func showDeleteActivityAlert() {
+        guard let index = lastSelectedIndexPath else { return }
+        let activityToDelete = activityStore.activities(for: activityListDate)[index.row]
+        deleteActivityAlert.title = activityToDelete.description
+        self.present(deleteActivityAlert, animated: true)
+        
+    }
+    
+    private func deleteActivityButtonTapped() {
+        guard let index = lastSelectedIndexPath else { return }
+        let activity = activityStore.activities(for: activityListDate)[index.row]
+        self.deleteActivity(activity)
+    }
     
 }
 
@@ -124,19 +151,33 @@ extension MainViewController: UITableViewDataSource {
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         dismissKeyboard()
+        lastSelectedIndexPath = indexPath
         let activityEditVC = ActivityEditTableViewController(types: typeStore.activeTypes, activity: activityStore.activities(for: activityListDate)[indexPath.row])
         activityEditVC.delegate = self
         activityEditVC.isModalInPresentation = true
         let activityEditNC = UINavigationController(rootViewController: activityEditVC)
         self.present(activityEditNC, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "") { (action, view, handler) in
+            self.lastSelectedIndexPath = indexPath
+            self.showDeleteActivityAlert()
+            handler(true)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+        deleteAction.image = UIImage(systemName: "trash")
+        let swipeConfiguration = UISwipeActionsConfiguration(actions: [deleteAction])
+        return swipeConfiguration
+    }
 }
 
 extension MainViewController: ActivityEditTableViewControllerDelegate {
     func deleteActivity(_ activity: Activity) {
-        if let indexPath = activitiesTableView.indexPathsForSelectedRows {
+        if let indexPath = lastSelectedIndexPath {
             activitiesTableView.beginUpdates()
-            activitiesTableView.deleteRows(at: indexPath, with: .automatic)
+            activitiesTableView.deleteRows(at: [indexPath], with: .automatic)
             activityStore.deleteActivity(activity)
             activitiesTableView.endUpdates()
         }
@@ -155,10 +196,9 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
         if let indexPath = activitiesTableView.indexPathForSelectedRow {
             activitiesTableView.beginUpdates()
             activitiesTableView.deselectRow(at: indexPath, animated: true)
-            
             activitiesTableView.endUpdates()
-//            print(activityStore.activities(for: .now))
         }
+        lastSelectedIndexPath = nil
     }
     
     
