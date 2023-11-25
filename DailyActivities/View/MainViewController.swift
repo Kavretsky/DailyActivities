@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Combine
 
 final class MainViewController: UIViewController {
     private let typeStore: TypeStore
@@ -14,8 +13,6 @@ final class MainViewController: UIViewController {
     private let createActivityView: NewActivityView
     private let activityListDate: Date
     private var lastSelectedIndexPath: IndexPath?
-    
-    private var cancellables = Set<AnyCancellable>()
     
     private lazy var activitiesTableView = UITableView(frame: .zero, style: .insetGrouped)
 
@@ -61,9 +58,14 @@ final class MainViewController: UIViewController {
     private func setupUI() {
         createActivityView.delegate = self
         title = "Today"
-        view.addSubview(emptyPlaceholder)
         view.addSubview(activitiesTableView)
         view.addSubview(createActivityView)
+        view.addSubview(emptyPlaceholder)
+        if activityStore.activities(for: activityListDate).isEmpty {
+            activitiesTableView.isHidden = true
+        } else {
+            emptyPlaceholder.isHidden = true
+        }
         createActivityView.updateConstraints()
     }
     
@@ -82,7 +84,7 @@ final class MainViewController: UIViewController {
             createActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
             
             activitiesTableView.topAnchor.constraint(equalTo: view.topAnchor),
-            activitiesTableView.bottomAnchor.constraint(lessThanOrEqualTo: createActivityView.topAnchor),
+            activitiesTableView.bottomAnchor.constraint(equalTo: createActivityView.topAnchor),
             activitiesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             activitiesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
@@ -125,7 +127,10 @@ final class MainViewController: UIViewController {
 extension MainViewController: NewActivityViewDelegate {
     func addNewActivity(description: String, typeID: String) {
         activityStore.addActivity(description: description, typeID: typeID)
-        activitiesTableView.isHidden = false
+        if activitiesTableView.isHidden {
+            self.emptyPlaceholder.isHidden = true
+            self.activitiesTableView.isHidden = false
+        }
         let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: 0)
         activitiesTableView.beginUpdates()
         if activityStore.activities(for: activityListDate).count > 1 {
@@ -206,6 +211,7 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
             activitiesTableView.endUpdates()
             if activityStore.activities(for: activityListDate).isEmpty {
                 activitiesTableView.isHidden = true
+                emptyPlaceholder.isHidden = false
             }
         }
     }
