@@ -61,6 +61,7 @@ final class MainViewController: UIViewController {
         view.addSubview(activitiesTableView)
         view.addSubview(createActivityView)
         view.addSubview(emptyPlaceholder)
+        activitiesTableView.keyboardDismissMode = .interactive
         if activityStore.activities(for: activityListDate).isEmpty {
             activitiesTableView.isHidden = true
         } else {
@@ -126,7 +127,6 @@ final class MainViewController: UIViewController {
 
 extension MainViewController: NewActivityViewDelegate {
     func addNewActivity(description: String, typeID: String) {
-        activityStore.addActivity(description: description, typeID: typeID)
         if activitiesTableView.isHidden {
             self.emptyPlaceholder.isHidden = true
             self.activitiesTableView.isHidden = false
@@ -189,7 +189,6 @@ extension MainViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
         let deleteAction = UIContextualAction(style: .destructive, title: "") { (action, view, handler) in
             self.lastSelectedIndexPath = indexPath
             self.showDeleteActivityAlert()
@@ -200,6 +199,10 @@ extension MainViewController: UITableViewDelegate {
         let swipeConfiguration = UISwipeActionsConfiguration(actions: [deleteAction])
         return swipeConfiguration
     }
+    
+//    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        
+//    }
 }
 
 extension MainViewController: ActivityEditTableViewControllerDelegate {
@@ -233,6 +236,4 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
         }
         lastSelectedIndexPath = nil
     }
-    
-    
 }
