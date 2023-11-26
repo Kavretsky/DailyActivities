@@ -123,6 +123,17 @@ final class MainViewController: UIViewController {
         self.deleteActivity(activity)
     }
     
+    private func finishActivity(_ activity: Activity, at indexPath: IndexPath) {
+        var data = activity.data
+        data.finishDateTime = .now
+        DispatchQueue.global().async {
+            self.activityStore.updateActivity(activity, with: data)
+        }
+        activitiesTableView.beginUpdates()
+        activitiesTableView.reloadRows(at: [indexPath], with: .none)
+        activitiesTableView.endUpdates()
+    }
+    
 }
 
 extension MainViewController: NewActivityViewDelegate {
@@ -131,6 +142,7 @@ extension MainViewController: NewActivityViewDelegate {
             self.emptyPlaceholder.isHidden = true
             self.activitiesTableView.isHidden = false
         }
+        activityStore.addActivity(description: description, typeID: typeID)
         let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: 0)
         activitiesTableView.beginUpdates()
         if activityStore.activities(for: activityListDate).count > 1 {
@@ -200,9 +212,23 @@ extension MainViewController: UITableViewDelegate {
         return swipeConfiguration
     }
     
-//    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        
-//    }
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let activity = activityStore.activities(for: activityListDate)[indexPath.row]
+        if activity.finishDateTime == nil {
+            let completeActivity = UIContextualAction(style: .normal, title: "Complete") { [weak self] (action, view, completionHandler) in
+                self?.finishActivity(activity, at: indexPath)
+                completionHandler(true)
+            }
+            completeActivity.backgroundColor = .systemGreen
+            return UISwipeActionsConfiguration(actions: [completeActivity])
+        } else {
+            let startActivityAgain = UIContextualAction(style: .normal, title: "Start again") { [weak self] (action, view, completionHandler) in
+                self?.addNewActivity(description: activity.description, typeID: activity.typeID)
+                completionHandler(true)
+            }
+            return UISwipeActionsConfiguration(actions: [startActivityAgain])
+        }
+    }
 }
 
 extension MainViewController: ActivityEditTableViewControllerDelegate {
@@ -222,8 +248,10 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
         if let indexPath = activitiesTableView.indexPathsForSelectedRows {
             activitiesTableView.beginUpdates()
+            DispatchQueue.global().async {
+                self.activityStore.updateActivity(activity, with: data)
+            }
             activitiesTableView.reloadRows(at: indexPath, with: .automatic)
-            activityStore.updateActivity(activity, with: data)
             activitiesTableView.endUpdates()
         }
     }
