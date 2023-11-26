@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 struct RGBAColor: Codable, Equatable, Hashable {
     let red: Double
@@ -18,6 +19,12 @@ struct RGBAColor: Codable, Equatable, Hashable {
 extension UIColor {
     convenience init(rgbaColor rgba: RGBAColor) {
         self.init(red: rgba.red, green: rgba.green, blue: rgba.blue, alpha: rgba.alpha)
+    }
+}
+
+extension Color {
+    init(rgbaColor rgba: RGBAColor) {
+        self.init(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.alpha)
     }
 }
 
