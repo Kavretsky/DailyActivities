@@ -10,7 +10,7 @@ import UIKit
 final class MainViewController: UIViewController {
     private let typeStore: TypeStore
     private let activityStore: ActivityStore
-    private let createActivityView: NewActivityView
+    private let newActivityView: NewActivityView
     private let activityListDate: Date
     private var lastSelectedIndexPath: IndexPath?
     
@@ -36,7 +36,7 @@ final class MainViewController: UIViewController {
         self.activityStore = activityStore
         self.typeStore = typeStore
         activityListDate = .now
-        createActivityView = NewActivityView(typeStore: self.typeStore)
+        newActivityView = NewActivityView(typeStore: self.typeStore)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -56,10 +56,10 @@ final class MainViewController: UIViewController {
         }
     
     private func setupUI() {
-        createActivityView.delegate = self
+        newActivityView.delegate = self
         title = "Today"
         view.addSubview(activitiesTableView)
-        view.addSubview(createActivityView)
+        view.addSubview(newActivityView)
         view.addSubview(emptyPlaceholder)
         activitiesTableView.keyboardDismissMode = .interactive
         if activityStore.activities(for: activityListDate).isEmpty {
@@ -67,7 +67,7 @@ final class MainViewController: UIViewController {
         } else {
             emptyPlaceholder.isHidden = true
         }
-        createActivityView.updateConstraints()
+        newActivityView.updateConstraints()
     }
     
     private func setupActivitiesTableview() {
@@ -79,13 +79,14 @@ final class MainViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         NSLayoutConstraint.activate([
-            createActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            createActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            createActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            createActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
+            newActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            view.keyboardLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: newActivityView.bottomAnchor),
+//            newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
             
             activitiesTableView.topAnchor.constraint(equalTo: view.topAnchor),
-            activitiesTableView.bottomAnchor.constraint(equalTo: createActivityView.topAnchor),
+            activitiesTableView.bottomAnchor.constraint(equalTo: newActivityView.topAnchor),
             activitiesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             activitiesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
@@ -94,6 +95,9 @@ final class MainViewController: UIViewController {
             emptyPlaceholder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyPlaceholder.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
         ])
+        
+        let dismissPadding = newActivityView.bounds.height
+        newActivityView.keyboardLayoutGuide.keyboardDismissPadding = dismissPadding
     }
 
     override func viewWillAppear(_ animated: Bool) {
