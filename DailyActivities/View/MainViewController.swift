@@ -81,9 +81,7 @@ final class MainViewController: UIViewController {
         NSLayoutConstraint.activate([
             newActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            newActivityView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             view.keyboardLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: newActivityView.bottomAnchor),
-//            newActivityView.topAnchor.constraint(lessThanOrEqualTo: view.keyboardLayoutGuide.topAnchor),
             
             activitiesTableView.topAnchor.constraint(equalTo: view.topAnchor),
             activitiesTableView.bottomAnchor.constraint(equalTo: newActivityView.topAnchor),
@@ -99,27 +97,6 @@ final class MainViewController: UIViewController {
         let dismissPadding = newActivityView.bounds.height
         newActivityView.keyboardLayoutGuide.keyboardDismissPadding = dismissPadding
     }
-    
-//    override func viewWillLayoutSubviews() {
-//        NSLayoutConstraint.activate([
-//            newActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            view.keyboardLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: newActivityView.bottomAnchor),
-//            
-//            activitiesTableView.topAnchor.constraint(equalTo: view.topAnchor),
-//            activitiesTableView.bottomAnchor.constraint(equalTo: newActivityView.topAnchor),
-//            activitiesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            activitiesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            
-//            emptyPlaceholder.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-//            emptyPlaceholder.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-//            emptyPlaceholder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            emptyPlaceholder.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
-//        ])
-//        
-//        let dismissPadding = newActivityView.bounds.height
-//        newActivityView.keyboardLayoutGuide.keyboardDismissPadding = dismissPadding
-//    }
 
     override func viewWillAppear(_ animated: Bool) {
         self.view.backgroundColor = .tertiarySystemGroupedBackground

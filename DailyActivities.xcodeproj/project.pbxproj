@@ -12,7 +12,6 @@
 		760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE752A8BFF73000C8776 /* ActivityType.swift */; };
 		760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */; };
 		760EFE7A2A8C13D6000C8776 /* TypeManagerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */; };
-		762313202B135F3A00A6B238 /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7623131E2B135F3A00A6B238 /* ChartViewModel.swift */; };
 		762313222B13612900A6B238 /* DayActivityChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762313212B13612900A6B238 /* DayActivityChart.swift */; };
 		7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */; };
 		7642D7462B03E0B90035E225 /* TimeStartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */; };
@@ -41,7 +40,6 @@
 		760EFE752A8BFF73000C8776 /* ActivityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityType.swift; sourceTree = "<group>"; };
 		760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityExtensions.swift; sourceTree = "<group>"; };
 		760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewController.swift; sourceTree = "<group>"; };
-		7623131E2B135F3A00A6B238 /* ChartViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 		762313212B13612900A6B238 /* DayActivityChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayActivityChart.swift; sourceTree = "<group>"; };
 		7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
 		7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStartTableViewCell.swift; sourceTree = "<group>"; };
@@ -100,7 +98,6 @@
 				768A1AE72A914CB5008C4CAC /* ViewModel */,
 				768A1AEA2A914CDF008C4CAC /* View */,
 				767B10732A9541FB00E55ED8 /* EmojiTextField.swift */,
-				7623131E2B135F3A00A6B238 /* ChartViewModel.swift */,
 				762313212B13612900A6B238 /* DayActivityChart.swift */,
 				7669F5C82A86B461003F75ED /* AppDelegate.swift */,
 				7669F5CA2A86B461003F75ED /* SceneDelegate.swift */,
@@ -242,7 +239,6 @@
 				764A92752A991759006402BE /* ActivityStore.swift in Sources */,
 				760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */,
 				767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */,
-				762313202B135F3A00A6B238 /* ChartViewModel.swift in Sources */,
 				7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */,
 				767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */,
 			);
