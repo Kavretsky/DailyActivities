@@ -8,6 +8,8 @@
 import UIKit
 import SwiftUI
 
+
+
 final class MainViewController: UIViewController {
     private let typeStore: TypeStore
     private let activityStore: ActivityStore
@@ -33,10 +35,21 @@ final class MainViewController: UIViewController {
         return label
     }()
     
-    private enum Section: Int {
-        case Chart
-        case Activities
+    private enum Section: Int, CaseIterable {
+        case chart
+        case activities
+        
+        var header: String? {
+            switch self {
+            case .chart:
+                return nil
+            case .activities:
+                return "Activities"
+            }
+        }
     }
+    
+    
     
     init(typeStore: TypeStore, activityStore: ActivityStore) {
         self.activityStore = activityStore
@@ -55,7 +68,6 @@ final class MainViewController: UIViewController {
         setupUI()
         setupActivitiesTableview()
         setupDeleteActivityAlert()
-        print (Section.Chart.rawValue, Section.Activities.rawValue)
     }
     
     @objc private func dismissKeyboard() {
@@ -153,7 +165,7 @@ extension MainViewController: NewActivityViewDelegate {
             self.activitiesTableView.isHidden = false
         }
         activityStore.addActivity(description: description, typeID: typeID)
-        let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: 1)
+        let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: Section.activities.rawValue)
         activitiesTableView.beginUpdates()
         if activityStore.activities(for: activityListDate).count > 1 {
             activitiesTableView.reloadRows(at: [IndexPath(row: indexPath.row - 1, section: indexPath.section)], with: .none)
@@ -172,18 +184,23 @@ extension MainViewController: NewActivityViewDelegate {
 
 extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 1 ? activityStore.activities(for: activityListDate).count : 1
+        switch Section(rawValue: section) {
+        case .activities: return activityStore.activities(for: activityListDate).count
+        case .chart: return 1
+        case .none: return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch (indexPath.section, indexPath.row) {
-        case (0, _):
+        guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
+        switch section {
+        case .chart:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier")!
             cell.contentConfiguration = UIHostingConfiguration(content: {
                 DayActivityChart(activities: activityStore.activities(for: activityListDate), typeStore: typeStore)
             })
             return cell
-        case (1, _):
+        case .activities:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
             let activity = activityStore.activities(for: activityListDate)[indexPath.row]
             if activity.finishDateTime != nil {
@@ -195,17 +212,15 @@ extension MainViewController: UITableViewDataSource {
             cell.activityDescription = activity.description
             cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
             return cell
-        default:
-            return UITableViewCell()
         }
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 1 ? "Activities" : nil
+        return Section(rawValue: section)?.header
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return Section.allCases.count
     }
     
 }
@@ -221,7 +236,9 @@ extension MainViewController: UITableViewDelegate {
         self.present(activityEditNC, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) ->
+    UISwipeActionsConfiguration? {
+        guard Section(rawValue: indexPath.section) == .activities else { return nil }
         let deleteAction = UIContextualAction(style: .destructive, title: "") { (action, view, handler) in
             self.lastSelectedIndexPath = indexPath
             self.showDeleteActivityAlert()
@@ -234,6 +251,7 @@ extension MainViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard Section(rawValue: indexPath.section) == .activities else { return nil }
         let activity = activityStore.activities(for: activityListDate)[indexPath.row]
         if activity.finishDateTime == nil {
             let completeActivity = UIContextualAction(style: .normal, title: "Complete") { [weak self] (action, view, completionHandler) in
