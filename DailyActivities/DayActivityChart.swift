@@ -8,7 +8,7 @@
 import SwiftUI
 import Charts
 
-fileprivate struct ChartData: Identifiable {
+struct ChartData: Identifiable {
     let id = UUID()
     let typeID: String
     let startTime: Date
@@ -17,10 +17,11 @@ fileprivate struct ChartData: Identifiable {
 }
 
 struct DayActivityChart: View {
-    @EnvironmentObject var typeStore: TypeStore
+    @ObservedObject var typeStore: TypeStore
     
-    init(activities: [Activity]) {
+    init(activities: [Activity], typeStore: TypeStore) {
         self.activities = activities
+        self.typeStore = typeStore
     }
     
     private var activities: [Activity]
@@ -101,8 +102,7 @@ struct DayActivityChart_Previews: PreviewProvider {
             Activity(description: "Test2", typeID: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9", startDateTime: .now.addingTimeInterval(3600), finishDateTime: .now.addingTimeInterval(8650)),
             Activity(description: "Test3", typeID: "4300197B-201F-42CC-AB52-67186E41F668", startDateTime: .now.addingTimeInterval(8650), finishDateTime: .now.addingTimeInterval(15650))
         ]
-        DayActivityChart(activities: sample)
-            .environmentObject(TypeStore())
+        DayActivityChart(activities: sample, typeStore: TypeStore())
             .scaledToFit()
     }
 }

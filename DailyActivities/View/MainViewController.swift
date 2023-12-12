@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 final class MainViewController: UIViewController {
     private let typeStore: TypeStore
@@ -32,6 +33,11 @@ final class MainViewController: UIViewController {
         return label
     }()
     
+    private enum Section: Int {
+        case Chart
+        case Activities
+    }
+    
     init(typeStore: TypeStore, activityStore: ActivityStore) {
         self.activityStore = activityStore
         self.typeStore = typeStore
@@ -49,6 +55,7 @@ final class MainViewController: UIViewController {
         setupUI()
         setupActivitiesTableview()
         setupDeleteActivityAlert()
+        print (Section.Chart.rawValue, Section.Activities.rawValue)
     }
     
     @objc private func dismissKeyboard() {
@@ -75,6 +82,7 @@ final class MainViewController: UIViewController {
         activitiesTableView.delegate = self
         activitiesTableView.dataSource = self
         activitiesTableView.register(ActivityTableViewCell.self, forCellReuseIdentifier: "ActivityTableViewCellIdentifier")
+        activitiesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ActivityChartTableViewCellIdentifier")
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -145,7 +153,7 @@ extension MainViewController: NewActivityViewDelegate {
             self.activitiesTableView.isHidden = false
         }
         activityStore.addActivity(description: description, typeID: typeID)
-        let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: 0)
+        let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: 1)
         activitiesTableView.beginUpdates()
         if activityStore.activities(for: activityListDate).count > 1 {
             activitiesTableView.reloadRows(at: [IndexPath(row: indexPath.row - 1, section: indexPath.section)], with: .none)
@@ -164,29 +172,40 @@ extension MainViewController: NewActivityViewDelegate {
 
 extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return activityStore.activities(for: activityListDate).count
+        return section == 1 ? activityStore.activities(for: activityListDate).count : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
-        let activity = activityStore.activities(for: activityListDate)[indexPath.row]
-        if activity.finishDateTime != nil {
-            cell.duration = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
-        } else {
-            cell.duration = "Started at \(activity.startDateTime.formatted(date: .omitted, time: .shortened))"
-            
+        switch (indexPath.section, indexPath.row) {
+        case (0, _):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier")!
+            cell.contentConfiguration = UIHostingConfiguration(content: {
+                DayActivityChart(activities: activityStore.activities(for: activityListDate), typeStore: typeStore)
+            })
+            return cell
+        case (1, _):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
+            let activity = activityStore.activities(for: activityListDate)[indexPath.row]
+            if activity.finishDateTime != nil {
+                cell.duration = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
+            } else {
+                cell.duration = "Started at \(activity.startDateTime.formatted(date: .omitted, time: .shortened))"
+                
+            }
+            cell.activityDescription = activity.description
+            cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
+            return cell
+        default:
+            return UITableViewCell()
         }
-        cell.activityDescription = activity.description
-        cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
-        return cell
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Activities"
+        return section == 1 ? "Activities" : nil
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
 }

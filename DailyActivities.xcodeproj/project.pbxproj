@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D32F9ED2AC3741E00D82544 /* ActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */; };
+		5D8521D52B28801C00D215A5 /* ActivityChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8521D42B28801C00D215A5 /* ActivityChartViewController.swift */; };
 		760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE732A8BFF55000C8776 /* TypeStore.swift */; };
 		760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE752A8BFF73000C8776 /* ActivityType.swift */; };
 		760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */; };
@@ -36,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTableViewCell.swift; sourceTree = "<group>"; };
+		5D8521D42B28801C00D215A5 /* ActivityChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChartViewController.swift; sourceTree = "<group>"; };
 		760EFE732A8BFF55000C8776 /* TypeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeStore.swift; sourceTree = "<group>"; };
 		760EFE752A8BFF73000C8776 /* ActivityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityType.swift; sourceTree = "<group>"; };
 		760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityExtensions.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				768A1AEA2A914CDF008C4CAC /* View */,
 				767B10732A9541FB00E55ED8 /* EmojiTextField.swift */,
 				762313212B13612900A6B238 /* DayActivityChart.swift */,
+				5D8521D42B28801C00D215A5 /* ActivityChartViewController.swift */,
 				7669F5C82A86B461003F75ED /* AppDelegate.swift */,
 				7669F5CA2A86B461003F75ED /* SceneDelegate.swift */,
 				760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */,
@@ -232,6 +235,7 @@
 				760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */,
 				7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */,
 				760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */,
+				5D8521D52B28801C00D215A5 /* ActivityChartViewController.swift in Sources */,
 				762313222B13612900A6B238 /* DayActivityChart.swift in Sources */,
 				76456DED2AFBAC6100690A21 /* ActivityEditTableViewController.swift in Sources */,
 				760EFE7A2A8C13D6000C8776 /* TypeManagerTableViewController.swift in Sources */,
@@ -316,6 +320,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -370,6 +375,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
