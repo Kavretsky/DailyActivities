@@ -197,7 +197,7 @@ extension MainViewController: UITableViewDataSource {
         case .chart:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier")!
             cell.contentConfiguration = UIHostingConfiguration(content: {
-                DayActivityChart(activities: activityStore.activities(for: activityListDate), typeStore: typeStore)
+                DayActivityChart(activityStore: activityStore, typeStore: typeStore)
             })
             return cell
         case .activities:
@@ -287,9 +287,7 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
         if let indexPath = activitiesTableView.indexPathsForSelectedRows {
             activitiesTableView.beginUpdates()
-            DispatchQueue.global().async {
-                self.activityStore.updateActivity(activity, with: data)
-            }
+            activityStore.updateActivity(activity, with: data)
             activitiesTableView.reloadRows(at: indexPath, with: .automatic)
             activitiesTableView.endUpdates()
         }

@@ -19,7 +19,6 @@ class TimeFinishTableViewCell: UITableViewCell {
                 timePicker.date = time!
                 timeStack.isHidden = false
                 finishButton.isHidden = true
-                delegate?.finishTimeChanged(to: time!)
             }
         }
     }
@@ -93,6 +92,7 @@ class TimeFinishTableViewCell: UITableViewCell {
     
     @objc private func timePickerDidChanged() {
         time = timePicker.date
+        delegate?.finishTimeChanged(to: time!)
     }
     
     

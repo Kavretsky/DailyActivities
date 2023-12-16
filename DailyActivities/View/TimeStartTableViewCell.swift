@@ -14,11 +14,10 @@ protocol TimeStartTableViewCellDelegate: AnyObject {
 final class TimeStartTableViewCell: UITableViewCell {
     var time: Date? {
         didSet {
-            if timePicker.date != time, time != nil {
-                timePicker.date = time!
-                delegate?.startTimeChanged(to: time!)
+            if let time {
+                timePicker.maximumDate = .now
+                timePicker.date = time
             }
-            
         }
     }
     
@@ -51,6 +50,8 @@ final class TimeStartTableViewCell: UITableViewCell {
     
     @objc private func timePickerDidChanged() {
         time = timePicker.date
+        timePicker.maximumDate = .now
+        delegate?.startTimeChanged(to: time!)
     }
     
     private func setupViews() {

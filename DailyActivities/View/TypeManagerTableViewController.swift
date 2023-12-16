@@ -87,12 +87,8 @@ extension TypeManagerTableViewController: TypeEditorViewControllerDelegate {
     }
     
     func updateType(type: ActivityType, with data: ActivityType.Data) {
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self?.typeStore.updateType(type, with: data)
-            DispatchQueue.main.async { [weak self] in
-                self?.tableView.reloadData()
-            }
-        }
+        typeStore.updateType(type, with: data)
+        tableView.reloadData()
     }
     
     var isTypeDeletable: Bool {

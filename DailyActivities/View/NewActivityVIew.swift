@@ -90,7 +90,7 @@ final class NewActivityView: UIView {
         setupUI()
         
         typeStore.objectWillChange
-            .receive(on: DispatchQueue.global(qos: .userInteractive))
+//            .receive(on: DispatchQueue.global(qos: .userInteractive))
             .sink { [weak self] in
                 guard let self else { return }
                 DispatchQueue.main.async {

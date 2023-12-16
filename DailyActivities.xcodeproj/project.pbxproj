@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D32F9ED2AC3741E00D82544 /* ActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */; };
+		5D3858B22B2DEBF300B37CB0 /* ChartData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D3858B12B2DEBF300B37CB0 /* ChartData.swift */; };
 		5D8521D52B28801C00D215A5 /* ActivityChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8521D42B28801C00D215A5 /* ActivityChartViewController.swift */; };
 		760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE732A8BFF55000C8776 /* TypeStore.swift */; };
 		760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE752A8BFF73000C8776 /* ActivityType.swift */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTableViewCell.swift; sourceTree = "<group>"; };
+		5D3858B12B2DEBF300B37CB0 /* ChartData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartData.swift; sourceTree = "<group>"; };
 		5D8521D42B28801C00D215A5 /* ActivityChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChartViewController.swift; sourceTree = "<group>"; };
 		760EFE732A8BFF55000C8776 /* TypeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeStore.swift; sourceTree = "<group>"; };
 		760EFE752A8BFF73000C8776 /* ActivityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityType.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			children = (
 				760EFE752A8BFF73000C8776 /* ActivityType.swift */,
 				764A92722A9914B3006402BE /* Activity.swift */,
+				5D3858B12B2DEBF300B37CB0 /* ChartData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */,
 				764A92752A991759006402BE /* ActivityStore.swift in Sources */,
 				760EFE742A8BFF55000C8776 /* TypeStore.swift in Sources */,
+				5D3858B22B2DEBF300B37CB0 /* ChartData.swift in Sources */,
 				767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */,
 				7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */,
 				767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */,
