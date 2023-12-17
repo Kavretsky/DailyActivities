@@ -227,6 +227,7 @@ extension MainViewController: UITableViewDataSource {
 
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard Section(rawValue: indexPath.section) == .activities else { return }
         dismissKeyboard()
         lastSelectedIndexPath = indexPath
         let activityEditVC = ActivityEditTableViewController(types: typeStore.activeTypes, activity: activityStore.activities(for: activityListDate)[indexPath.row])
@@ -267,6 +268,10 @@ extension MainViewController: UITableViewDelegate {
             }
             return UISwipeActionsConfiguration(actions: [startActivityAgain])
         }
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        return Section(rawValue: indexPath.section) == .activities ? indexPath : nil
     }
 }
 

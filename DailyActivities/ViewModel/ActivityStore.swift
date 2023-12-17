@@ -106,7 +106,7 @@ final class ActivityStore: ObservableObject {
     private func updateTimer() {
         updateLastActivityChartDataTimer?.invalidate()
         if let activity = activities.first(where: {$0.finishDateTime == nil}) {
-            updateLastActivityChartDataTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true, block: { [weak self] timer in
+            updateLastActivityChartDataTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: { [weak self] timer in
                 self?.updateActivityChartData(activity)
             })
         } else {
