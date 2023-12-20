@@ -49,7 +49,7 @@ final class MainViewController: UIViewController {
         }
     }
     
-    
+    private lazy var dataSource: UITableViewDiffableDataSource<Section, AnyHashable> = makeDataSource()
     
     init(typeStore: TypeStore, activityStore: ActivityStore) {
         self.activityStore = activityStore
@@ -120,6 +120,33 @@ final class MainViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         self.view.backgroundColor = .tertiarySystemGroupedBackground
+    }
+    
+    private func makeDataSource() -> UITableViewDiffableDataSource<Section, AnyHashable> {
+        return UITableViewDiffableDataSource(tableView: activitiesTableView) { [weak self] tableView, indexPath, item in
+            guard let self else { return nil }
+            guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
+            switch section {
+            case .chart:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier")!
+                cell.contentConfiguration = UIHostingConfiguration(content: {
+                    DayActivityChart(activityStore: self.activityStore, typeStore: self.typeStore)
+                })
+                return cell
+            case .activities:
+                guard let activity = item as? Activity else { return nil }
+                let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
+                if activity.finishDateTime != nil {
+                    cell.duration = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
+                } else {
+                    cell.duration = "Started at \(activity.startDateTime.formatted(date: .omitted, time: .shortened))"
+                    
+                }
+                cell.activityDescription = activity.description
+                cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
+                return cell
+            }
+        }
     }
     
     private func setupDeleteActivityAlert() {

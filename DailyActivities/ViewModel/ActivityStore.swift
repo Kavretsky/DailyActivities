@@ -11,7 +11,7 @@ import Combine
 
 final class ActivityStore: ObservableObject {
     private var activities = [Activity]()
-    
+    private(set) var activitiesConflict: [String: Bool] = [:]
     @Published private(set) var chartData = [ChartData]()
     private var updateLastActivityChartDataTimer: Timer?
         
@@ -62,6 +62,10 @@ final class ActivityStore: ObservableObject {
         activities.remove(at: index)
         chartData.removeAll(where: {$0.activityID == activityToDelete.id})
         updateTimer()
+    }
+    
+    private func updateActivityConflict(at indexPath: Int) {
+        
     }
     
     private func chartDataFromActivity(_ activity: Activity) -> [ChartData] {
