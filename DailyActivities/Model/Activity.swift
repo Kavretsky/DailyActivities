@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Activity: Identifiable, Hashable {
+struct Activity: Identifiable, Hashable, Equatable {
     let id = UUID().uuidString
     var description: String
     var typeID: String
@@ -25,13 +25,13 @@ struct Activity: Identifiable, Hashable {
         self.finishDateTime = finishDateTime
     }
     
-//    static func ==(lhs: Activity, rhs: Activity) -> Bool {
-//        return lhs.id == rhs.id
-//    }
-//    
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine(id)
-//    }
+    static func ==(lhs: Activity, rhs: Activity) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 extension Activity {

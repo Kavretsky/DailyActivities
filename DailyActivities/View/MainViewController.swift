@@ -48,7 +48,7 @@ final class MainViewController: UIViewController {
     }
     
     private lazy var dataSource: ActivityTableViewDiffableDataSource = makeDataSource()
-//    private var snapshot: NSDiffableDataSourceSnapshot<Section, AnyHashable>!
+    private var snapshot: NSDiffableDataSourceSnapshot<Section, AnyHashable>!
     
     init(typeStore: TypeStore, activityStore: ActivityStore) {
         self.activityStore = activityStore
@@ -67,7 +67,7 @@ final class MainViewController: UIViewController {
         setupUI()
         setupActivitiesTableview()
         setupDeleteActivityAlert()
-        updateActivityTableView()
+        configureSnapshot()
         dataSource.defaultRowAnimation = .fade
     }
     
@@ -125,7 +125,7 @@ final class MainViewController: UIViewController {
     
     private func makeDataSource() -> ActivityTableViewDiffableDataSource {
         return ActivityTableViewDiffableDataSource(tableView: activityTableView) { [weak self] tableView, indexPath, item in
-            guard let self else { return nil }
+            guard let self else { return nil}
             guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
             switch section {
             case .chart:
@@ -135,7 +135,7 @@ final class MainViewController: UIViewController {
                 })
                 return cell
             case .activities:
-                guard let activity = item as? Activity else { return nil }
+                guard let activity = activityStore.activities.first(where: {$0.id == item as! String}) else { return nil }
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
                 if activity.finishDateTime != nil {
                     cell.duration = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
@@ -150,10 +150,10 @@ final class MainViewController: UIViewController {
         }
     }
     
-    private func updateActivityTableView() {
+    private func configureSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
         snapshot.appendSections(Section.allCases)
-        snapshot.appendItems(activityStore.activities, toSection: Section.activities)
+        snapshot.appendItems(activityStore.activities.map{$0.id}, toSection: Section.activities)
         snapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
@@ -199,7 +199,9 @@ extension MainViewController: NewActivityViewDelegate {
             self.activityTableView.isHidden = false
         }
         activityStore.addActivity(description: description, typeID: typeID)
-        updateActivityTableView()
+        print(activityStore.activities.count)
+        snapshot.appendItems([activityStore.activities.last?.id], toSection: .activities)
+        dataSource.apply(snapshot, animatingDifferences: true)
 //        snapshot.appendItems([activityStore.activities.last], toSection: .activities)
 //        dataSource.apply(snapshot, animatingDifferences: true)
 //        let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: Section.activities.rawValue)
@@ -321,7 +323,8 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
 //            activityTableView.deleteRows(at: [indexPath], with: .automatic)
             activityStore.deleteActivity(activity)
 //            activityTableView.endUpdates()
-            updateActivityTableView()
+            snapshot.deleteItems([activity.id])
+            dataSource.apply(snapshot, animatingDifferences: true)
             if activityStore.activities(for: activityListDate).isEmpty {
                 activityTableView.isHidden = true
                 emptyPlaceholder.isHidden = false
@@ -335,7 +338,9 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
             print("update \(activity) with \(data)")
 //            activityTableView.beginUpdates()
             activityStore.updateActivity(activity, with: data)
-            updateActivityTableView()
+//            updateActivityTableView()
+            snapshot.reconfigureItems([activityStore.activities[activity].id])
+            dataSource.apply(snapshot, animatingDifferences: true)
 //            snapshot.reconfigureItems([activityStore.activities[activity]])
             
 //            dataSource.defaultRowAnimation = .fade
