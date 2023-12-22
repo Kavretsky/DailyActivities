@@ -10,7 +10,7 @@ import Combine
 
 
 final class ActivityStore: ObservableObject {
-    private var activities = [Activity]()
+    @Published private(set) var activities = [Activity]()
     private(set) var activitiesConflict: [String: Bool] = [:]
     @Published private(set) var chartData = [ChartData]()
     private var updateLastActivityChartDataTimer: Timer?

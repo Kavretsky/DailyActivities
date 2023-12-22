@@ -8,7 +8,7 @@
 import Foundation
 
 struct Activity: Identifiable, Hashable {
-    let id: String
+    let id = UUID().uuidString
     var description: String
     var typeID: String
     var startDateTime: Date
@@ -18,13 +18,20 @@ struct Activity: Identifiable, Hashable {
         DateInterval(start: startDateTime, end: finishDateTime ?? Date.now).duration
     }
     
-    init(id: String = UUID().uuidString, description: String, typeID: String, startDateTime: Date, finishDateTime: Date? = nil) {
-        self.id = id
+    init(description: String, typeID: String, startDateTime: Date, finishDateTime: Date? = nil) {
         self.description = description
         self.typeID = typeID
         self.startDateTime = startDateTime
         self.finishDateTime = finishDateTime
     }
+    
+//    static func ==(lhs: Activity, rhs: Activity) -> Bool {
+//        return lhs.id == rhs.id
+//    }
+//    
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(id)
+//    }
 }
 
 extension Activity {
@@ -47,7 +54,6 @@ extension Activity {
     }
     
     init(data: Data) {
-        id = UUID().uuidString
         description = data.description
         typeID = data.typeID
         startDateTime = data.startDateTime

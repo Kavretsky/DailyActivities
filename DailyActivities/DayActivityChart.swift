@@ -29,6 +29,7 @@ struct DayActivityChart: View {
     
     var body: some View {
         barChart
+            .aspectRatio(2.5, contentMode: .fill)
     }
     
     private var barChart: some View {
