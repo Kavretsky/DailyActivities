@@ -68,7 +68,7 @@ final class MainViewController: UIViewController {
         setupActivitiesTableview()
         setupDeleteActivityAlert()
         configureSnapshot()
-        dataSource.defaultRowAnimation = .fade
+        dataSource.defaultRowAnimation = .automatic
     }
     
     @objc private func dismissKeyboard() {
@@ -82,6 +82,7 @@ final class MainViewController: UIViewController {
         view.addSubview(newActivityView)
         view.addSubview(emptyPlaceholder)
         activityTableView.keyboardDismissMode = .interactive
+        activityTableView.selectionFollowsFocus = false
         if activityStore.activities(for: activityListDate).isEmpty {
             activityTableView.isHidden = true
         } else {
@@ -93,7 +94,6 @@ final class MainViewController: UIViewController {
     private func setupActivitiesTableview() {
         activityTableView.translatesAutoresizingMaskIntoConstraints = false 
         activityTableView.delegate = self
-//        activitiesTableView.dataSource = self
         activityTableView.register(ActivityTableViewCell.self, forCellReuseIdentifier: "ActivityTableViewCellIdentifier")
         activityTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ActivityChartTableViewCellIdentifier")
     }
@@ -126,17 +126,20 @@ final class MainViewController: UIViewController {
     private func makeDataSource() -> ActivityTableViewDiffableDataSource {
         return ActivityTableViewDiffableDataSource(tableView: activityTableView) { [weak self] tableView, indexPath, item in
             guard let self else { return nil}
-            guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
+            guard let section = Section(rawValue: indexPath.section) else { return nil }
             switch section {
             case .chart:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier")!
                 cell.contentConfiguration = UIHostingConfiguration(content: {
                     DayActivityChart(activityStore: self.activityStore, typeStore: self.typeStore)
                 })
+//                cell.selectionStyle = .none
                 return cell
             case .activities:
-                guard let activity = activityStore.activities.first(where: {$0.id == item as! String}) else { return nil }
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
+                guard let activity = activityStore.activities.first(where: {$0.id == item as! String}) else {
+                    return cell
+                }
                 if activity.finishDateTime != nil {
                     cell.duration = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
                 } else {
@@ -145,13 +148,14 @@ final class MainViewController: UIViewController {
                 }
                 cell.activityDescription = activity.description
                 cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
+//                cell.selectionStyle = .none
                 return cell
             }
         }
     }
     
     private func configureSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
+        snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
         snapshot.appendSections(Section.allCases)
         snapshot.appendItems(activityStore.activities.map{$0.id}, toSection: Section.activities)
         snapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
@@ -185,9 +189,6 @@ final class MainViewController: UIViewController {
         var data = activity.data
         data.finishDateTime = .now
         updateActivity(activity, with: data)
-//        activityTableView.beginUpdates()
-//        activityTableView.reloadRows(at: [indexPath], with: .none)
-//        activityTableView.endUpdates()
     }
     
 }
@@ -202,16 +203,6 @@ extension MainViewController: NewActivityViewDelegate {
         print(activityStore.activities.count)
         snapshot.appendItems([activityStore.activities.last?.id], toSection: .activities)
         dataSource.apply(snapshot, animatingDifferences: true)
-//        snapshot.appendItems([activityStore.activities.last], toSection: .activities)
-//        dataSource.apply(snapshot, animatingDifferences: true)
-//        let indexPath = IndexPath(item: activityStore.activities(for: activityListDate).count - 1, section: Section.activities.rawValue)
-//        activityTableView.beginUpdates()
-//        if activityStore.activities(for: activityListDate).count > 1 {
-//            activityTableView.reloadRows(at: [IndexPath(row: indexPath.row - 1, section: indexPath.section)], with: .none)
-//        }
-//        activityTableView.insertRows(at: [indexPath], with: .fade)
-//        activityTableView.endUpdates()
-//        activityTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
     }
     
     func showTypeManager() {
@@ -220,49 +211,6 @@ extension MainViewController: NewActivityViewDelegate {
         self.present(typeManagerNC, animated: true)
     }
 }
-
-//extension MainViewController: UITableViewDataSource {
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        switch Section(rawValue: section) {
-//        case .activities: return activityStore.activities(for: activityListDate).count
-//        case .chart: return 1
-//        case .none: return 0
-//        }
-//    }
-//    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
-//        switch section {
-//        case .chart:
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier")!
-//            cell.contentConfiguration = UIHostingConfiguration(content: {
-//                DayActivityChart(activityStore: activityStore, typeStore: typeStore)
-//            })
-//            return cell
-//        case .activities:
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
-//            let activity = activityStore.activities(for: activityListDate)[indexPath.row]
-//            if activity.finishDateTime != nil {
-//                cell.duration = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
-//            } else {
-//                cell.duration = "Started at \(activity.startDateTime.formatted(date: .omitted, time: .shortened))"
-//                
-//            }
-//            cell.activityDescription = activity.description
-//            cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
-//            return cell
-//        }
-//    }
-//    
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return Section(rawValue: section)?.header
-//    }
-//    
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return Section.allCases.count
-//    }
-//    
-//}
 
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -293,7 +241,6 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard Section(rawValue: indexPath.section) == .activities else { return nil }
         lastSelectedIndexPath = indexPath
-        print(indexPath)
         let activity = activityStore.activities(for: activityListDate)[indexPath.row]
         if activity.finishDateTime == nil {
             let completeActivity = UIContextualAction(style: .normal, title: "Complete") { [weak self] (action, view, completionHandler) in
@@ -318,13 +265,12 @@ extension MainViewController: UITableViewDelegate {
 
 extension MainViewController: ActivityEditTableViewControllerDelegate {
     func deleteActivity(_ activity: Activity) {
-        if let indexPath = lastSelectedIndexPath {
-//            activityTableView.beginUpdates()
-//            activityTableView.deleteRows(at: [indexPath], with: .automatic)
-            activityStore.deleteActivity(activity)
-//            activityTableView.endUpdates()
+        if lastSelectedIndexPath != nil {
+//            var snapshot = dataSource.snapshot()
+            dataSource.defaultRowAnimation = .top
             snapshot.deleteItems([activity.id])
             dataSource.apply(snapshot, animatingDifferences: true)
+            activityStore.deleteActivity(activity)
             if activityStore.activities(for: activityListDate).isEmpty {
                 activityTableView.isHidden = true
                 emptyPlaceholder.isHidden = false
@@ -336,17 +282,10 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
         if let indexPath = lastSelectedIndexPath {
             print(indexPath)
             print("update \(activity) with \(data)")
-//            activityTableView.beginUpdates()
+            dataSource.defaultRowAnimation = .automatic
             activityStore.updateActivity(activity, with: data)
-//            updateActivityTableView()
             snapshot.reconfigureItems([activityStore.activities[activity].id])
             dataSource.apply(snapshot, animatingDifferences: true)
-//            snapshot.reconfigureItems([activityStore.activities[activity]])
-            
-//            dataSource.defaultRowAnimation = .fade
-//            dataSource.apply(snapshot, animatingDifferences: true)
-//            activityTableView.reloadRows(at: indexPath, with: .automatic)
-//            activityTableView.endUpdates()
         }
     }
     
