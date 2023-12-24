@@ -159,10 +159,6 @@ final class NewActivityView: UIView {
                     self.newActivityButton.transform = .init(scaleX: 1, y: 1)
                 }
             }
-           
-
-
-
         } else {
             descriptionTF.becomeFirstResponder()
         }

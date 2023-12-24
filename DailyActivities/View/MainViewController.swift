@@ -133,7 +133,7 @@ final class MainViewController: UIViewController {
                 cell.contentConfiguration = UIHostingConfiguration(content: {
                     DayActivityChart(activityStore: self.activityStore, typeStore: self.typeStore)
                 })
-//                cell.selectionStyle = .none
+                cell.selectionStyle = .none
                 return cell
             case .activities:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
@@ -148,7 +148,7 @@ final class MainViewController: UIViewController {
                 }
                 cell.activityDescription = activity.description
                 cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
-//                cell.selectionStyle = .none
+                cell.selectionStyle = .none
                 return cell
             }
         }
@@ -199,14 +199,17 @@ extension MainViewController: NewActivityViewDelegate {
             self.emptyPlaceholder.isHidden = true
             self.activityTableView.isHidden = false
         }
-        if activityStore.activities.last?.finishDateTime == nil {
+        if let lastActivity = activityStore.activities.last, lastActivity.finishDateTime == nil {
             snapshot.reconfigureItems([activityStore.activities.last?.id])
         }
         activityStore.addActivity(description: description, typeID: typeID)
         dataSource.defaultRowAnimation = activityStore.activities.count != 1 ? .top : .fade
         snapshot.appendItems([activityStore.activities.last?.id], toSection: .activities)
-        DispatchQueue.main.async {
-            self.dataSource.apply(self.snapshot)
+        DispatchQueue.main.async { [unowned self] in
+            dataSource.apply(snapshot)
+            let indexPath = IndexPath(row: snapshot.numberOfItems(inSection: .activities) - 1, section: Section.activities.rawValue)
+            print(indexPath)
+            activityTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
     }
     
@@ -273,9 +276,7 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
         if lastSelectedIndexPath != nil {
             dataSource.defaultRowAnimation = activityStore.activities.index(matching: activity) != 0 ? .top : .bottom
             snapshot.deleteItems([activity.id])
-            DispatchQueue.main.async { [unowned self] in
-                dataSource.apply(snapshot)
-            }
+            dataSource.apply(snapshot, animatingDifferences: true)
             activityStore.deleteActivity(activity)
             if activityStore.activities(for: activityListDate).isEmpty {
                 activityTableView.isHidden = true

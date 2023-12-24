@@ -10,10 +10,11 @@ import Combine
 
 
 final class ActivityStore: ObservableObject {
-    @Published private(set) var activities = [Activity]()
+    private(set) var activities = [Activity]()
     private(set) var activitiesConflict: [String: Bool] = [:]
     @Published private(set) var chartData = [ChartData]()
     private var updateLastActivityChartDataTimer: Timer?
+    private(set) var conflictActivityIDs: Set<Activity.ID> = []
         
     
     
@@ -87,19 +88,6 @@ final class ActivityStore: ObservableObject {
     }
     
     private func updateActivityChartData(_ activity: Activity) {
-//        var curentChartDataArray = chartData.filter {$0.activityID == activity.id}
-//        let newChartDataArray = chartDataFromActivity(activity)
-//        let maxIndex = max(curentChartDataArray.count, newChartDataArray.count)
-//        for index in 0..<maxIndex {
-//            switch (curentChartDataArray[index], newChartDataArray[index]) {
-//            case (let curentChartData, let newChartData):
-//                curentChartDataArray[index].startTime = newChartData.startTime
-//                curentChartDataArray[index].duration = newChartData.duration
-//                curentChartDataArray[index].typeID = newChartData.activityID
-//            case (nil, let newChartData):
-//                curentChartDataArray.append(newChartData)
-//            }
-//        }
         chartData.removeAll(where: {$0.activityID == activity.id})
         chartDataFromActivity(activity).forEach { element in
             chartData.append(element)
