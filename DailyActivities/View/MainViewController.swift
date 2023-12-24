@@ -92,7 +92,7 @@ final class MainViewController: UIViewController {
     }
     
     private func setupActivitiesTableview() {
-        activityTableView.translatesAutoresizingMaskIntoConstraints = false 
+        activityTableView.translatesAutoresizingMaskIntoConstraints = false
         activityTableView.delegate = self
         activityTableView.register(ActivityTableViewCell.self, forCellReuseIdentifier: "ActivityTableViewCellIdentifier")
         activityTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ActivityChartTableViewCellIdentifier")
@@ -199,10 +199,15 @@ extension MainViewController: NewActivityViewDelegate {
             self.emptyPlaceholder.isHidden = true
             self.activityTableView.isHidden = false
         }
+        if activityStore.activities.last?.finishDateTime == nil {
+            snapshot.reconfigureItems([activityStore.activities.last?.id])
+        }
         activityStore.addActivity(description: description, typeID: typeID)
-        print(activityStore.activities.count)
+        dataSource.defaultRowAnimation = activityStore.activities.count != 1 ? .top : .fade
         snapshot.appendItems([activityStore.activities.last?.id], toSection: .activities)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        DispatchQueue.main.async {
+            self.dataSource.apply(self.snapshot)
+        }
     }
     
     func showTypeManager() {
@@ -266,10 +271,11 @@ extension MainViewController: UITableViewDelegate {
 extension MainViewController: ActivityEditTableViewControllerDelegate {
     func deleteActivity(_ activity: Activity) {
         if lastSelectedIndexPath != nil {
-//            var snapshot = dataSource.snapshot()
-            dataSource.defaultRowAnimation = .top
+            dataSource.defaultRowAnimation = activityStore.activities.index(matching: activity) != 0 ? .top : .bottom
             snapshot.deleteItems([activity.id])
-            dataSource.apply(snapshot, animatingDifferences: true)
+            DispatchQueue.main.async { [unowned self] in
+                dataSource.apply(snapshot)
+            }
             activityStore.deleteActivity(activity)
             if activityStore.activities(for: activityListDate).isEmpty {
                 activityTableView.isHidden = true
@@ -279,13 +285,11 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
     }
     
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
-        if let indexPath = lastSelectedIndexPath {
-            print(indexPath)
-            print("update \(activity) with \(data)")
-            dataSource.defaultRowAnimation = .automatic
-            activityStore.updateActivity(activity, with: data)
-            snapshot.reconfigureItems([activityStore.activities[activity].id])
-            dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.defaultRowAnimation = .fade
+        activityStore.updateActivity(activity, with: data)
+        snapshot.reconfigureItems([activityStore.activities[activity].id])
+        DispatchQueue.main.async {
+            self.dataSource.apply(self.snapshot, animatingDifferences: true)
         }
     }
     
