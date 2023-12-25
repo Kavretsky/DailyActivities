@@ -11,10 +11,9 @@ import Combine
 
 final class ActivityStore: ObservableObject {
     private(set) var activities = [Activity]()
-    private(set) var activitiesConflict: [String: Bool] = [:]
     @Published private(set) var chartData = [ChartData]()
     private var updateLastActivityChartDataTimer: Timer?
-    private(set) var conflictActivityIDs: Set<Activity.ID> = []
+    private(set) var conflictActivityDictionary: [Activity.ID: Set<Activity.ID>] = [:]
         
     
     
@@ -53,8 +52,15 @@ final class ActivityStore: ObservableObject {
                 && data.startDateTime.isSameDay(with: data.finishDateTime ?? data.startDateTime)
                 && !data.description.isEmpty else { return }
         activities[index].update(from: data)
-        
-        updateActivityChartData(activities[index])
+        if activityToUpdate.description != data.description {
+            
+        } else {
+            if activityToUpdate.startDateTime != data.startDateTime || activityToUpdate.finishDateTime != data.finishDateTime {
+                let detectedConflicts = detectActivityTimeConflicts(for: activities[index])
+                
+            }
+            updateActivityChartData(activities[index])
+        }
         updateTimer()
     }
     
@@ -65,7 +71,69 @@ final class ActivityStore: ObservableObject {
         updateTimer()
     }
     
-    private func updateActivityConflict(at indexPath: Int) {
+    private func detectActivityTimeConflicts(for activity: Activity) -> Set<Activity.ID> {
+        activities.sort { $0.startDateTime < $1.startDateTime }
+        guard let activityIndex = activities.index(matching: activity) else { return [] }
+        var conflictActivitiesID = Set<Activity.ID>()
+        var currentCheckIndex = activityIndex - 1
+        while currentCheckIndex >= 0 {
+            if let activityFinishDateTime = activities[currentCheckIndex].finishDateTime, activityFinishDateTime > activity.startDateTime {
+                conflictActivitiesID.insert(activities[currentCheckIndex].id)
+                currentCheckIndex -= 1
+            } else {
+                break
+            }
+        }
+        currentCheckIndex = activityIndex + 1
+        while currentCheckIndex <= activities.count - 1 {
+            if activities[currentCheckIndex].startDateTime < activity.finishDateTime ?? .now {
+                conflictActivitiesID.insert(activities[currentCheckIndex].id)
+                currentCheckIndex += 1
+            } else {
+                break
+            }
+        }
+        
+        //MARK: проверить конфликты из словаря:
+        for activityID in conflictActivityDictionary.keys {
+            if let conflicts = conflictActivityDictionary[activityID], conflicts.contains(activity.id) {
+                if !isActivityConflict(activityID, activity.id) {
+                    conflictActivityDictionary[activityID]?.remove(activity.id)
+                }
+            }
+        }
+        
+        return conflictActivitiesID
+    }
+    
+    private func isActivityConflict(_ lhs: Activity.ID, _ rhs: Activity.ID) -> Bool {
+        guard let lhsActivity = activities.first(where: {$0.id == lhs}),
+              let rhsActivity = activities.first(where: {$0.id == rhs}) 
+        else { return false }
+        
+        return lhsActivity.finishDateTime ?? .now > rhsActivity.startDateTime && lhsActivity.startDateTime < rhsActivity.finishDateTime ?? .now
+    }
+    
+    private func updateConflictDictionary(for activity: Activity, with conflictSet: Set<Activity.ID>) {
+        let lastConflictActivities = conflictActivityDictionary[activity.id] ?? []
+        let activitiesWithoutConflict = lastConflictActivities.subtracting(conflictSet)
+        conflictActivityDictionary.removeValue(forKey: activity.id)
+        
+        if !conflictSet.isEmpty {
+            conflictActivityDictionary[activity.id] = conflictSet
+            for activityID in conflictSet {
+                if let index = activities.index(matching: activityID) {
+                    updateActivityChartData(activities[index])
+                }
+            }
+        }
+        if !activitiesWithoutConflict.isEmpty {
+            for activityID in activitiesWithoutConflict {
+                if let index = activities.index(matching: activityID) {
+                    updateActivityChartData(activities[index])
+                }
+            }
+        }
         
     }
     
@@ -88,6 +156,10 @@ final class ActivityStore: ObservableObject {
     }
     
     private func updateActivityChartData(_ activity: Activity) {
+        guard !conflictActivityDictionary.contains(where: {$0.key == activity.id || $0.value.contains(activity.id) }) else {
+            chartData.removeAll { $0.activityID == activity.id }
+            return 
+        }
         chartData.removeAll(where: {$0.activityID == activity.id})
         chartDataFromActivity(activity).forEach { element in
             chartData.append(element)

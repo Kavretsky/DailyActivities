@@ -59,6 +59,10 @@ extension Collection where Element: Identifiable {
     func index(matching element: Element) -> Self.Index? {
         firstIndex(where:{ $0.id == element.id })
     }
+    
+    func index(matching id: Element.ID) -> Self.Index? {
+        firstIndex(where:{ $0.id == id })
+    }
 }
 
 extension RangeReplaceableCollection where Element: Identifiable {

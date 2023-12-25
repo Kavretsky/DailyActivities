@@ -16,10 +16,10 @@ final class ActivityTableViewCell: UITableViewCell {
         }
     }
     
-    var duration: String?
+    var duration: NSMutableAttributedString?
     {
         didSet {
-            durationLabel.text = duration
+            durationLabel.attributedText = duration
         }
     }
     
@@ -41,8 +41,8 @@ final class ActivityTableViewCell: UITableViewCell {
     private let durationLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 11)
-        label.textColor = UIColor(red: 0.557, green: 0.557, blue: 0.576, alpha: 1)
+//        label.font = .systemFont(ofSize: 11)
+//        label.textColor = UIColor(red: 0.557, green: 0.557, blue: 0.576, alpha: 1)
         return label
     }()
     

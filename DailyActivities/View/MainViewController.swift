@@ -125,8 +125,8 @@ final class MainViewController: UIViewController {
     
     private func makeDataSource() -> ActivityTableViewDiffableDataSource {
         return ActivityTableViewDiffableDataSource(tableView: activityTableView) { [weak self] tableView, indexPath, item in
-            guard let self else { return nil}
-            guard let section = Section(rawValue: indexPath.section) else { return nil }
+            guard let self else { return nil }
+            guard let section = Section(rawValue: indexPath.section) else { return .init() }
             switch section {
             case .chart:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier")!
@@ -140,12 +140,29 @@ final class MainViewController: UIViewController {
                 guard let activity = activityStore.activities.first(where: {$0.id == item as! String}) else {
                     return cell
                 }
+                var durationString = ""
                 if activity.finishDateTime != nil {
-                    cell.duration = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
+                    durationString = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
                 } else {
-                    cell.duration = "Started at \(activity.startDateTime.formatted(date: .omitted, time: .shortened))"
+                    durationString = "Started at \(activity.startDateTime.formatted(date: .omitted, time: .shortened))"
                     
                 }
+                
+                var durationAttributedString: NSMutableAttributedString
+                let isConflict = activityStore.conflictActivityDictionary.values.contains([activity.id]) || activityStore.conflictActivityDictionary.keys.contains(activity.id)
+                
+                if isConflict {
+                    durationString = "Conflict  " + durationString
+                    durationAttributedString = .init(string: durationString)
+                    durationAttributedString.addAttribute(.foregroundColor, value: UIColor(red: 1, green: 0.176, blue: 0.333, alpha: 1), range: .init(location: 0, length: 10))
+                    durationAttributedString.addAttribute(.foregroundColor, value: UIColor(red: 0.557, green: 0.557, blue: 0.576, alpha: 1), range: .init(location: 10, length: durationAttributedString.length - 10))
+                } else {
+                    durationAttributedString = .init(string: durationString)
+                    durationAttributedString.addAttribute(.foregroundColor, value: UIColor(red: 0.557, green: 0.557, blue: 0.576, alpha: 1), range: .init(location: 0, length: durationAttributedString.length))
+                }
+                durationAttributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 11), range: .init(location: 0, length: durationAttributedString.length))
+                
+                cell.duration = durationAttributedString
                 cell.activityDescription = activity.description
                 cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
                 cell.selectionStyle = .none
@@ -287,8 +304,14 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
     
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
         dataSource.defaultRowAnimation = .fade
+//        if let conflictActivitiesBeforeUpdate = activityStore.conflictActivityDictionary[activity.id]?.map({$0}) {
+//            snapshot.reconfigureItems(conflictActivitiesBeforeUpdate)
+//        }
         activityStore.updateActivity(activity, with: data)
-        snapshot.reconfigureItems([activityStore.activities[activity].id])
+        snapshot.reconfigureItems(snapshot.itemIdentifiers(inSection: .activities))
+//        if let conflictActivitiesAfterUpdate = activityStore.conflictActivityDictionary[activity.id]?.map({$0}) {
+//            snapshot.reconfigureItems(conflictActivitiesAfterUpdate)
+//        }
         DispatchQueue.main.async {
             self.dataSource.apply(self.snapshot, animatingDifferences: true)
         }

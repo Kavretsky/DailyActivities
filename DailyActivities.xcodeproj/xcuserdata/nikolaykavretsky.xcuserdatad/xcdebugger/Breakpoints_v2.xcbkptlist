@@ -3,4 +3,70 @@
    uuid = "14833206-27BC-44AD-8B25-932FC261C798"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "982F246D-3BC3-49BA-BCE2-E8CAF3FA8F60"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DailyActivities/View/MainViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
+            landmarkName = "updateActivity(_:with:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "982F246D-3BC3-49BA-BCE2-E8CAF3FA8F60 - aa2af4ed7a31c9b9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DailyActivities.MainViewController.updateActivity(_: DailyActivities.Activity, with: DailyActivities.Activity.Data) -&gt; ()"
+                  moduleName = "DailyActivities"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nikolaykavretsky/Documents/UIKit/DailyActivities/DailyActivities/View/MainViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "305"
+                  endingLineNumber = "305"
+                  offsetFromSymbolStart = "364">
+               </Location>
+               <Location
+                  uuid = "982F246D-3BC3-49BA-BCE2-E8CAF3FA8F60 - aa2af4ed7a31c9d8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DailyActivities.MainViewController.updateActivity(_: DailyActivities.Activity, with: DailyActivities.Activity.Data) -&gt; ()"
+                  moduleName = "DailyActivities"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nikolaykavretsky/Documents/UIKit/DailyActivities/DailyActivities/View/MainViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "306"
+                  endingLineNumber = "306"
+                  offsetFromSymbolStart = "364">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "85EE0ECA-B664-47F9-A0D7-02F2F2568CC2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DailyActivities/View/MainViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "makeDataSource()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
