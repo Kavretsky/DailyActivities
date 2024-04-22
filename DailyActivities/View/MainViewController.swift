@@ -75,6 +75,25 @@ final class MainViewController: UIViewController {
             view.endEditing(true)
         }
     
+    func setupConstrains() {
+        NSLayoutConstraint.activate([
+            newActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            view.keyboardLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: newActivityView.bottomAnchor),
+            
+            activityTableView.topAnchor.constraint(equalTo: view.topAnchor),
+            activityTableView.bottomAnchor.constraint(equalTo: newActivityView.topAnchor),
+            activityTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            activityTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            emptyPlaceholder.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            emptyPlaceholder.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            emptyPlaceholder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyPlaceholder.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
+        ])
+        
+    }
+    
     private func setupUI() {
         newActivityView.delegate = self
         title = "Today"
@@ -87,6 +106,7 @@ final class MainViewController: UIViewController {
             emptyPlaceholder.isHidden = true
         }
         newActivityView.updateConstraints()
+        setupConstrains()
     }
     
     private func setupActivitiesTableview() {
@@ -112,26 +132,6 @@ final class MainViewController: UIViewController {
         }
     }
     
-    override func viewIsAppearing(_ animated: Bool) {
-        NSLayoutConstraint.activate([
-            newActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            view.keyboardLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: newActivityView.bottomAnchor),
-            
-            activityTableView.topAnchor.constraint(equalTo: view.topAnchor),
-            activityTableView.bottomAnchor.constraint(equalTo: newActivityView.topAnchor),
-            activityTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            activityTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            emptyPlaceholder.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            emptyPlaceholder.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            emptyPlaceholder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyPlaceholder.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
-        ])
-        
-        let dismissPadding = newActivityView.bounds.height
-        newActivityView.keyboardLayoutGuide.keyboardDismissPadding = dismissPadding
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         self.view.backgroundColor = .tertiarySystemGroupedBackground

@@ -89,9 +89,9 @@ final class NewActivityView: UIView {
         super.init(frame: .null)
         setupUI()
         
-        typeStore.activeTypes.publisher
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
+        typeStore.objectWillChange
+//            .receive(on: DispatchQueue.main)
+            .sink { _ in 
                 DispatchQueue.main.async {
                     self.chosenIndex %= typeStore.activeTypes.count
                     self.descriptionTF.placeholder = self.chosenType.description
