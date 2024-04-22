@@ -6,16 +6,21 @@
 //
 
 import UIKit
+import Combine
+
+protocol TypeManagerTableViewControllerDelegate: AnyObject {
+    func activityTypesChanged()
+}
 
 final class TypeManagerTableViewController: UITableViewController {
 
     private let typeStore: TypeStore
+    weak var delegate: TypeManagerTableViewControllerDelegate?
     
     init(typeStore: TypeStore) {
         self.typeStore = typeStore
         super.init(style: .insetGrouped)
         tableView.register(TypeManagerTableViewCell.self, forCellReuseIdentifier: "TypeManagerCellIdentifier")
-        
     }
     
     required init?(coder: NSCoder) {
@@ -76,8 +81,6 @@ final class TypeManagerTableViewController: UITableViewController {
             self?.tableView.reloadData()
         }
     }
-    
-
 }
 
 extension TypeManagerTableViewController: TypeEditorViewControllerDelegate {
@@ -89,6 +92,7 @@ extension TypeManagerTableViewController: TypeEditorViewControllerDelegate {
     func updateType(type: ActivityType, with data: ActivityType.Data) {
         typeStore.updateType(type, with: data)
         tableView.reloadData()
+        delegate?.activityTypesChanged()
     }
     
     var isTypeDeletable: Bool {

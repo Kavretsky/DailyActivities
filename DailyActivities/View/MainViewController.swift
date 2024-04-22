@@ -241,14 +241,16 @@ extension MainViewController: NewActivityViewDelegate {
         DispatchQueue.global().async { [unowned self] in
             dataSource.apply(snapshot)
             let indexPath = IndexPath(row: snapshot.numberOfItems(inSection: .activities) - 1, section: Section.activities.rawValue)
-            DispatchQueue.main.async { [unowned self] in
-                activityTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            DispatchQueue.main.async { 
+                self.activityTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
             }
         }
     }
     
     func showTypeManager() {
         let typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
+        typeManagerVC.delegate = self
+        print(typeManagerVC.delegate != nil)
         let typeManagerNC = UINavigationController(rootViewController: typeManagerVC)
         self.present(typeManagerNC, animated: true)
     }
@@ -322,14 +324,12 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
                         self.emptyPlaceholder.isHidden = false
                     }
                 }
-                //            dataSource.defaultRowAnimation = .fade
                 
                 snapshot.reconfigureItems(activityStore.activitiesToReconfigure)
                 
                 dataSource.apply(snapshot, animatingDifferences: true)
                 
             }
-            //MARK: Data race
             
         }
     }
@@ -360,6 +360,18 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
             activityTableView.endUpdates()
         }
         lastSelectedIndexPath = nil
+    }
+}
+
+extension MainViewController: TypeManagerTableViewControllerDelegate {
+    func activityTypesChanged() {
+        DispatchQueue.global().async { [weak self] in
+            guard let self else { return }
+            self.snapshot.reconfigureItems(self.activityStore.activities.map { $0.id })
+            DispatchQueue.main.async {
+                self.dataSource.apply(self.snapshot)
+            }
+        }
     }
 }
 
