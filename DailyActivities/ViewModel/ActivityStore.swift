@@ -14,7 +14,7 @@ final class ActivityStore: ObservableObject {
     @Published private(set) var chartData = [ChartData]()
     private var updateLastActivityChartDataTimer: Timer?
     private(set) var conflictActivityDictionary: [Activity.ID: Set<Activity.ID>] = [:]
-        
+    private(set) var activitiesToReconfigure = [Activity.ID]()
     
     
     var datesInHistory: Set<Date> {
@@ -36,9 +36,7 @@ final class ActivityStore: ObservableObject {
         }
         let activity = Activity(description: description, typeID: typeID, startDateTime: .now)
         activities.append(activity)
-        chartDataFromActivity(activity).forEach { element in
-            chartData.append(element)
-        }
+        updateActivityChartData(activity)
         updateTimer()
     }
     
@@ -52,22 +50,25 @@ final class ActivityStore: ObservableObject {
                 && data.startDateTime.isSameDay(with: data.finishDateTime ?? data.startDateTime)
                 && !data.description.isEmpty else { return }
         activities[index].update(from: data)
-        if activityToUpdate.description != data.description {
-            
-        } else {
-            if activityToUpdate.startDateTime != data.startDateTime || activityToUpdate.finishDateTime != data.finishDateTime {
-                let detectedConflicts = detectActivityTimeConflicts(for: activities[index])
-                
-            }
-            updateActivityChartData(activities[index])
+
+        if activityToUpdate.startDateTime != data.startDateTime || activityToUpdate.finishDateTime != data.finishDateTime {
+            let detectedConflicts = detectActivityTimeConflicts(for: activities[index])
+            updateConflictDictionary(for: activityToUpdate, with: detectedConflicts)
         }
+        updateActivityChartData(activities[activityToUpdate])
+        
         updateTimer()
     }
     
     func deleteActivity(_ activityToDelete: Activity) {
         guard let index = activities.firstIndex(where: {$0.id == activityToDelete.id}) else { return }
         activities.remove(at: index)
+        var chartData = chartData
         chartData.removeAll(where: {$0.activityID == activityToDelete.id})
+        DispatchQueue.main.async {
+            self.chartData = chartData
+        }
+        updateConflictDictionary(for: activityToDelete, with: [])
         updateTimer()
     }
     
@@ -94,21 +95,12 @@ final class ActivityStore: ObservableObject {
             }
         }
         
-        //MARK: проверить конфликты из словаря:
-        for activityID in conflictActivityDictionary.keys {
-            if let conflicts = conflictActivityDictionary[activityID], conflicts.contains(activity.id) {
-                if !isActivityConflict(activityID, activity.id) {
-                    conflictActivityDictionary[activityID]?.remove(activity.id)
-                }
-            }
-        }
-        
         return conflictActivitiesID
     }
     
     private func isActivityConflict(_ lhs: Activity.ID, _ rhs: Activity.ID) -> Bool {
         guard let lhsActivity = activities.first(where: {$0.id == lhs}),
-              let rhsActivity = activities.first(where: {$0.id == rhs}) 
+              let rhsActivity = activities.first(where: {$0.id == rhs})
         else { return false }
         
         return lhsActivity.finishDateTime ?? .now > rhsActivity.startDateTime && lhsActivity.startDateTime < rhsActivity.finishDateTime ?? .now
@@ -116,7 +108,7 @@ final class ActivityStore: ObservableObject {
     
     private func updateConflictDictionary(for activity: Activity, with conflictSet: Set<Activity.ID>) {
         let lastConflictActivities = conflictActivityDictionary[activity.id] ?? []
-        let activitiesWithoutConflict = lastConflictActivities.subtracting(conflictSet)
+        var activitiesWithoutConflict = lastConflictActivities.subtracting(conflictSet)
         conflictActivityDictionary.removeValue(forKey: activity.id)
         
         if !conflictSet.isEmpty {
@@ -127,14 +119,31 @@ final class ActivityStore: ObservableObject {
                 }
             }
         }
-        if !activitiesWithoutConflict.isEmpty {
-            for activityID in activitiesWithoutConflict {
-                if let index = activities.index(matching: activityID) {
-                    updateActivityChartData(activities[index])
+        
+        for activityID in activitiesWithoutConflict {
+            if let index = activities.index(matching: activityID) {
+                updateActivityChartData(activities[index])
+            }
+        }
+        
+        
+        for activityID in conflictActivityDictionary.keys {
+            if let conflicts = conflictActivityDictionary[activityID], conflicts.contains(activity.id) {
+                if !isActivityConflict(activityID, activity.id) {
+                    if conflictActivityDictionary[activityID]!.count > 1 {
+                        conflictActivityDictionary[activityID]?.remove(activity.id)
+                    } else {
+                        activitiesWithoutConflict.insert(activityID)
+                        conflictActivityDictionary.removeValue(forKey: activityID)
+                        if let index = activities.index(matching: activityID) {
+                            updateActivityChartData(activities[index])
+                        }
+                    }
                 }
             }
         }
         
+        activitiesToReconfigure = Array(activitiesWithoutConflict.union(conflictSet))
     }
     
     private func chartDataFromActivity(_ activity: Activity) -> [ChartData] {
@@ -156,15 +165,22 @@ final class ActivityStore: ObservableObject {
     }
     
     private func updateActivityChartData(_ activity: Activity) {
-        guard !conflictActivityDictionary.contains(where: {$0.key == activity.id || $0.value.contains(activity.id) }) else {
-            chartData.removeAll { $0.activityID == activity.id }
-            return 
-        }
+        var chartData = chartData
         chartData.removeAll(where: {$0.activityID == activity.id})
+        guard !conflictActivityDictionary.contains(where: {$0.key == activity.id || $0.value.contains(activity.id) }) else {
+            DispatchQueue.main.async {
+                self.chartData = chartData
+            }
+            return
+        }
+        
         chartDataFromActivity(activity).forEach { element in
             chartData.append(element)
         }
         chartData.sort(by: {$0.startTime < $1.startTime})
+        DispatchQueue.main.async {
+            self.chartData = chartData
+        }
     }
     
     private func updateTimer() {

@@ -14,6 +14,7 @@ final class MainViewController: UIViewController {
     private let newActivityView: NewActivityView
     private let activityListDate: Date
     private var lastSelectedIndexPath: IndexPath?
+    private var isSwipeActionsShow = false
     
     private lazy var activityTableView = UITableView(frame: .zero, style: .insetGrouped)
 
@@ -68,7 +69,6 @@ final class MainViewController: UIViewController {
         setupActivitiesTableview()
         setupDeleteActivityAlert()
         configureSnapshot()
-        dataSource.defaultRowAnimation = .automatic
     }
     
     @objc private func dismissKeyboard() {
@@ -81,8 +81,6 @@ final class MainViewController: UIViewController {
         view.addSubview(activityTableView)
         view.addSubview(newActivityView)
         view.addSubview(emptyPlaceholder)
-        activityTableView.keyboardDismissMode = .interactive
-        activityTableView.selectionFollowsFocus = false
         if activityStore.activities(for: activityListDate).isEmpty {
             activityTableView.isHidden = true
         } else {
@@ -92,10 +90,26 @@ final class MainViewController: UIViewController {
     }
     
     private func setupActivitiesTableview() {
+        activityTableView.keyboardDismissMode = .interactive
         activityTableView.translatesAutoresizingMaskIntoConstraints = false
         activityTableView.delegate = self
         activityTableView.register(ActivityTableViewCell.self, forCellReuseIdentifier: "ActivityTableViewCellIdentifier")
         activityTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ActivityChartTableViewCellIdentifier")
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleCellTap))
+        activityTableView.addGestureRecognizer(tapGesture)
+        
+        dataSource.defaultRowAnimation = .fade
+    }
+    
+    @objc private func handleCellTap(_ gesture: UITapGestureRecognizer) {
+        guard let indexPath = activityTableView.indexPathForRow(at: gesture.location(in: activityTableView)) else { return }
+
+        if isSwipeActionsShow && activityTableView.isEditing {
+            isSwipeActionsShow = false
+        } else {
+            tableView(activityTableView, didSelectRowAt: indexPath)
+        }
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -125,7 +139,7 @@ final class MainViewController: UIViewController {
     
     private func makeDataSource() -> ActivityTableViewDiffableDataSource {
         return ActivityTableViewDiffableDataSource(tableView: activityTableView) { [weak self] tableView, indexPath, item in
-            guard let self else { return nil }
+            guard let self else { return .init() }
             guard let section = Section(rawValue: indexPath.section) else { return .init() }
             switch section {
             case .chart:
@@ -133,7 +147,7 @@ final class MainViewController: UIViewController {
                 cell.contentConfiguration = UIHostingConfiguration(content: {
                     DayActivityChart(activityStore: self.activityStore, typeStore: self.typeStore)
                 })
-                cell.selectionStyle = .none
+//                cell.selectionStyle = .none
                 return cell
             case .activities:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
@@ -149,7 +163,7 @@ final class MainViewController: UIViewController {
                 }
                 
                 var durationAttributedString: NSMutableAttributedString
-                let isConflict = activityStore.conflictActivityDictionary.values.contains([activity.id]) || activityStore.conflictActivityDictionary.keys.contains(activity.id)
+                let isConflict = activityStore.conflictActivityDictionary.values.contains(where: {$0.contains(activity.id) }) || activityStore.conflictActivityDictionary.keys.contains(activity.id)
                 
                 if isConflict {
                     durationString = "Conflict  " + durationString
@@ -165,7 +179,7 @@ final class MainViewController: UIViewController {
                 cell.duration = durationAttributedString
                 cell.activityDescription = activity.description
                 cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
-                cell.selectionStyle = .none
+//                cell.selectionStyle = .none
                 return cell
             }
         }
@@ -176,7 +190,9 @@ final class MainViewController: UIViewController {
         snapshot.appendSections(Section.allCases)
         snapshot.appendItems(activityStore.activities.map{$0.id}, toSection: Section.activities)
         snapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        DispatchQueue.global().async { [unowned self] in
+            dataSource.apply(snapshot, animatingDifferences: true)
+        }
     }
     
     private func setupDeleteActivityAlert() {
@@ -222,11 +238,12 @@ extension MainViewController: NewActivityViewDelegate {
         activityStore.addActivity(description: description, typeID: typeID)
         dataSource.defaultRowAnimation = activityStore.activities.count != 1 ? .top : .fade
         snapshot.appendItems([activityStore.activities.last?.id], toSection: .activities)
-        DispatchQueue.main.async { [unowned self] in
+        DispatchQueue.global().async { [unowned self] in
             dataSource.apply(snapshot)
             let indexPath = IndexPath(row: snapshot.numberOfItems(inSection: .activities) - 1, section: Section.activities.rawValue)
-            print(indexPath)
-            activityTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            DispatchQueue.main.async { [unowned self] in
+                activityTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
         }
     }
     
@@ -264,7 +281,6 @@ extension MainViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard Section(rawValue: indexPath.section) == .activities else { return nil }
         lastSelectedIndexPath = indexPath
         let activity = activityStore.activities(for: activityListDate)[indexPath.row]
         if activity.finishDateTime == nil {
@@ -286,33 +302,53 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return Section(rawValue: indexPath.section) == .activities ? indexPath : nil
     }
+    
+    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+        isSwipeActionsShow = true
+    }
 }
 
 extension MainViewController: ActivityEditTableViewControllerDelegate {
     func deleteActivity(_ activity: Activity) {
         if lastSelectedIndexPath != nil {
-            dataSource.defaultRowAnimation = activityStore.activities.index(matching: activity) != 0 ? .top : .bottom
-            snapshot.deleteItems([activity.id])
-            dataSource.apply(snapshot, animatingDifferences: true)
-            activityStore.deleteActivity(activity)
-            if activityStore.activities(for: activityListDate).isEmpty {
-                activityTableView.isHidden = true
-                emptyPlaceholder.isHidden = false
+            DispatchQueue.global().async { [unowned self] in
+                dataSource.defaultRowAnimation = activityStore.activities.index(matching: activity) != 0 ? .top : .bottom
+                snapshot.deleteItems([activity.id])
+                dataSource.apply(snapshot, animatingDifferences: true)
+                activityStore.deleteActivity(activity)
+                if activityStore.activities(for: activityListDate).isEmpty {
+                    DispatchQueue.main.async {
+                        self.activityTableView.isHidden = true
+                        self.emptyPlaceholder.isHidden = false
+                    }
+                }
+                //            dataSource.defaultRowAnimation = .fade
+                
+                snapshot.reconfigureItems(activityStore.activitiesToReconfigure)
+                
+                dataSource.apply(snapshot, animatingDifferences: true)
+                
             }
+            //MARK: Data race
+            
         }
     }
     
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
-        dataSource.defaultRowAnimation = .fade
-//        if let conflictActivitiesBeforeUpdate = activityStore.conflictActivityDictionary[activity.id]?.map({$0}) {
-//            snapshot.reconfigureItems(conflictActivitiesBeforeUpdate)
-//        }
+//        dataSource.defaultRowAnimation = .fade
+        let activityIndexBeforeUpdate = activityStore.activities.index(matching: activity)
         activityStore.updateActivity(activity, with: data)
-        snapshot.reconfigureItems(snapshot.itemIdentifiers(inSection: .activities))
-//        if let conflictActivitiesAfterUpdate = activityStore.conflictActivityDictionary[activity.id]?.map({$0}) {
-//            snapshot.reconfigureItems(conflictActivitiesAfterUpdate)
-//        }
-        DispatchQueue.main.async {
+        let activityIndexAfterUpdate = activityStore.activities.index(matching: activity)
+        if activityIndexBeforeUpdate != activityIndexAfterUpdate {
+            if activityIndexAfterUpdate == activityStore.activities.count - 1 {
+                snapshot.moveItem(activity.id, afterItem: activityStore.activities[activityIndexAfterUpdate! - 1].id)
+            } else {
+                snapshot.moveItem(activity.id, beforeItem: activityStore.activities[activityIndexAfterUpdate! + 1].id)
+            }
+        }
+        snapshot.reconfigureItems([activity.id])
+        snapshot.reconfigureItems(activityStore.activitiesToReconfigure)
+        DispatchQueue.global().async {
             self.dataSource.apply(self.snapshot, animatingDifferences: true)
         }
     }

@@ -89,10 +89,9 @@ final class NewActivityView: UIView {
         super.init(frame: .null)
         setupUI()
         
-        typeStore.objectWillChange
-//            .receive(on: DispatchQueue.global(qos: .userInteractive))
-            .sink { [weak self] in
-                guard let self else { return }
+        typeStore.activeTypes.publisher
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
                 DispatchQueue.main.async {
                     self.chosenIndex %= typeStore.activeTypes.count
                     self.descriptionTF.placeholder = self.chosenType.description
@@ -204,7 +203,7 @@ final class NewActivityView: UIView {
         typeButton.setTitle(chosenType.emoji, for: .normal)
         descriptionTF.placeholder = chosenType.description
         
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction) {
             self.typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
         }
     }

@@ -67,11 +67,6 @@ struct DayActivityChart: View {
 
 struct DayActivityChart_Previews: PreviewProvider {
     static var previews: some View {
-        let sample = [
-            Activity(description: "Test", typeID: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9", startDateTime: .now, finishDateTime: .now.addingTimeInterval(TimeInterval(300))),
-            Activity(description: "Test2", typeID: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9", startDateTime: .now.addingTimeInterval(3600), finishDateTime: .now.addingTimeInterval(8650)),
-            Activity(description: "Test3", typeID: "4300197B-201F-42CC-AB52-67186E41F668", startDateTime: .now.addingTimeInterval(8650), finishDateTime: .now.addingTimeInterval(15650))
-        ]
         DayActivityChart(activityStore: ActivityStore(), typeStore: TypeStore())
             .scaledToFit()
     }

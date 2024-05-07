@@ -100,6 +100,7 @@ class TimeFinishTableViewCell: UITableViewCell {
         time = .now
         finishButton.isHidden = true
         timeStack.isHidden = false
+        delegate?.finishTimeChanged(to: time!)
     }
     
     private func setupViews() {
