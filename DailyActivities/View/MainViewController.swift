@@ -18,12 +18,12 @@ final class MainViewController: UIViewController {
     
     private lazy var activityTableView = UITableView(frame: .zero, style: .insetGrouped)
 
-    private let deleteActivityAlert: UIAlertController = {
+    private lazy var deleteActivityAlert: UIAlertController = {
         let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         return sheetAlert
     }()
     
-    private let emptyPlaceholder: UILabel = {
+    private lazy var emptyPlaceholder: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = NSLocalizedString("There are no logged activities today.\nLet's start log your day below.", comment: "placeholder when there are no activities per day")
