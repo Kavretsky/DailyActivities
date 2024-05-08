@@ -14,6 +14,8 @@
 		760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */; };
 		760EFE7A2A8C13D6000C8776 /* TypeManagerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */; };
 		762313222B13612900A6B238 /* DayActivityChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762313212B13612900A6B238 /* DayActivityChart.swift */; };
+		7630E0462BEBB03F00F41000 /* DailyActivitiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630E0452BEBB03F00F41000 /* DailyActivitiesUITests.swift */; };
+		7630E0482BEBB03F00F41000 /* DailyActivitiesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630E0472BEBB03F00F41000 /* DailyActivitiesUITestsLaunchTests.swift */; };
 		7638BB9D2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7638BB9C2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift */; };
 		7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */; };
 		7642D7462B03E0B90035E225 /* TimeStartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */; };
@@ -37,6 +39,16 @@
 		76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7630E0492BEBB03F00F41000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7669F5BD2A86B461003F75ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7669F5C42A86B461003F75ED;
+			remoteInfo = DailyActivities;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTableViewCell.swift; sourceTree = "<group>"; };
 		5D3858B12B2DEBF300B37CB0 /* ChartData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartData.swift; sourceTree = "<group>"; };
@@ -45,6 +57,9 @@
 		760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityExtensions.swift; sourceTree = "<group>"; };
 		760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewController.swift; sourceTree = "<group>"; };
 		762313212B13612900A6B238 /* DayActivityChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayActivityChart.swift; sourceTree = "<group>"; };
+		7630E0432BEBB03F00F41000 /* DailyActivitiesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DailyActivitiesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7630E0452BEBB03F00F41000 /* DailyActivitiesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyActivitiesUITests.swift; sourceTree = "<group>"; };
+		7630E0472BEBB03F00F41000 /* DailyActivitiesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyActivitiesUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		7638BB9C2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityTableViewDiffableDataSource.swift; path = DailyActivities/ActivityTableViewDiffableDataSource.swift; sourceTree = SOURCE_ROOT; };
 		7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
 		7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStartTableViewCell.swift; sourceTree = "<group>"; };
@@ -71,6 +86,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7630E0402BEBB03F00F41000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7669F5C22A86B461003F75ED /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -81,10 +103,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7630E0442BEBB03F00F41000 /* DailyActivitiesUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7630E0452BEBB03F00F41000 /* DailyActivitiesUITests.swift */,
+				7630E0472BEBB03F00F41000 /* DailyActivitiesUITestsLaunchTests.swift */,
+			);
+			path = DailyActivitiesUITests;
+			sourceTree = "<group>";
+		};
 		7669F5BC2A86B461003F75ED = {
 			isa = PBXGroup;
 			children = (
 				7669F5C72A86B461003F75ED /* DailyActivities */,
+				7630E0442BEBB03F00F41000 /* DailyActivitiesUITests */,
 				7669F5C62A86B461003F75ED /* Products */,
 			);
 			sourceTree = "<group>";
@@ -93,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				7669F5C52A86B461003F75ED /* DailyActivities.app */,
+				7630E0432BEBB03F00F41000 /* DailyActivitiesUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -160,6 +193,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7630E0422BEBB03F00F41000 /* DailyActivitiesUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7630E04D2BEBB03F00F41000 /* Build configuration list for PBXNativeTarget "DailyActivitiesUITests" */;
+			buildPhases = (
+				7630E03F2BEBB03F00F41000 /* Sources */,
+				7630E0402BEBB03F00F41000 /* Frameworks */,
+				7630E0412BEBB03F00F41000 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7630E04A2BEBB03F00F41000 /* PBXTargetDependency */,
+			);
+			name = DailyActivitiesUITests;
+			productName = DailyActivitiesUITests;
+			productReference = 7630E0432BEBB03F00F41000 /* DailyActivitiesUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		7669F5C42A86B461003F75ED /* DailyActivities */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7669F5D92A86B462003F75ED /* Build configuration list for PBXNativeTarget "DailyActivities" */;
@@ -184,9 +235,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1430;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					7630E0422BEBB03F00F41000 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = 7669F5C42A86B461003F75ED;
+					};
 					7669F5C42A86B461003F75ED = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
@@ -206,11 +261,19 @@
 			projectRoot = "";
 			targets = (
 				7669F5C42A86B461003F75ED /* DailyActivities */,
+				7630E0422BEBB03F00F41000 /* DailyActivitiesUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7630E0412BEBB03F00F41000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7669F5C32A86B461003F75ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -224,6 +287,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7630E03F2BEBB03F00F41000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7630E0462BEBB03F00F41000 /* DailyActivitiesUITests.swift in Sources */,
+				7630E0482BEBB03F00F41000 /* DailyActivitiesUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7669F5C12A86B461003F75ED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -258,6 +330,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		7630E04A2BEBB03F00F41000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7669F5C42A86B461003F75ED /* DailyActivities */;
+			targetProxy = 7630E0492BEBB03F00F41000 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		7669F5D32A86B462003F75ED /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -270,6 +350,47 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		7630E04B2BEBB03F00F41000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C27NM5L469;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kavretsky.DailyActivitiesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DailyActivities;
+			};
+			name = Debug;
+		};
+		7630E04C2BEBB03F00F41000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C27NM5L469;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kavretsky.DailyActivitiesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DailyActivities;
+			};
+			name = Release;
+		};
 		7669F5D72A86B462003F75ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -447,6 +568,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7630E04D2BEBB03F00F41000 /* Build configuration list for PBXNativeTarget "DailyActivitiesUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7630E04B2BEBB03F00F41000 /* Debug */,
+				7630E04C2BEBB03F00F41000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7669F5C02A86B461003F75ED /* Build configuration list for PBXProject "DailyActivities" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
