@@ -142,7 +142,6 @@ final class ActivityStore: ObservableObject {
                 }
             }
         }
-        
         activitiesToReconfigure = Array(activitiesWithoutConflict.union(conflictSet))
     }
     
@@ -168,9 +167,7 @@ final class ActivityStore: ObservableObject {
         var chartData = chartData
         chartData.removeAll(where: {$0.activityID == activity.id})
         guard !conflictActivityDictionary.contains(where: {$0.key == activity.id || $0.value.contains(activity.id) }) else {
-            DispatchQueue.main.async {
-                self.chartData = chartData
-            }
+            self.chartData = chartData
             return
         }
         
@@ -178,9 +175,7 @@ final class ActivityStore: ObservableObject {
             chartData.append(element)
         }
         chartData.sort(by: {$0.startTime < $1.startTime})
-        DispatchQueue.main.async {
-            self.chartData = chartData
-        }
+        self.chartData = chartData
     }
     
     private func updateTimer() {

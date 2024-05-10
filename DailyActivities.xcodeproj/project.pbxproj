@@ -31,7 +31,6 @@
 		7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */; };
 		767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */; };
 		767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */; };
-		767B10742A9541FB00E55ED8 /* EmojiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10732A9541FB00E55ED8 /* EmojiTextField.swift */; };
 		767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */; };
 		767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */; };
 		768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */; };
@@ -77,7 +76,6 @@
 		7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewActivityVIew.swift; sourceTree = "<group>"; };
 		767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeEditorViewController.swift; sourceTree = "<group>"; };
 		767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSection.swift; sourceTree = "<group>"; };
-		767B10732A9541FB00E55ED8 /* EmojiTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTextField.swift; sourceTree = "<group>"; };
 		767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypePickerTableViewCell.swift; sourceTree = "<group>"; };
 		767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypeCollectionViewCell.swift; sourceTree = "<group>"; };
 		768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewCell.swift; sourceTree = "<group>"; };
@@ -136,7 +134,6 @@
 				768A1AEB2A914CFC008C4CAC /* Model */,
 				768A1AE72A914CB5008C4CAC /* ViewModel */,
 				768A1AEA2A914CDF008C4CAC /* View */,
-				767B10732A9541FB00E55ED8 /* EmojiTextField.swift */,
 				7638BB9C2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift */,
 				762313212B13612900A6B238 /* DayActivityChart.swift */,
 				7669F5C82A86B461003F75ED /* AppDelegate.swift */,
@@ -301,7 +298,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */,
-				767B10742A9541FB00E55ED8 /* EmojiTextField.swift in Sources */,
 				764A92732A9914B3006402BE /* Activity.swift in Sources */,
 				7642D7482B03E8BB0035E225 /* TimeFinishTableViewCell.swift in Sources */,
 				76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */,
