@@ -6,10 +6,9 @@
 //
 
 import UIKit
-import Combine
 
 protocol TypeManagerTableViewControllerDelegate: AnyObject {
-    func activityTypesChanged()
+    func activityTypeChanged(_ typeID: ActivityType.ID)
 }
 
 final class TypeManagerTableViewController: UITableViewController {
@@ -92,7 +91,7 @@ extension TypeManagerTableViewController: TypeEditorViewControllerDelegate {
     func updateType(type: ActivityType, with data: ActivityType.Data) {
         typeStore.updateType(type, with: data)
         tableView.reloadData()
-        delegate?.activityTypesChanged()
+        delegate?.activityTypeChanged(type.id)
     }
     
     var isTypeDeletable: Bool {

@@ -105,7 +105,7 @@ final class MainViewController: UIViewController {
         } else {
             emptyPlaceholder.isHidden = true
         }
-        newActivityView.updateConstraints()
+//        newActivityView.updateConstraints()
         setupConstrains()
     }
     
@@ -250,7 +250,6 @@ extension MainViewController: NewActivityViewDelegate {
     func showTypeManager() {
         let typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
         typeManagerVC.delegate = self
-        print(typeManagerVC.delegate != nil)
         let typeManagerNC = UINavigationController(rootViewController: typeManagerVC)
         self.present(typeManagerNC, animated: true)
     }
@@ -346,9 +345,9 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
                 snapshot.moveItem(activity.id, beforeItem: activityStore.activities[activityIndexAfterUpdate! + 1].id)
             }
         }
-        snapshot.reconfigureItems([activity.id])
-        snapshot.reconfigureItems(activityStore.activitiesToReconfigure)
         DispatchQueue.global().async {
+            self.snapshot.reconfigureItems([activity.id])
+            self.snapshot.reconfigureItems(self.activityStore.activitiesToReconfigure)
             self.dataSource.apply(self.snapshot, animatingDifferences: true)
         }
     }
@@ -364,13 +363,13 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
 }
 
 extension MainViewController: TypeManagerTableViewControllerDelegate {
-    func activityTypesChanged() {
+    func activityTypeChanged(_ typeID: ActivityType.ID) {
         DispatchQueue.global().async { [weak self] in
             guard let self else { return }
-            self.snapshot.reconfigureItems(self.activityStore.activities.map { $0.id })
-            DispatchQueue.main.async {
+            self.snapshot.reconfigureItems(self.activityStore.activities.filter { $0.typeID == typeID }.map { $0.id })
+//            DispatchQueue.main.async {
                 self.dataSource.apply(self.snapshot)
-            }
+//            }
         }
     }
 }
