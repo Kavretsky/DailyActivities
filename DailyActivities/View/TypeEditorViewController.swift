@@ -20,7 +20,6 @@ final class TypeEditorViewController: UIViewController {
     private var typeData: ActivityType.Data
     {
         didSet{
-            delegate?.updateType(type: typeToEdit, with: typeData)
             emojiTF.text = typeData.emoji
             descriptionTF.text = typeData.description
         }
@@ -129,6 +128,10 @@ final class TypeEditorViewController: UIViewController {
         view.addGestureRecognizer(dismissKeyboardTap)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate?.updateType(type: typeToEdit, with: typeData)
+    }
+    
     
     @objc private func dismissKeyboard() {
             view.endEditing(true)
@@ -229,10 +232,10 @@ extension TypeEditorViewController: UIColorPickerViewControllerDelegate {
 
 extension TypeEditorViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == descriptionTF {
+        let text = textField.text
+        if textField == descriptionTF, text != typeData.description {
             typeData.description = textField.text ?? "Type Description"
-        }
-        if textField == emojiTF {
+        } else if textField == emojiTF, text != typeData.emoji {
             typeData.emoji = textField.text ?? ""
         }
     }
