@@ -13,6 +13,11 @@ protocol TypeEditorViewControllerDelegate: AnyObject {
     var isTypeDeletable: Bool { get }
 }
 
+fileprivate struct Constants {
+    static let defaultEmoji = "🙂"
+    static let defaultDescription = NSLocalizedString("Type description", comment: "Type description")
+}
+
 final class TypeEditorViewController: UIViewController {
     
     let typeToEdit: ActivityType
@@ -43,7 +48,7 @@ final class TypeEditorViewController: UIViewController {
         let descriptionTF = UITextField()
         descriptionTF.translatesAutoresizingMaskIntoConstraints = false
         descriptionTF.layer.cornerRadius = 10
-        descriptionTF.placeholder = NSLocalizedString("Type description", comment: "Type description")
+        descriptionTF.placeholder = Constants.defaultDescription
         descriptionTF.heightAnchor.constraint(equalToConstant: 56).isActive = true
         
         descriptionTF.backgroundColor = .white
@@ -129,7 +134,16 @@ final class TypeEditorViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        delegate?.updateType(type: typeToEdit, with: typeData)
+        if typeData.description != descriptionTF.text {
+            typeData.description = descriptionTF.text ?? Constants.defaultDescription
+        }
+        if typeData.emoji != emojiTF.text {
+            typeData.emoji = emojiTF.text ?? Constants.defaultEmoji
+        }
+        if typeData != typeToEdit.data {
+            delegate?.updateType(type: typeToEdit, with: typeData)
+        }
+        view.endEditing(true)
     }
     
     
@@ -234,9 +248,9 @@ extension TypeEditorViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         let text = textField.text
         if textField == descriptionTF, text != typeData.description {
-            typeData.description = textField.text ?? "Type Description"
+            typeData.description = textField.text ?? Constants.defaultDescription
         } else if textField == emojiTF, text != typeData.emoji {
-            typeData.emoji = textField.text ?? ""
+            typeData.emoji = textField.text ?? Constants.defaultEmoji
         }
     }
     

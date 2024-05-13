@@ -15,6 +15,7 @@ final class MainViewController: UIViewController {
     private let activityListDate: Date
     private var lastSelectedIndexPath: IndexPath?
     private var isSwipeActionsShow = false
+    private lazy var typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
     
     private lazy var activityTableView = UITableView(frame: .zero, style: .insetGrouped)
 
@@ -92,9 +93,11 @@ final class MainViewController: UIViewController {
             emptyPlaceholder.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
         ])
         
+        view.keyboardLayoutGuide.keyboardDismissPadding = 52
     }
     
     private func setupUI() {
+        view.backgroundColor = .tertiarySystemGroupedBackground
         newActivityView.delegate = self
         title = "Today"
         view.addSubview(activityTableView)
@@ -106,6 +109,7 @@ final class MainViewController: UIViewController {
             emptyPlaceholder.isHidden = true
         }
 //        newActivityView.updateConstraints()
+        typeManagerVC.delegate = self
         setupConstrains()
     }
     
@@ -133,8 +137,10 @@ final class MainViewController: UIViewController {
     }
     
 
-    override func viewWillAppear(_ animated: Bool) {
-        self.view.backgroundColor = .tertiarySystemGroupedBackground
+    override func viewIsAppearing(_ animated: Bool) {
+        DispatchQueue.global(qos: .userInteractive).async { [unowned self] in
+            dataSource.apply(snapshot, animatingDifferences: false)
+        }
     }
     
     private func makeDataSource() -> ActivityTableViewDiffableDataSource {
@@ -190,9 +196,6 @@ final class MainViewController: UIViewController {
         snapshot.appendSections(Section.allCases)
         snapshot.appendItems(activityStore.activities.map{$0.id}, toSection: Section.activities)
         snapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
-        DispatchQueue.global().async { [unowned self] in
-            dataSource.apply(snapshot, animatingDifferences: true)
-        }
     }
     
     private func setupDeleteActivityAlert() {
@@ -248,9 +251,8 @@ extension MainViewController: NewActivityViewDelegate {
     }
     
     func showTypeManager() {
-        let typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
-        typeManagerVC.delegate = self
         let typeManagerNC = UINavigationController(rootViewController: typeManagerVC)
+        typeManagerNC.modalPresentationStyle = .fullScreen
         self.present(typeManagerNC, animated: true)
     }
 }
@@ -334,7 +336,6 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
     }
     
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
-//        dataSource.defaultRowAnimation = .fade
         let activityIndexBeforeUpdate = activityStore.activities.index(matching: activity)
         activityStore.updateActivity(activity, with: data)
         let activityIndexAfterUpdate = activityStore.activities.index(matching: activity)
@@ -364,12 +365,10 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
 
 extension MainViewController: TypeManagerTableViewControllerDelegate {
     func activityTypeChanged(_ typeID: ActivityType.ID) {
-        DispatchQueue.global().async { [weak self] in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
-            self.snapshot.reconfigureItems(self.activityStore.activities.filter { $0.typeID == typeID }.map { $0.id })
-//            DispatchQueue.main.async {
-                self.dataSource.apply(self.snapshot)
-//            }
+            snapshot.reconfigureItems(activityStore.activities.filter { $0.typeID == typeID }.map { $0.id })
+            
         }
     }
 }

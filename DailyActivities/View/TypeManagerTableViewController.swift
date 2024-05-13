@@ -69,8 +69,12 @@ final class TypeManagerTableViewController: UITableViewController {
     
     private func setupToolBar() {
         let addTypeButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewType))
-        addTypeButton.title = NSLocalizedString("New type", comment: "New type button")
         navigationItem.rightBarButtonItem = addTypeButton
+        
+        let closeButton = UIBarButtonItem(systemItem: .close)
+        closeButton.target = self
+        closeButton.action = #selector(self.closeButtonTapped)
+        navigationItem.leftBarButtonItem = closeButton
     }
     
     @objc private func addNewType() {
@@ -79,6 +83,10 @@ final class TypeManagerTableViewController: UITableViewController {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }
+    }
+    
+    @objc private func closeButtonTapped() {
+        dismiss(animated: true)
     }
 }
 
