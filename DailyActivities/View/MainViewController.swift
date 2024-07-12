@@ -24,7 +24,7 @@ final class MainViewController: UIViewController {
         return sheetAlert
     }()
     
-    private lazy var emptyPlaceholder: UILabel = {
+    private lazy var emptyPlaceholder: UIView = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = NSLocalizedString("There are no logged activities today.\nLet's start log your day below.", comment: "placeholder when there are no activities per day")
@@ -32,7 +32,15 @@ final class MainViewController: UIViewController {
         label.tintColor = .gray
         label.numberOfLines = 0
         label.textAlignment = .center
-        return label
+        label.sizeToFit()
+        let view = UIView()
+        view.addSubview(label)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        return view
     }()
     
     enum Section: Int, CaseIterable, Hashable {
@@ -89,8 +97,12 @@ final class MainViewController: UIViewController {
             
             emptyPlaceholder.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             emptyPlaceholder.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            emptyPlaceholder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyPlaceholder.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30)
+            emptyPlaceholder.topAnchor.constraint(equalTo: view.topAnchor),
+            emptyPlaceholder.bottomAnchor.constraint(equalTo: newActivityView.topAnchor)
+//            emptyPlaceholder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            emptyPlaceholder.centerYAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -30),
+//            emptyPlaceholder.centerYAnchor.constraint(equalTo: (view.bottomAnchor - view.topAnchor / 2)),
+            
         ])
         
         view.keyboardLayoutGuide.keyboardDismissPadding = 52
@@ -111,6 +123,7 @@ final class MainViewController: UIViewController {
 //        newActivityView.updateConstraints()
         typeManagerVC.delegate = self
         setupConstrains()
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
     }
     
     private func setupActivitiesTableview() {

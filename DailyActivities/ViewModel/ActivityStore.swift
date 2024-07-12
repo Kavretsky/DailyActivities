@@ -24,8 +24,8 @@ final class ActivityStore: ObservableObject {
     }
     
     init() {
-        addActivity(description: "Morning walking with dog", typeID: "4300197B-201F-42CC-AB52-67186E41F668")
-        addActivity(description: "Working on new project", typeID: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9")
+//        addActivity(description: "Morning walking with dog", typeID: "4300197B-201F-42CC-AB52-67186E41F668")
+//        addActivity(description: "Working on new project", typeID: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9")
     }
     
     //MARK: Intents
