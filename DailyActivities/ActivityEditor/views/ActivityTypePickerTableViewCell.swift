@@ -47,7 +47,7 @@ final class ActivityTypePickerTableViewCell: UITableViewCell {
             activityTypeCollection.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintsConstants.topAnchorConstant),
             activityTypeCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: ConstraintsConstants.bottomAnchorConstant),
             activityTypeCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintsConstants.leadingAnchorConstant),
-            activityTypeCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: ConstraintsConstants.trailingAnchorConstant),
+            activityTypeCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: ConstraintsConstants.trailingAnchorConstant)
         ])
         
     }
@@ -73,7 +73,7 @@ extension ActivityTypePickerTableViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActivityTypeCollectionViewCellIdentifier", for: indexPath) as! ActivityTypeCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActivityTypeCollectionViewCellIdentifier", for: indexPath) as? ActivityTypeCollectionViewCell else { return .init() }
         let type = types[indexPath.row]
         cell.emoji = type.emoji
         if type.id == selectedTypeID {

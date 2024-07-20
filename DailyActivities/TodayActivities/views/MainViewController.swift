@@ -149,7 +149,6 @@ final class MainViewController: UIViewController {
         }
     }
     
-
     override func viewIsAppearing(_ animated: Bool) {
         DispatchQueue.global(qos: .userInteractive).async { [unowned self] in
             dataSource.apply(snapshot, animatingDifferences: false)
@@ -162,15 +161,15 @@ final class MainViewController: UIViewController {
             guard let section = Section(rawValue: indexPath.section) else { return .init() }
             switch section {
             case .chart:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier")!
+                let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier", for: indexPath)
                 cell.contentConfiguration = UIHostingConfiguration(content: {
                     DayActivityChart(activityStore: self.activityStore, typeStore: self.typeStore)
                 })
 //                cell.selectionStyle = .none
                 return cell
             case .activities:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as! ActivityTableViewCell
-                guard let activity = activityStore.activities.first(where: {$0.id == item as! String}) else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as? ActivityTableViewCell
+                guard let activity = activityStore.activities.first(where: {$0.id == item as? String}) else {
                     return cell
                 }
                 var durationString = ""
@@ -188,16 +187,20 @@ final class MainViewController: UIViewController {
                     durationString = "Conflict  " + durationString
                     durationAttributedString = .init(string: durationString)
                     durationAttributedString.addAttribute(.foregroundColor, value: UIColor(red: 1, green: 0.176, blue: 0.333, alpha: 1), range: .init(location: 0, length: 10))
-                    durationAttributedString.addAttribute(.foregroundColor, value: UIColor(red: 0.557, green: 0.557, blue: 0.576, alpha: 1), range: .init(location: 10, length: durationAttributedString.length - 10))
+                    durationAttributedString.addAttribute(.foregroundColor, 
+                                                          value: UIColor(red: 0.557, green: 0.557, blue: 0.576, alpha: 1),
+                                                          range: .init(location: 10, length: durationAttributedString.length - 10))
                 } else {
                     durationAttributedString = .init(string: durationString)
-                    durationAttributedString.addAttribute(.foregroundColor, value: UIColor(red: 0.557, green: 0.557, blue: 0.576, alpha: 1), range: .init(location: 0, length: durationAttributedString.length))
+                    durationAttributedString.addAttribute(.foregroundColor, 
+                                                          value: UIColor(red: 0.557, green: 0.557, blue: 0.576, alpha: 1),
+                                                          range: .init(location: 0, length: durationAttributedString.length))
                 }
                 durationAttributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 11), range: .init(location: 0, length: durationAttributedString.length))
                 
-                cell.duration = durationAttributedString
-                cell.activityDescription = activity.description
-                cell.typeEmoji = typeStore.type(withID: activity.typeID).emoji
+                cell?.duration = durationAttributedString
+                cell?.activityDescription = activity.description
+                cell?.typeEmoji = typeStore.type(withID: activity.typeID).emoji
 //                cell.selectionStyle = .none
                 return cell
             }
@@ -207,12 +210,12 @@ final class MainViewController: UIViewController {
     private func configureSnapshot() {
         snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
         snapshot.appendSections(Section.allCases)
-        snapshot.appendItems(activityStore.activities.map{$0.id}, toSection: Section.activities)
+        snapshot.appendItems(activityStore.activities.map {$0.id}, toSection: Section.activities)
         snapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
     }
     
     private func setupDeleteActivityAlert() {
-        let confirmDeleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] handler in
+        let confirmDeleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             self?.deleteActivityButtonTapped()
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)
@@ -285,7 +288,7 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) ->
     UISwipeActionsConfiguration? {
         guard Section(rawValue: indexPath.section) == .activities else { return nil }
-        let deleteAction = UIContextualAction(style: .destructive, title: "") { (action, view, handler) in
+        let deleteAction = UIContextualAction(style: .destructive, title: "") { (_, _, handler) in
             self.lastSelectedIndexPath = indexPath
             self.showDeleteActivityAlert()
             handler(true)
@@ -300,14 +303,14 @@ extension MainViewController: UITableViewDelegate {
         lastSelectedIndexPath = indexPath
         let activity = activityStore.activities(for: activityListDate)[indexPath.row]
         if activity.finishDateTime == nil {
-            let completeActivity = UIContextualAction(style: .normal, title: "Complete") { [weak self] (action, view, completionHandler) in
+            let completeActivity = UIContextualAction(style: .normal, title: "Complete") { [weak self] (_, _, completionHandler) in
                 self?.finishActivity(activity, at: indexPath)
                 completionHandler(true)
             }
             completeActivity.backgroundColor = .systemGreen
             return UISwipeActionsConfiguration(actions: [completeActivity])
         } else {
-            let startActivityAgain = UIContextualAction(style: .normal, title: "Start again") { [weak self] (action, view, completionHandler) in
+            let startActivityAgain = UIContextualAction(style: .normal, title: "Start again") { [weak self] (_, _, completionHandler) in
                 self?.addNewActivity(description: activity.description, typeID: activity.typeID)
                 completionHandler(true)
             }

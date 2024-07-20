@@ -9,8 +9,7 @@ import UIKit
 
 class SelfSizingCollectionView: UICollectionView {
 
-    override var contentSize: CGSize 
-    {
+    override var contentSize: CGSize {
         didSet {
             if oldValue.height != self.contentSize.height {
                 invalidateIntrinsicContentSize()
@@ -18,8 +17,7 @@ class SelfSizingCollectionView: UICollectionView {
         }
     }
     
-    override var intrinsicContentSize: CGSize
-    {
+    override var intrinsicContentSize: CGSize {
         layoutIfNeeded()
         return CGSize(width: UIView.noIntrinsicMetric,
                       height: contentSize.height)

@@ -8,8 +8,6 @@
 import SwiftUI
 import Charts
 
-
-
 struct DayActivityChart: View {
     @ObservedObject private var activityStore: ActivityStore
     @ObservedObject private var typeStore: TypeStore

@@ -23,8 +23,7 @@ class TimeFinishTableViewCell: UITableViewCell {
         }
     }
     
-    var minimumDate: Date!
-    {
+    var minimumDate: Date! {
         didSet {
             timePicker.minimumDate = minimumDate
         }
@@ -45,7 +44,12 @@ class TimeFinishTableViewCell: UITableViewCell {
         
         var configuration = UIButton.Configuration.plain()
         configuration.title = "Finish now"
-        configuration.contentInsets = .init(top: ConstraintsConstants.topAnchorConstant, leading: ConstraintsConstants.leadingAnchorConstant, bottom: ConstraintsConstants.topAnchorConstant, trailing: ConstraintsConstants.leadingAnchorConstant)
+        configuration.contentInsets = .init(
+            top: ConstraintsConstants.topAnchorConstant,
+            leading: ConstraintsConstants.leadingAnchorConstant,
+            bottom: ConstraintsConstants.topAnchorConstant,
+            trailing: ConstraintsConstants.leadingAnchorConstant
+        )
         
         let transformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -95,7 +99,6 @@ class TimeFinishTableViewCell: UITableViewCell {
         delegate?.finishTimeChanged(to: time!)
     }
     
-    
     @objc private func finishButtonTapped() {
         time = .now
         finishButton.isHidden = true
@@ -118,10 +121,7 @@ class TimeFinishTableViewCell: UITableViewCell {
             finishButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             finishButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             finishButton.topAnchor.constraint(equalTo: contentView.topAnchor),
-            finishButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
+            finishButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        
-        
     }
 }

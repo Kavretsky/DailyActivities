@@ -63,7 +63,6 @@ final class NewActivityView: UIView {
         return formSV
     }()
     
-    
     private var newActivityButton = {
         let newActivityButton = UIButton()
         
@@ -88,7 +87,7 @@ final class NewActivityView: UIView {
         let managerAction = UIAction(
             title: NSLocalizedString("Type Manager", comment: ""),
             image: UIImage(systemName: "slider.vertical.3")
-        ) { [weak self] action in
+        ) { [weak self] _ in
             self?.delegate?.showTypeManager()
         }
         
@@ -106,9 +105,6 @@ final class NewActivityView: UIView {
         }
         
         let goToMenu = UIMenu(title: "Go to", children: typeSelectionActions)
-        
-        
-        
         
         return UIMenu(title: "", children: [managerAction, goToMenu])
     }()
@@ -163,7 +159,7 @@ final class NewActivityView: UIView {
             newActivitySV.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -10),
             newActivitySV.bottomAnchor.constraint(lessThanOrEqualTo: keyboardLayoutGuide.topAnchor, constant: -8),
             newActivitySV.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            newActivitySV.heightAnchor.constraint(equalToConstant: 38),
+            newActivitySV.heightAnchor.constraint(equalToConstant: 38)
         ])
     }
     
@@ -202,7 +198,7 @@ final class NewActivityView: UIView {
             typeButton.leadingAnchor.constraint(equalTo: typeButtonBackground.leadingAnchor),
             typeButton.trailingAnchor.constraint(equalTo: typeButtonBackground.trailingAnchor),
             typeButton.topAnchor.constraint(equalTo: typeButtonBackground.topAnchor),
-            typeButton.bottomAnchor.constraint(equalTo: typeButtonBackground.bottomAnchor),
+            typeButton.bottomAnchor.constraint(equalTo: typeButtonBackground.bottomAnchor)
         ])
         
         typeButton.setTitle(chosenType.emoji, for: .normal)
@@ -211,7 +207,6 @@ final class NewActivityView: UIView {
         let interaction = UIContextMenuInteraction(delegate: self)
         typeButtonBackground.addInteraction(interaction)
     }
-    
     
     @objc private func typeButtonTapped() {
         chosenIndex = (chosenIndex + 1) % typeStore.activeTypes.count
@@ -256,7 +251,7 @@ final class NewActivityView: UIView {
             descriptionTF.topAnchor.constraint(equalTo: descriptionTFBackground.topAnchor),
             descriptionTF.bottomAnchor.constraint(equalTo: descriptionTFBackground.bottomAnchor),
             descriptionTFBackground.topAnchor.constraint(equalTo: formSV.topAnchor),
-            descriptionTFBackground.bottomAnchor.constraint(equalTo: formSV.bottomAnchor),
+            descriptionTFBackground.bottomAnchor.constraint(equalTo: formSV.bottomAnchor)
         ])
     }
     

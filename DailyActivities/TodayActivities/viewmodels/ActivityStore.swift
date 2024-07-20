@@ -8,14 +8,12 @@
 import Foundation
 import Combine
 
-
 final class ActivityStore: ObservableObject {
     private(set) var activities = [Activity]()
     @Published private(set) var chartData = [ChartData]()
     private var updateLastActivityChartDataTimer: Timer?
     private(set) var conflictActivityDictionary: [Activity.ID: Set<Activity.ID>] = [:]
     private(set) var activitiesToReconfigure = [Activity.ID]()
-    
     
     var datesInHistory: Set<Date> {
         activities.reduce(into: Set<Date>.init()) { partialResult, activity in
@@ -28,7 +26,7 @@ final class ActivityStore: ObservableObject {
 //        addActivity(description: "Working on new project", typeID: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9")
     }
     
-    //MARK: Intents
+    // MARK: Intents
     func addActivity(description: String, typeID: String) {
         if let index = activities.firstIndex(where: { $0.finishDateTime == nil }) {
             activities[index].finishDateTime = .now
@@ -126,7 +124,6 @@ final class ActivityStore: ObservableObject {
             }
         }
         
-        
         for activityID in conflictActivityDictionary.keys {
             if let conflicts = conflictActivityDictionary[activityID], conflicts.contains(activity.id) {
                 if !isActivityConflict(activityID, activity.id) {
@@ -166,7 +163,9 @@ final class ActivityStore: ObservableObject {
     private func updateActivityChartData(_ activity: Activity) {
         var chartData = chartData
         chartData.removeAll(where: {$0.activityID == activity.id})
-        guard !conflictActivityDictionary.contains(where: {$0.key == activity.id || $0.value.contains(activity.id) }) else {
+        guard !conflictActivityDictionary.contains(where: {
+            $0.key == activity.id || $0.value.contains(activity.id)
+        }) else {
             self.chartData = chartData
             return
         }
@@ -181,7 +180,7 @@ final class ActivityStore: ObservableObject {
     private func updateTimer() {
         updateLastActivityChartDataTimer?.invalidate()
         if let activity = activities.first(where: {$0.finishDateTime == nil}) {
-            updateLastActivityChartDataTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: { [weak self] timer in
+            updateLastActivityChartDataTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: { [weak self] _ in
                 self?.updateActivityChartData(activity)
             })
         } else {

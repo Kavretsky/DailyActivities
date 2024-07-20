@@ -36,6 +36,8 @@
 		768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */; };
 		76B0896C2BEB68FB00EA63D1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 76B0896B2BEB68FB00EA63D1 /* README.md */; };
 		76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */; };
+		76F8B7B82C4C42C5002B4B27 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */; };
+		76F8B7B92C4C42C5002B4B27 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +83,7 @@
 		768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewCell.swift; sourceTree = "<group>"; };
 		76B0896B2BEB68FB00EA63D1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
+		76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -258,6 +261,7 @@
 				76B0896B2BEB68FB00EA63D1 /* README.md */,
 				7669F5D12A86B462003F75ED /* Assets.xcassets */,
 				7669F5D32A86B462003F75ED /* LaunchScreen.storyboard */,
+				76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */,
 				7669F5D62A86B462003F75ED /* Info.plist */,
 			);
 			path = DailyActivities;
@@ -323,6 +327,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				76481BB32C4C405600EB7DD2 /* PBXTargetDependency */,
 			);
 			name = DailyActivities;
 			productName = DailyActivities;
@@ -337,7 +342,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					7630E0422BEBB03F00F41000 = {
 						CreatedOnToolsVersion = 15.3;
@@ -357,6 +362,9 @@
 				Base,
 			);
 			mainGroup = 7669F5BC2A86B461003F75ED;
+			packageReferences = (
+				76481BB12C4C404400EB7DD2 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+			);
 			productRefGroup = 7669F5C62A86B461003F75ED /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -372,6 +380,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76F8B7B92C4C42C5002B4B27 /* .swiftlint.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +388,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76F8B7B82C4C42C5002B4B27 /* .swiftlint.yml in Resources */,
 				76B0896C2BEB68FB00EA63D1 /* README.md in Resources */,
 				7669F5D52A86B462003F75ED /* LaunchScreen.storyboard in Resources */,
 				7669F5D22A86B462003F75ED /* Assets.xcassets in Resources */,
@@ -435,6 +445,10 @@
 			isa = PBXTargetDependency;
 			target = 7669F5C42A86B461003F75ED /* DailyActivities */;
 			targetProxy = 7630E0492BEBB03F00F41000 /* PBXContainerItemProxy */;
+		};
+		76481BB32C4C405600EB7DD2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 76481BB22C4C405600EB7DD2 /* SwiftLintBuildToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -495,6 +509,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -557,6 +572,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -617,6 +633,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C27NM5L469;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DailyActivities/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -645,6 +662,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C27NM5L469;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DailyActivities/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -696,6 +714,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		76481BB12C4C404400EB7DD2 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.55.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		76481BB22C4C405600EB7DD2 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76481BB12C4C404400EB7DD2 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7669F5BD2A86B461003F75ED /* Project object */;
 }

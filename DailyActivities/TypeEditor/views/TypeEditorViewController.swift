@@ -17,9 +17,8 @@ final class TypeEditorViewController: UIViewController {
     
     let typeToEdit: ActivityType
     
-    private var typeData: ActivityType.Data
-    {
-        didSet{
+    private var typeData: ActivityType.Data {
+        didSet {
             emojiTF.text = typeData.emoji
             descriptionTF.text = typeData.description
         }
@@ -61,7 +60,6 @@ final class TypeEditorViewController: UIViewController {
         stack.distribution = .fillEqually
         return stack
     }()
-    
     
     let colorPickerSection: ColorPickerSection = {
         let colorPickerSection = ColorPickerSection(color: .black)
@@ -107,8 +105,6 @@ final class TypeEditorViewController: UIViewController {
         self.colorPickerSection.delegate = self
     }
     
-    
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -143,12 +139,10 @@ final class TypeEditorViewController: UIViewController {
         view.endEditing(true)
     }
     
-    
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
     
-
     private func setupUI() {
         view.backgroundColor = .systemGroupedBackground
         setupEmojiTF()
@@ -210,7 +204,7 @@ final class TypeEditorViewController: UIViewController {
             descriptionTF.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
             colorPickerSection.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
             colorPickerSection.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
-            colorPickerSection.heightAnchor.constraint(equalToConstant: 56),
+            colorPickerSection.heightAnchor.constraint(equalToConstant: 56)
             
         ])
     }
@@ -264,8 +258,6 @@ extension TypeEditorViewController: ColorPickerSectionDelegate {
     func updateColor(color: UIColor) {
         typeData.backgroundRGBA = RGBAColor(color: color)
     }
-    
-    
 }
 
 fileprivate struct Constants {

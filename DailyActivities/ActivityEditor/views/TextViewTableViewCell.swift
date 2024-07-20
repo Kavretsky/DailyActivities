@@ -12,8 +12,7 @@ protocol TextViewTableViewCellDelegate: AnyObject {
 }
 
 final class TextViewTableViewCell: UITableViewCell {
-    var text: String = ""
-    {
+    var text: String = "" {
         willSet {
             if textView.text != newValue {
                 textView.text = newValue
@@ -31,8 +30,6 @@ final class TextViewTableViewCell: UITableViewCell {
         textView.font = .systemFont(ofSize: 17)
         return textView
     }()
-    
-
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -37,7 +37,6 @@ final class TypeManagerTableViewController: UITableViewController {
 //        tableView.rowHeight = UITableView.automaticDimension
     }
     
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -47,7 +46,7 @@ final class TypeManagerTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TypeManagerCellIdentifier", for: indexPath) as! TypeManagerTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TypeManagerCellIdentifier", for: indexPath) as? TypeManagerTableViewCell else { return UITableViewCell() }
 
         let index = indexPath.row
         cell.type = typeStore.activeTypes[index]
@@ -107,6 +106,3 @@ extension TypeManagerTableViewController: TypeEditorViewControllerDelegate {
     }
     
 }
-
-
-

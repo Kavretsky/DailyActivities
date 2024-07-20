@@ -1,0 +1,7 @@
+disabled_rules:
+ - trailing_whitespace
+ - private_over_fileprivate
+ 
+line_length: 200
+
+warning_threshold: 15

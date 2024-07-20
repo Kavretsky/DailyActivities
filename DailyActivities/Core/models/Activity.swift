@@ -25,7 +25,7 @@ struct Activity: Identifiable, Hashable, Equatable {
         self.finishDateTime = finishDateTime
     }
     
-    static func ==(lhs: Activity, rhs: Activity) -> Bool {
+    static func == (lhs: Activity, rhs: Activity) -> Bool {
         return lhs.id == rhs.id
     }
     
@@ -39,7 +39,7 @@ extension Activity {
         var description = ""
         var typeID = UUID().uuidString
         var startDateTime = Date.now
-        var finishDateTime: Date? = nil
+        var finishDateTime: Date?
     }
     
     var data: Data {

@@ -14,11 +14,10 @@ protocol ActivityEditTableViewControllerDelegate: AnyObject {
 }
 
 final class ActivityEditTableViewController: UITableViewController {
-    private let types:[ActivityType]
+    private let types: [ActivityType]
     private let activity: Activity
-    private var activityData: Activity.Data
-    {
-        willSet{
+    private var activityData: Activity.Data {
+        willSet {
             navigationItem.rightBarButtonItem?.isEnabled = !newValue.description.isEmpty
         }
     }
@@ -52,7 +51,6 @@ final class ActivityEditTableViewController: UITableViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,31 +119,32 @@ final class ActivityEditTableViewController: UITableViewController {
         return 2
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch (indexPath.section, indexPath.row) {
-        case (0,0):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as! TextViewTableViewCell
+        case (0, 0):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as? TextViewTableViewCell else {
+                fallthrough
+            }
             
             cell.text = activity.description
             cell.delegate = self
             return cell
-        case (0,1):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier", for: indexPath) as! ActivityTypePickerTableViewCell
+        case (0, 1):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier", for: indexPath) as? ActivityTypePickerTableViewCell else { fallthrough }
             cell.types = types
             cell.selectedTypeID = activity.typeID
             cell.delegate = self
             cell.layoutIfNeeded()
             return cell
             
-        case (1,0):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TimeStartTableViewCellReuseIdentifier", for: indexPath) as! TimeStartTableViewCell
+        case (1, 0):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TimeStartTableViewCellReuseIdentifier", for: indexPath) as? TimeStartTableViewCell else { fallthrough }
             cell.time = activity.startDateTime
             cell.delegate = self
             return cell
             
-        case (1,1):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TimeFinishTableViewCellReuseIdentifier", for: indexPath) as! TimeFinishTableViewCell
+        case (1, 1):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TimeFinishTableViewCellReuseIdentifier", for: indexPath) as? TimeFinishTableViewCell else { fallthrough }
             cell.time = activity.finishDateTime
             cell.minimumDate = activity.startDateTime
             cell.delegate = self
@@ -153,7 +152,7 @@ final class ActivityEditTableViewController: UITableViewController {
             return cell
             
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as! TextViewTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as? TextViewTableViewCell else { return UITableViewCell() }
             
             cell.text = activity.description
             cell.delegate = self
@@ -166,7 +165,7 @@ final class ActivityEditTableViewController: UITableViewController {
 
 extension ActivityEditTableViewController: TextViewTableViewCellDelegate {
     func textViewDidChange(_ cell: TextViewTableViewCell) {
-        if let _ = tableView.indexPath(for: cell) {
+        if tableView.indexPath(for: cell) != nil {
             activityData.description = cell.text
             tableView.beginUpdates()
             tableView.endUpdates()
@@ -197,6 +196,4 @@ extension ActivityEditTableViewController: TimeFinishTableViewCellDelegate {
             activityData.finishDateTime = dateTime
         }
     }
-    
-    
 }

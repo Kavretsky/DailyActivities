@@ -8,8 +8,7 @@
 import UIKit
 
 final class ActivityTypeCollectionViewCell: UICollectionViewCell {
-    var emoji: String = ""
-    {
+    var emoji: String = "" {
         didSet {
             emojiLabel.text = emoji
         }
@@ -32,7 +31,7 @@ final class ActivityTypeCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupViews(){
+    private func setupViews() {
         contentView.backgroundColor = .clear
         contentView.addSubview(emojiLabel)
         

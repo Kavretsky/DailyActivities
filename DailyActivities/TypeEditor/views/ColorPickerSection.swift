@@ -15,8 +15,7 @@ final class ColorPickerSection: UIView {
     
     weak var delegate: ColorPickerSectionDelegate?
     
-    var color: UIColor
-    {
+    var color: UIColor {
         willSet {
             colorCircle.backgroundColor = newValue
             delegate?.updateColor(color: newValue)
@@ -58,12 +57,11 @@ final class ColorPickerSection: UIView {
         
         gradientLayer.colors = gradientColors.map { $0.cgColor }
         
-        
         backgroundView.layer.addSublayer(gradientLayer)
     
         NSLayoutConstraint.activate([
             backgroundView.heightAnchor.constraint(equalToConstant: 32),
-            backgroundView.widthAnchor.constraint(equalToConstant: 32),
+            backgroundView.widthAnchor.constraint(equalToConstant: 32)
         ])
         
         return backgroundView
@@ -76,7 +74,7 @@ final class ColorPickerSection: UIView {
         whiteCircle.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             whiteCircle.heightAnchor.constraint(equalToConstant: 26),
-            whiteCircle.widthAnchor.constraint(equalToConstant: 26),
+            whiteCircle.widthAnchor.constraint(equalToConstant: 26)
         ])
         return whiteCircle
     }()
@@ -87,7 +85,7 @@ final class ColorPickerSection: UIView {
         colorCircle.layer.cornerRadius = 11.5
         NSLayoutConstraint.activate([
             colorCircle.heightAnchor.constraint(equalToConstant: 21),
-            colorCircle.widthAnchor.constraint(equalToConstant: 21),
+            colorCircle.widthAnchor.constraint(equalToConstant: 21)
         ])
         return colorCircle
     }()
@@ -120,7 +118,7 @@ final class ColorPickerSection: UIView {
             whiteCircle.centerXAnchor.constraint(equalTo: gradientCircle.centerXAnchor),
             whiteCircle.centerYAnchor.constraint(equalTo: gradientCircle.centerYAnchor),
             colorCircle.centerXAnchor.constraint(equalTo: gradientCircle.centerXAnchor),
-            colorCircle.centerYAnchor.constraint(equalTo: gradientCircle.centerYAnchor),
+            colorCircle.centerYAnchor.constraint(equalTo: gradientCircle.centerYAnchor)
         ])
     }
 

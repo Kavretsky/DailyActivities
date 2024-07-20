@@ -9,22 +9,19 @@ import UIKit
 
 final class ActivityTableViewCell: UITableViewCell {
     
-    var activityDescription: String?
-    {
+    var activityDescription: String? {
         didSet {
             descriptionLabel.text = activityDescription
         }
     }
     
-    var duration: NSMutableAttributedString?
-    {
+    var duration: NSMutableAttributedString? {
         didSet {
             durationLabel.attributedText = duration
         }
     }
     
-    var typeEmoji: String?
-    {
+    var typeEmoji: String? {
         didSet {
             typeLabel.text = typeEmoji
         }
@@ -75,7 +72,6 @@ final class ActivityTableViewCell: UITableViewCell {
         contentSV.alignment = .fill
         contentSV.distribution = .fill
         
-        
         contentView.addSubview(contentSV)
         
         NSLayoutConstraint.activate([
@@ -85,7 +81,7 @@ final class ActivityTableViewCell: UITableViewCell {
             contentSV.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             
             durationAndTypeSV.leadingAnchor.constraint(equalTo: contentSV.leadingAnchor),
-            durationAndTypeSV.trailingAnchor.constraint(equalTo: contentSV.trailingAnchor),
+            durationAndTypeSV.trailingAnchor.constraint(equalTo: contentSV.trailingAnchor)
         ])
     }
     

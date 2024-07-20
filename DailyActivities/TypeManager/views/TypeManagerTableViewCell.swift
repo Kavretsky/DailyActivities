@@ -8,8 +8,7 @@
 import UIKit
 
 final class TypeManagerTableViewCell: UITableViewCell {
-    var type: ActivityType?
-    {
+    var type: ActivityType? {
         didSet {
             guard let type else { return }
             emojiBGView.backgroundColor = UIColor(rgbaColor: type.backgroundRGBA)
@@ -65,7 +64,7 @@ final class TypeManagerTableViewCell: UITableViewCell {
             cellStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             cellStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             cellStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            cellStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            cellStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
     

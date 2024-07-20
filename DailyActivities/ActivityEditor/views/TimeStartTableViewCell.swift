@@ -66,10 +66,7 @@ final class TimeStartTableViewCell: UITableViewCell {
             stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: ConstraintsConstants.bottomAnchorConstant),
             
             timeLabel.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
-            timePicker.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
-            
+            timePicker.trailingAnchor.constraint(equalTo: stack.trailingAnchor)
         ])
-        
-        
     }
 }

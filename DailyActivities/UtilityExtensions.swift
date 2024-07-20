@@ -57,11 +57,11 @@ extension Date {
 
 extension Collection where Element: Identifiable {
     func index(matching element: Element) -> Self.Index? {
-        firstIndex(where:{ $0.id == element.id })
+        firstIndex(where: { $0.id == element.id })
     }
     
     func index(matching id: Element.ID) -> Self.Index? {
-        firstIndex(where:{ $0.id == id })
+        firstIndex(where: { $0.id == id })
     }
 }
 
@@ -111,14 +111,10 @@ extension Array where Element: Hashable {
     func uniqued() -> Array {
         var buffer = Array()
         var added = Set<Element>()
-        for elem in self {
-            if !added.contains(elem) {
-                buffer.append(elem)
-                added.insert(elem)
-            }
+        for elem in self where added.contains(elem) {
+            buffer.append(elem)
+            added.insert(elem)
         }
         return buffer
     }
 }
-
-
