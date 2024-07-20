@@ -21,10 +21,10 @@ class TypeStore: ObservableObject {
     }
     
     private func addDefaultTypes() {
-//        addType(id: "4300197B-201F-42CC-AB52-67186E41F668", emoji: "👍", background: UIColor(rgbaColor: RGBAColor(red: 182/255, green: 255/255, blue: 137/255, alpha: 1)), description: "Positive")
-//        addType(id: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9", emoji: "😡", background: UIColor(rgbaColor: RGBAColor(red: 255/255, green: 194/255, blue: 137/255, alpha: 1)), description: "Negative")
-//        addType(emoji: "😇", background: UIColor(rgbaColor: RGBAColor(red: 115/255, green: 14/255, blue: 137/255, alpha: 1)), description: "Rest activity")
-//        addType(emoji: "🥰", background: UIColor(rgbaColor: RGBAColor(red: 15/255, green: 140/255, blue: 17/255, alpha: 1)), description: "Love activity")
+        addType(id: "4300197B-201F-42CC-AB52-67186E41F668", emoji: "👍", background: UIColor(rgbaColor: RGBAColor(red: 182/255, green: 255/255, blue: 137/255, alpha: 1)), description: "Positive")
+        addType(id: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9", emoji: "😡", background: UIColor(rgbaColor: RGBAColor(red: 255/255, green: 194/255, blue: 137/255, alpha: 1)), description: "Negative")
+        addType(emoji: "😇", background: UIColor(rgbaColor: RGBAColor(red: 115/255, green: 14/255, blue: 137/255, alpha: 1)), description: "Rest activity")
+        addType(emoji: "🥰", background: UIColor(rgbaColor: RGBAColor(red: 15/255, green: 140/255, blue: 17/255, alpha: 1)), description: "Love activity")
     }
     
     var activeTypes: [ActivityType] {
