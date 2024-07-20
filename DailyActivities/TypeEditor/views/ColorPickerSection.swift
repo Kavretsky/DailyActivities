@@ -125,3 +125,7 @@ final class ColorPickerSection: UIView {
     }
 
 }
+
+#Preview {
+    ColorPickerSection(color: .red)
+}

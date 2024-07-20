@@ -59,7 +59,7 @@
 		7630E0432BEBB03F00F41000 /* DailyActivitiesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DailyActivitiesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7630E0452BEBB03F00F41000 /* DailyActivitiesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyActivitiesUITests.swift; sourceTree = "<group>"; };
 		7630E0472BEBB03F00F41000 /* DailyActivitiesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyActivitiesUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		7638BB9C2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityTableViewDiffableDataSource.swift; path = DailyActivities/ActivityTableViewDiffableDataSource.swift; sourceTree = SOURCE_ROOT; };
+		7638BB9C2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityTableViewDiffableDataSource.swift; path = DailyActivities/TodayActivities/datasource/ActivityTableViewDiffableDataSource.swift; sourceTree = SOURCE_ROOT; };
 		7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
 		7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStartTableViewCell.swift; sourceTree = "<group>"; };
 		7642D7472B03E8BB0035E225 /* TimeFinishTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFinishTableViewCell.swift; sourceTree = "<group>"; };
@@ -110,6 +110,121 @@
 			path = DailyActivitiesUITests;
 			sourceTree = "<group>";
 		};
+		76481B9E2C4B07E000EB7DD2 /* TypeEditor */ = {
+			isa = PBXGroup;
+			children = (
+				76481B9F2C4B081C00EB7DD2 /* views */,
+			);
+			path = TypeEditor;
+			sourceTree = "<group>";
+		};
+		76481B9F2C4B081C00EB7DD2 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */,
+				767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		76481BA02C4BD6E000EB7DD2 /* TypeManager */ = {
+			isa = PBXGroup;
+			children = (
+				76481BA12C4BDD9600EB7DD2 /* views */,
+			);
+			path = TypeManager;
+			sourceTree = "<group>";
+		};
+		76481BA12C4BDD9600EB7DD2 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */,
+				768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		76481BA22C4C29F500EB7DD2 /* ActivityEditor */ = {
+			isa = PBXGroup;
+			children = (
+				76481BA32C4C2A0F00EB7DD2 /* views */,
+			);
+			path = ActivityEditor;
+			sourceTree = "<group>";
+		};
+		76481BA32C4C2A0F00EB7DD2 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */,
+				7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */,
+				767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */,
+				767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */,
+				7642D7472B03E8BB0035E225 /* TimeFinishTableViewCell.swift */,
+				76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		76481BA42C4C2A6300EB7DD2 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				768A1AEB2A914CFC008C4CAC /* models */,
+				76481BA52C4C2A6B00EB7DD2 /* views */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		76481BA52C4C2A6B00EB7DD2 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		76481BA62C4C2C7200EB7DD2 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
+				7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */,
+				5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		76481BA72C4C2C8000EB7DD2 /* datasource */ = {
+			isa = PBXGroup;
+			children = (
+				7638BB9C2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift */,
+			);
+			path = datasource;
+			sourceTree = "<group>";
+		};
+		76481BA82C4C30D500EB7DD2 /* DayChart */ = {
+			isa = PBXGroup;
+			children = (
+				76481BAA2C4C30FF00EB7DD2 /* models */,
+				76481BA92C4C30E600EB7DD2 /* views */,
+			);
+			path = DayChart;
+			sourceTree = "<group>";
+		};
+		76481BA92C4C30E600EB7DD2 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				762313212B13612900A6B238 /* DayActivityChart.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		76481BAA2C4C30FF00EB7DD2 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				5D3858B12B2DEBF300B37CB0 /* ChartData.swift */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
 		7669F5BC2A86B461003F75ED = {
 			isa = PBXGroup;
 			children = (
@@ -131,11 +246,12 @@
 		7669F5C72A86B461003F75ED /* DailyActivities */ = {
 			isa = PBXGroup;
 			children = (
-				768A1AEB2A914CFC008C4CAC /* Model */,
-				768A1AE72A914CB5008C4CAC /* ViewModel */,
-				768A1AEA2A914CDF008C4CAC /* View */,
-				7638BB9C2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift */,
-				762313212B13612900A6B238 /* DayActivityChart.swift */,
+				76481BA42C4C2A6300EB7DD2 /* Core */,
+				76481BA82C4C30D500EB7DD2 /* DayChart */,
+				768A1AEA2A914CDF008C4CAC /* TodayActivities */,
+				76481BA02C4BD6E000EB7DD2 /* TypeManager */,
+				76481B9E2C4B07E000EB7DD2 /* TypeEditor */,
+				76481BA22C4C29F500EB7DD2 /* ActivityEditor */,
 				7669F5C82A86B461003F75ED /* AppDelegate.swift */,
 				7669F5CA2A86B461003F75ED /* SceneDelegate.swift */,
 				760EFE772A8BFFE4000C8776 /* UtilityExtensions.swift */,
@@ -147,44 +263,32 @@
 			path = DailyActivities;
 			sourceTree = "<group>";
 		};
-		768A1AE72A914CB5008C4CAC /* ViewModel */ = {
+		768A1AE72A914CB5008C4CAC /* viewmodels */ = {
 			isa = PBXGroup;
 			children = (
 				760EFE732A8BFF55000C8776 /* TypeStore.swift */,
 				764A92742A991759006402BE /* ActivityStore.swift */,
 			);
-			path = ViewModel;
+			path = viewmodels;
 			sourceTree = "<group>";
 		};
-		768A1AEA2A914CDF008C4CAC /* View */ = {
+		768A1AEA2A914CDF008C4CAC /* TodayActivities */ = {
 			isa = PBXGroup;
 			children = (
-				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
-				76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */,
-				7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */,
-				7642D7472B03E8BB0035E225 /* TimeFinishTableViewCell.swift */,
-				767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */,
-				7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */,
-				767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */,
-				76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */,
-				767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */,
-				7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */,
-				760EFE792A8C13D6000C8776 /* TypeManagerTableViewController.swift */,
-				5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */,
-				767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */,
-				768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */,
+				768A1AE72A914CB5008C4CAC /* viewmodels */,
+				76481BA72C4C2C8000EB7DD2 /* datasource */,
+				76481BA62C4C2C7200EB7DD2 /* views */,
 			);
-			path = View;
+			path = TodayActivities;
 			sourceTree = "<group>";
 		};
-		768A1AEB2A914CFC008C4CAC /* Model */ = {
+		768A1AEB2A914CFC008C4CAC /* models */ = {
 			isa = PBXGroup;
 			children = (
 				760EFE752A8BFF73000C8776 /* ActivityType.swift */,
 				764A92722A9914B3006402BE /* Activity.swift */,
-				5D3858B12B2DEBF300B37CB0 /* ChartData.swift */,
 			);
-			path = Model;
+			path = models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -438,7 +542,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -494,7 +598,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

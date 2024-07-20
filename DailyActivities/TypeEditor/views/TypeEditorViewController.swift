@@ -13,11 +13,6 @@ protocol TypeEditorViewControllerDelegate: AnyObject {
     var isTypeDeletable: Bool { get }
 }
 
-fileprivate struct Constants {
-    static let defaultEmoji = "🙂"
-    static let defaultDescription = NSLocalizedString("Type description", comment: "Type description")
-}
-
 final class TypeEditorViewController: UIViewController {
     
     let typeToEdit: ActivityType
@@ -95,6 +90,11 @@ final class TypeEditorViewController: UIViewController {
         return scrollView
     }()
     
+    private lazy var deleteTypeAlert: UIAlertController = {
+        let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        return sheetAlert
+    }()
+    
     private let colorPicker = UIColorPickerViewController()
     
     init(activityType: ActivityType) {
@@ -107,10 +107,7 @@ final class TypeEditorViewController: UIViewController {
         self.colorPickerSection.delegate = self
     }
     
-    private let deleteTypeAlert: UIAlertController = {
-        let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
-        return sheetAlert
-    }()
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -148,7 +145,7 @@ final class TypeEditorViewController: UIViewController {
     
     
     @objc private func dismissKeyboard() {
-            view.endEditing(true)
+        view.endEditing(true)
     }
     
 
@@ -170,14 +167,10 @@ final class TypeEditorViewController: UIViewController {
         setupConstraints()
     }
     
-    
-    
     private func setupDeleteButton() {
         deleteButton.addTarget(nil, action: #selector(showDeleteTypeAlert), for: .touchUpInside)
         deleteButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
         deleteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        
     }
     
     private func setupDeleteTypeAlert() {
@@ -273,4 +266,13 @@ extension TypeEditorViewController: ColorPickerSectionDelegate {
     }
     
     
+}
+
+fileprivate struct Constants {
+    static let defaultEmoji = "🙂"
+    static let defaultDescription = NSLocalizedString("Type description", comment: "Type description")
+}
+
+#Preview {
+    TypeEditorViewController(activityType: ActivityType.init(data: ActivityType.sampleData()))
 }
