@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="ActivityEntity" representedClassName="ActivityEntity" syncable="YES">
+        <attribute name="desc" attributeType="String"/>
+        <attribute name="finishDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="startDateTime" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="typeId" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="ActivityTypeEntity" representedClassName="ActivityTypeEntity" syncable="YES">
+        <attribute name="emoji" attributeType="String"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="isActive" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="typeDescription" attributeType="String"/>
+        <relationship name="color" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="RGBAColorEntity" inverseName="type" inverseEntity="RGBAColorEntity"/>
+    </entity>
+    <entity name="RGBAColorEntity" representedClassName="RGBAColorEntity" syncable="YES">
+        <attribute name="alpha" attributeType="Integer 16" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="blue" attributeType="Integer 16" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="green" attributeType="Integer 16" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="red" attributeType="Integer 16" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="type" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ActivityTypeEntity" inverseName="color" inverseEntity="ActivityTypeEntity"/>
+    </entity>
+</model>

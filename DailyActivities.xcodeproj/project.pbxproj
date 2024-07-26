@@ -38,6 +38,11 @@
 		76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */; };
 		76F8B7B82C4C42C5002B4B27 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */; };
 		76F8B7B92C4C42C5002B4B27 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */; };
+		76F8B7C82C50371F002B4B27 /* DailyActivities.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7C42C50371F002B4B27 /* DailyActivities.xcdatamodeld */; };
+		76F8B7D12C504550002B4B27 /* ActivityEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7CF2C504550002B4B27 /* ActivityEntity+CoreDataProperties.swift */; };
+		76F8B7D72C512938002B4B27 /* ActivityTypeEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7D32C512938002B4B27 /* ActivityTypeEntity+CoreDataProperties.swift */; };
+		76F8B7D92C512938002B4B27 /* RGBAColorEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7D52C512938002B4B27 /* RGBAColorEntity+CoreDataProperties.swift */; };
+		76F8B7DB2C512E64002B4B27 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7DA2C512E64002B4B27 /* CoreDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +89,11 @@
 		76B0896B2BEB68FB00EA63D1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
 		76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		76F8B7C52C50371F002B4B27 /* DailyActivities.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DailyActivities.xcdatamodel; sourceTree = "<group>"; };
+		76F8B7CF2C504550002B4B27 /* ActivityEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActivityEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		76F8B7D32C512938002B4B27 /* ActivityTypeEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActivityTypeEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		76F8B7D52C512938002B4B27 /* RGBAColorEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RGBAColorEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		76F8B7DA2C512E64002B4B27 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +181,7 @@
 		76481BA42C4C2A6300EB7DD2 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				76F8B7C22C50367D002B4B27 /* data */,
 				768A1AEB2A914CFC008C4CAC /* models */,
 				76481BA52C4C2A6B00EB7DD2 /* views */,
 			);
@@ -295,6 +306,26 @@
 			path = models;
 			sourceTree = "<group>";
 		};
+		76F8B7BA2C4EC9F9002B4B27 /* coreData */ = {
+			isa = PBXGroup;
+			children = (
+				76F8B7DA2C512E64002B4B27 /* CoreDataManager.swift */,
+				76F8B7D32C512938002B4B27 /* ActivityTypeEntity+CoreDataProperties.swift */,
+				76F8B7D52C512938002B4B27 /* RGBAColorEntity+CoreDataProperties.swift */,
+				76F8B7CF2C504550002B4B27 /* ActivityEntity+CoreDataProperties.swift */,
+				76F8B7C42C50371F002B4B27 /* DailyActivities.xcdatamodeld */,
+			);
+			path = coreData;
+			sourceTree = "<group>";
+		};
+		76F8B7C22C50367D002B4B27 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				76F8B7BA2C4EC9F9002B4B27 /* coreData */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -411,6 +442,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76F8B7D72C512938002B4B27 /* ActivityTypeEntity+CoreDataProperties.swift in Sources */,
+				76F8B7D92C512938002B4B27 /* RGBAColorEntity+CoreDataProperties.swift in Sources */,
 				767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */,
 				764A92732A9914B3006402BE /* Activity.swift in Sources */,
 				7642D7482B03E8BB0035E225 /* TimeFinishTableViewCell.swift in Sources */,
@@ -421,6 +454,7 @@
 				5D32F9ED2AC3741E00D82544 /* ActivityTableViewCell.swift in Sources */,
 				7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */,
 				767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */,
+				76F8B7D12C504550002B4B27 /* ActivityEntity+CoreDataProperties.swift in Sources */,
 				760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */,
 				7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */,
 				760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */,
@@ -433,7 +467,9 @@
 				5D3858B22B2DEBF300B37CB0 /* ChartData.swift in Sources */,
 				767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */,
 				7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */,
+				76F8B7DB2C512E64002B4B27 /* CoreDataManager.swift in Sources */,
 				7638BB9D2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift in Sources */,
+				76F8B7C82C50371F002B4B27 /* DailyActivities.xcdatamodeld in Sources */,
 				767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -733,6 +769,20 @@
 			productName = "plugin:SwiftLintBuildToolPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		76F8B7C42C50371F002B4B27 /* DailyActivities.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				76F8B7C52C50371F002B4B27 /* DailyActivities.xcdatamodel */,
+			);
+			currentVersion = 76F8B7C52C50371F002B4B27 /* DailyActivities.xcdatamodel */;
+			name = DailyActivities.xcdatamodeld;
+			path = /Users/nikolaykavretsky/Documents/UIKit/DailyActivities/DailyActivities/Core/data/coreData/DailyActivities.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7669F5BD2A86B461003F75ED /* Project object */;
 }

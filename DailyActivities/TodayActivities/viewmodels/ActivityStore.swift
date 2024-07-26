@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import CoreData
 
 final class ActivityStore: ObservableObject {
     private(set) var activities = [Activity]()
@@ -14,6 +15,7 @@ final class ActivityStore: ObservableObject {
     private var updateLastActivityChartDataTimer: Timer?
     private(set) var conflictActivityDictionary: [Activity.ID: Set<Activity.ID>] = [:]
     private(set) var activitiesToReconfigure = [Activity.ID]()
+    private let context = CoreDataManager.shared.context
     
     var datesInHistory: Set<Date> {
         activities.reduce(into: Set<Date>.init()) { partialResult, activity in
@@ -24,6 +26,7 @@ final class ActivityStore: ObservableObject {
     init() {
 //        addActivity(description: "Morning walking with dog", typeID: "4300197B-201F-42CC-AB52-67186E41F668")
 //        addActivity(description: "Working on new project", typeID: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9")
+        fetchActivities()
     }
     
     // MARK: Intents
@@ -33,6 +36,7 @@ final class ActivityStore: ObservableObject {
             updateActivityChartData(activities[index])
         }
         let activity = Activity(description: description, typeID: typeID, startDateTime: .now)
+        saveActivity(activity)
         activities.append(activity)
         updateActivityChartData(activity)
         updateTimer()
@@ -54,12 +58,19 @@ final class ActivityStore: ObservableObject {
             updateConflictDictionary(for: activityToUpdate, with: detectedConflicts)
         }
         updateActivityChartData(activities[activityToUpdate])
-        
+        saveActivity(activities[index])
         updateTimer()
     }
     
     func deleteActivity(_ activityToDelete: Activity) {
         guard let index = activities.firstIndex(where: {$0.id == activityToDelete.id}) else { return }
+        
+        let activityEntity = fetchActivityEntity(by: activityToDelete.id)
+        if let activityEntity {
+            context.delete(activityEntity)
+            CoreDataManager.shared.saveContext()
+        }
+        
         activities.remove(at: index)
         var chartData = chartData
         chartData.removeAll(where: {$0.activityID == activityToDelete.id})
@@ -185,6 +196,42 @@ final class ActivityStore: ObservableObject {
             })
         } else {
             updateLastActivityChartDataTimer?.invalidate()
+        }
+    }
+    
+    // MARK: Persistance
+    private func fetchActivities() {
+        let request: NSFetchRequest<ActivityEntity> = ActivityEntity.fetchRequest()
+        
+        do {
+            let result = try context.fetch(request)
+            self.activities = result.map { Activity(from: $0) }
+        } catch {
+            print("Failed to fetch activities: \(error.localizedDescription)")
+        }
+    }
+    
+    private func saveActivity(_ activty: Activity) {
+        let activityEntity = fetchActivityEntity(by: activty.id) ?? ActivityEntity(context: context)
+        
+        activityEntity.id = activty.id
+        activityEntity.desc = activty.description
+        activityEntity.finishDateTime = activty.finishDateTime
+        activityEntity.startDateTime = activty.startDateTime
+        activityEntity.typeId = activty.typeID
+        
+        CoreDataManager.shared.saveContext()
+    }
+    
+    private func fetchActivityEntity(by id: String) -> ActivityEntity? {
+        let request = ActivityEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id = %@", id)
+        
+        do {
+            return try context.fetch(request).first
+        } catch {
+            print("Failed to fetch activity entity: \(error.localizedDescription)")
+            return nil
         }
     }
     
