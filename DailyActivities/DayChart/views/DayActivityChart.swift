@@ -10,9 +10,9 @@ import Charts
 
 struct DayActivityChart: View {
     @ObservedObject private var activityStore: ActivityStore
-    @ObservedObject private var typeStore: TypeStore
+    @ObservedObject private var typeStore: ActivityTypeStore
     
-    init(activityStore: ActivityStore, typeStore: TypeStore) {
+    init(activityStore: ActivityStore, typeStore: ActivityTypeStore) {
         self.activityStore = activityStore
         self.typeStore = typeStore
     }
@@ -65,7 +65,7 @@ struct DayActivityChart: View {
 
 struct DayActivityChart_Previews: PreviewProvider {
     static var previews: some View {
-        DayActivityChart(activityStore: ActivityStore(), typeStore: TypeStore())
+        DayActivityChart(activityStore: ActivityStore(), typeStore: ActivityTypeStore(activityTypeRepository: ActivityTypeRepositoryMock()))
             .scaledToFit()
     }
 }

@@ -23,6 +23,16 @@ struct ActivityType: Identifiable, Hashable {
 }
 
 extension ActivityType {
+    init(from entity: ActivityTypeEntity) {
+        self.id = entity.id ?? UUID().uuidString
+        self.description = entity.typeDescription ?? ""
+        self.emoji = entity.emoji ?? ""
+        self.isActive = entity.isActive
+        self.backgroundRGBA = entity.color != nil ? RGBAColor(from: entity.color!) : RGBAColor.randomBackgroundRGBA()
+    }
+}
+
+extension ActivityType {
     struct Data: Hashable {
         var emoji = ""
         var backgroundRGBA = RGBAColor(color: .black)
@@ -52,11 +62,7 @@ extension ActivityType {
         return String(randomScalar)
     }
     
-    private static func randomBackgroundRGBA() -> RGBAColor {
-        return RGBAColor(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1), alpha: 1)
-    }
-    
     static func sampleData() -> Data {
-        Data(emoji: randomEmoji(), backgroundRGBA: randomBackgroundRGBA(), description: "New type")
+        Data(emoji: randomEmoji(), backgroundRGBA: RGBAColor.randomBackgroundRGBA(), description: "New type")
     }
 }

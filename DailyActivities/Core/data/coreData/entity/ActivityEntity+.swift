@@ -1,5 +1,5 @@
 //
-//  ActivityEntity+CoreDataProperties.swift
+//  ActivityEntity+.swift
 //  DailyActivities
 //
 //  Created by Nikolay Kavretsky on 23.07.2024.

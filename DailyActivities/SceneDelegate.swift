@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        let typeStore = TypeStore()
+        let typeStore = ActivityTypeStore(activityTypeRepository: ActivityTypeRepositoryService(context: CoreDataManager.shared.backgroundContext))
         let activityStore = ActivityStore()
         let mainVC = MainViewController(typeStore: typeStore, activityStore: activityStore)
         let navigationVC = UINavigationController(rootViewController: mainVC)

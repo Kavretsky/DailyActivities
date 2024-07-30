@@ -9,6 +9,12 @@ import Foundation
 import Combine
 import CoreData
 
+protocol ActivityRepository {
+    func fetchActivities() async throws -> [Activity]
+    func saveActivity(_ activity: Activity) async throws
+    func deleteActivity(_ activity: Activity) async throws
+}
+
 final class ActivityStore: ObservableObject {
     private(set) var activities = [Activity]()
     @Published private(set) var chartData = [ChartData]()
@@ -24,8 +30,6 @@ final class ActivityStore: ObservableObject {
     }
     
     init() {
-//        addActivity(description: "Morning walking with dog", typeID: "4300197B-201F-42CC-AB52-67186E41F668")
-//        addActivity(description: "Working on new project", typeID: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9")
         fetchActivities()
     }
     
@@ -228,6 +232,7 @@ final class ActivityStore: ObservableObject {
         request.predicate = NSPredicate(format: "id = %@", id)
         
         do {
+            print("\(#function), \(Thread.isMainThread)")
             return try context.fetch(request).first
         } catch {
             print("Failed to fetch activity entity: \(error.localizedDescription)")

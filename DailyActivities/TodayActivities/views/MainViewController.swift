@@ -7,9 +7,10 @@
 
 import UIKit
 import SwiftUI
+import Combine
 
 final class MainViewController: UIViewController {
-    private let typeStore: TypeStore
+    private let typeStore: ActivityTypeStore
     private let activityStore: ActivityStore
     private let newActivityView: NewActivityView
     private let activityListDate: Date
@@ -60,7 +61,7 @@ final class MainViewController: UIViewController {
     private lazy var dataSource: ActivityTableViewDiffableDataSource = makeDataSource()
     private var snapshot: NSDiffableDataSourceSnapshot<Section, AnyHashable>!
     
-    init(typeStore: TypeStore, activityStore: ActivityStore) {
+    init(typeStore: ActivityTypeStore, activityStore: ActivityStore) {
         self.activityStore = activityStore
         self.typeStore = typeStore
         activityListDate = .now
@@ -210,7 +211,7 @@ final class MainViewController: UIViewController {
     private func configureSnapshot() {
         snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
         snapshot.appendSections(Section.allCases)
-        snapshot.appendItems(activityStore.activities.map {$0.id}, toSection: Section.activities)
+        snapshot.appendItems(activityStore.activities(for: activityListDate).map {$0.id}, toSection: Section.activities)
         snapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
     }
     
@@ -391,7 +392,7 @@ extension MainViewController: TypeManagerTableViewControllerDelegate {
 
 #Preview("Main") {
     let activityStore = ActivityStore()
-    let typeStore = TypeStore()
+    let typeStore = ActivityTypeStore(activityTypeRepository: ActivityTypeRepositoryMock())
     let controller = MainViewController(typeStore: typeStore, activityStore: activityStore)
     return UINavigationController(rootViewController: controller)
 }

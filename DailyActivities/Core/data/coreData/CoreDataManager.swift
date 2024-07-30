@@ -27,6 +27,10 @@ final class CoreDataManager {
         persistentContainer.viewContext
     }
     
+    lazy var backgroundContext: NSManagedObjectContext = {
+        persistentContainer.newBackgroundContext()
+    }()
+    
     func saveContext() {
         guard context.hasChanges else { return }
         do {
