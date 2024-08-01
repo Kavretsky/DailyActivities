@@ -8,7 +8,7 @@
 import Foundation
 
 struct Activity: Identifiable, Hashable, Equatable {
-    let id = UUID().uuidString
+    let id: String
     var description: String
     var typeID: String
     var startDateTime: Date
@@ -19,6 +19,7 @@ struct Activity: Identifiable, Hashable, Equatable {
     }
     
     init(description: String, typeID: String, startDateTime: Date, finishDateTime: Date? = nil) {
+        self.id = UUID().uuidString
         self.description = description
         self.typeID = typeID
         self.startDateTime = startDateTime
@@ -58,5 +59,14 @@ extension Activity {
         typeID = data.typeID
         startDateTime = data.startDateTime
         finishDateTime = data.finishDateTime
+        id = UUID().uuidString
+    }
+    
+    init(from entity: ActivityEntity) {
+        self.id = entity.id ?? UUID().uuidString
+        self.startDateTime = entity.startDateTime ?? .now
+        self.finishDateTime = entity.finishDateTime
+        self.typeID = entity.typeID ?? ""
+        description = entity.desc ?? ""
     }
 }

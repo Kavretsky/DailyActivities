@@ -15,7 +15,7 @@ protocol NewActivityViewDelegate: AnyObject {
 
 final class NewActivityView: UIView {
     
-    private let typeStore: TypeStore
+    private let typeStore: ActivityTypeStore
     private var chosenIndex = 0
     private var chosenType: ActivityType {
         typeStore.activeTypes[chosenIndex]
@@ -109,20 +109,18 @@ final class NewActivityView: UIView {
         return UIMenu(title: "", children: [managerAction, goToMenu])
     }()
     
-    init(typeStore: TypeStore) {
+    init(typeStore: ActivityTypeStore) {
         self.typeStore = typeStore
         super.init(frame: .null)
         setupUI()
         
         typeStore.objectWillChange
-//            .receive(on: DispatchQueue.main)
-            .sink { _ in 
-                DispatchQueue.main.async {
-                    self.chosenIndex %= typeStore.activeTypes.count
-                    self.descriptionTF.placeholder = self.chosenType.description
-                    self.typeButton.setTitle(self.chosenType.emoji, for: .normal)
-                    self.typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
-                }
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.chosenIndex %= typeStore.activeTypes.count
+                self.descriptionTF.placeholder = self.chosenType.description
+                self.typeButton.setTitle(self.chosenType.emoji, for: .normal)
+                self.typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
             }
             .store(in: &cancellables)
     }

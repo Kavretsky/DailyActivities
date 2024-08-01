@@ -13,10 +13,10 @@ protocol TypeManagerTableViewControllerDelegate: AnyObject {
 
 final class TypeManagerTableViewController: UITableViewController {
 
-    private let typeStore: TypeStore
+    private let typeStore: ActivityTypeStore
     weak var delegate: TypeManagerTableViewControllerDelegate?
     
-    init(typeStore: TypeStore) {
+    init(typeStore: ActivityTypeStore) {
         self.typeStore = typeStore
         super.init(style: .insetGrouped)
         tableView.register(TypeManagerTableViewCell.self, forCellReuseIdentifier: "TypeManagerCellIdentifier")

@@ -1,5 +1,5 @@
 //
-//  ActivityStore.swift
+//  TodayActivityVM.swift
 //  DailyActivities
 //
 //  Created by Nikolay Kavretsky on 25.08.2023.
@@ -7,39 +7,55 @@
 
 import Foundation
 import Combine
+import CoreData
 
-final class ActivityStore: ObservableObject {
-    private(set) var activities = [Activity]()
+protocol ActivityRepository {
+    func fetchActivities(for date: Date) async throws -> [Activity]
+    func addActivity(_ activity: Activity) async throws
+    func saveActivity(_ activity: Activity) async throws
+    func deleteActivity(_ activity: Activity) async throws
+}
+
+@MainActor
+final class TodayActivityVM: ObservableObject {
+    @Published private(set) var activities = [Activity]()
     @Published private(set) var chartData = [ChartData]()
     private var updateLastActivityChartDataTimer: Timer?
     private(set) var conflictActivityDictionary: [Activity.ID: Set<Activity.ID>] = [:]
-    private(set) var activitiesToReconfigure = [Activity.ID]()
+    @Published private(set) var activitiesToReconfigure = [Activity.ID]()
+    private let activityRepository: ActivityRepository
+    private var cancellables = Set<AnyCancellable>()
     
-    var datesInHistory: Set<Date> {
-        activities.reduce(into: Set<Date>.init()) { partialResult, activity in
-            partialResult.insert(activity.startDateTime)
+    init(activityRepository: ActivityRepository) {
+        self.activityRepository = activityRepository
+        Task {
+            await fetchActivities()
         }
-    }
-    
-    init() {
-//        addActivity(description: "Morning walking with dog", typeID: "4300197B-201F-42CC-AB52-67186E41F668")
-//        addActivity(description: "Working on new project", typeID: "C286CACB-51A6-4FD8-87E1-6900C8ECC1A9")
+        $activities
+            .sink { activities in
+                activities.forEach { [weak self] in self?.updateActivityChartData($0) }
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: Intents
     func addActivity(description: String, typeID: String) {
         if let index = activities.firstIndex(where: { $0.finishDateTime == nil }) {
             activities[index].finishDateTime = .now
+            activitiesToReconfigure = [activities[index].id]
             updateActivityChartData(activities[index])
         }
         let activity = Activity(description: description, typeID: typeID, startDateTime: .now)
         activities.append(activity)
+        Task {
+            do {
+                try await activityRepository.addActivity(activity)
+            } catch {
+                print("failed to add activity: \(error.localizedDescription)")
+            }
+        }
         updateActivityChartData(activity)
         updateTimer()
-    }
-    
-    func activities(for specificDate: Date) -> [Activity] {
-        activities.filter { $0.startDateTime.isSameDay(with: specificDate) }
     }
     
     func updateActivity(_ activityToUpdate: Activity, with data: Activity.Data) {
@@ -47,27 +63,41 @@ final class ActivityStore: ObservableObject {
         guard data.startDateTime <= data.finishDateTime ?? data.startDateTime
                 && data.startDateTime.isSameDay(with: data.finishDateTime ?? data.startDateTime)
                 && !data.description.isEmpty else { return }
+        
+        activitiesToReconfigure = [activityToUpdate.id]
         activities[index].update(from: data)
-
         if activityToUpdate.startDateTime != data.startDateTime || activityToUpdate.finishDateTime != data.finishDateTime {
             let detectedConflicts = detectActivityTimeConflicts(for: activities[index])
+            guard !detectedConflicts.isEmpty else { return }
             updateConflictDictionary(for: activityToUpdate, with: detectedConflicts)
         }
         updateActivityChartData(activities[activityToUpdate])
-        
+        Task(priority: .userInitiated) {
+            do {
+                try await activityRepository.saveActivity(activities[index])
+            } catch {
+                print("failed to save activity: \(error.localizedDescription)")
+            }
+        }
         updateTimer()
     }
     
     func deleteActivity(_ activityToDelete: Activity) {
         guard let index = activities.firstIndex(where: {$0.id == activityToDelete.id}) else { return }
-        activities.remove(at: index)
-        var chartData = chartData
-        chartData.removeAll(where: {$0.activityID == activityToDelete.id})
-        DispatchQueue.main.async {
-            self.chartData = chartData
+        Task(priority: .userInitiated) {
+            do {
+                try await activityRepository.deleteActivity(activityToDelete)
+                activities.remove(at: index)
+                updateActivityChartData(activityToDelete)
+                var chartData = chartData
+                chartData.removeAll(where: {$0.activityID == activityToDelete.id})
+                self.chartData = chartData
+                updateConflictDictionary(for: activityToDelete, with: [])
+                updateTimer()
+            } catch {
+                print("failed delete activity: \(error.localizedDescription)")
+            }
         }
-        updateConflictDictionary(for: activityToDelete, with: [])
-        updateTimer()
     }
     
     private func detectActivityTimeConflicts(for activity: Activity) -> Set<Activity.ID> {
@@ -186,6 +216,18 @@ final class ActivityStore: ObservableObject {
         } else {
             updateLastActivityChartDataTimer?.invalidate()
         }
+    }
+    
+    private func fetchActivities() async {
+        do {
+            activities = try await activityRepository.fetchActivities(for: Date.now)
+        } catch {
+            print("failed to fetch activities: \(error.localizedDescription)")
+        }
+    }
+    
+    deinit {
+        cancellables.forEach { $0.cancel() }
     }
     
 }
