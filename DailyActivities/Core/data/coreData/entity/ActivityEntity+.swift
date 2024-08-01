@@ -22,7 +22,7 @@ extension ActivityEntity {
     @NSManaged public var id: String?
     @NSManaged public var startDateTime: Date?
     @NSManaged public var desc: String?
-    @NSManaged public var typeId: String?
+    @NSManaged public var typeID: String?
 
 }
 

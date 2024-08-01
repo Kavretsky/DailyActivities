@@ -66,7 +66,7 @@ extension Activity {
         self.id = entity.id ?? UUID().uuidString
         self.startDateTime = entity.startDateTime ?? .now
         self.finishDateTime = entity.finishDateTime
-        self.typeID = entity.typeId ?? ""
+        self.typeID = entity.typeID ?? ""
         description = entity.desc ?? ""
     }
 }

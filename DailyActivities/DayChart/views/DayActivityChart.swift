@@ -9,10 +9,10 @@ import SwiftUI
 import Charts
 
 struct DayActivityChart: View {
-    @ObservedObject private var activityStore: ActivityStore
+    @ObservedObject private var activityStore: TodayActivityVM
     @ObservedObject private var typeStore: ActivityTypeStore
     
-    init(activityStore: ActivityStore, typeStore: ActivityTypeStore) {
+    init(activityStore: TodayActivityVM, typeStore: ActivityTypeStore) {
         self.activityStore = activityStore
         self.typeStore = typeStore
     }
@@ -40,7 +40,7 @@ struct DayActivityChart: View {
             .cornerRadius(3)
         }
         .chartYScale(domain: [0, 60])
-        .chartXScale(domain: [Date.startOfDay(), Date.endOfDay()])
+        .chartXScale(domain: [Date.startOfDay(), Date.endOfDay(for: .now)])
         .chartForegroundStyleScale { typeID in
             colorForTypeID(typeID)
         }
@@ -65,7 +65,7 @@ struct DayActivityChart: View {
 
 struct DayActivityChart_Previews: PreviewProvider {
     static var previews: some View {
-        DayActivityChart(activityStore: ActivityStore(), typeStore: ActivityTypeStore(activityTypeRepository: ActivityTypeRepositoryMock()))
+        DayActivityChart(activityStore: TodayActivityVM(activityRepository: ActivityRepositoryMock()), typeStore: ActivityTypeStore(activityTypeRepository: ActivityTypeRepositoryMock()))
             .scaledToFit()
     }
 }

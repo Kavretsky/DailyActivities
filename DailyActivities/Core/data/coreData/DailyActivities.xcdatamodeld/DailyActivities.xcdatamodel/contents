@@ -5,7 +5,7 @@
         <attribute name="finishDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="String"/>
         <attribute name="startDateTime" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="typeId" optional="YES" attributeType="String"/>
+        <attribute name="typeID" attributeType="String"/>
     </entity>
     <entity name="ActivityTypeEntity" representedClassName="ActivityTypeEntity" syncable="YES">
         <attribute name="emoji" attributeType="String"/>

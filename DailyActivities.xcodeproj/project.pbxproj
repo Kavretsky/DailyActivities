@@ -22,7 +22,7 @@
 		7642D7482B03E8BB0035E225 /* TimeFinishTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642D7472B03E8BB0035E225 /* TimeFinishTableViewCell.swift */; };
 		76456DED2AFBAC6100690A21 /* ActivityEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */; };
 		764A92732A9914B3006402BE /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92722A9914B3006402BE /* Activity.swift */; };
-		764A92752A991759006402BE /* ActivityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92742A991759006402BE /* ActivityStore.swift */; };
+		764A92752A991759006402BE /* TodayActivityVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92742A991759006402BE /* TodayActivityVM.swift */; };
 		7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5C82A86B461003F75ED /* AppDelegate.swift */; };
 		7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5CA2A86B461003F75ED /* SceneDelegate.swift */; };
 		7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5CC2A86B461003F75ED /* MainViewController.swift */; };
@@ -34,6 +34,7 @@
 		767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */; };
 		767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */; };
 		768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */; };
+		76A2C4C42C5BA3F00026F810 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 76A2C4C32C5BA3F00026F810 /* Collections */; };
 		76B0896C2BEB68FB00EA63D1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 76B0896B2BEB68FB00EA63D1 /* README.md */; };
 		76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */; };
 		76F8B7B82C4C42C5002B4B27 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */; };
@@ -46,6 +47,8 @@
 		76F8B7E02C5807F2002B4B27 /* ActivityTypeRepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7DF2C5807F2002B4B27 /* ActivityTypeRepositoryService.swift */; };
 		76F8B7E22C580F82002B4B27 /* RGBAColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7E12C580F82002B4B27 /* RGBAColor.swift */; };
 		76F8B7E42C582216002B4B27 /* ActivityTypeRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7E32C582216002B4B27 /* ActivityTypeRepositoryMock.swift */; };
+		76F8B7E62C5978DF002B4B27 /* ActivityRepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7E52C5978DF002B4B27 /* ActivityRepositoryService.swift */; };
+		76F8B7E82C5A9A6E002B4B27 /* ActivityRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7E72C5A9A6E002B4B27 /* ActivityRepositoryMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +78,7 @@
 		7642D7472B03E8BB0035E225 /* TimeFinishTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFinishTableViewCell.swift; sourceTree = "<group>"; };
 		76456DEC2AFBAC6100690A21 /* ActivityEditTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityEditTableViewController.swift; sourceTree = "<group>"; };
 		764A92722A9914B3006402BE /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
-		764A92742A991759006402BE /* ActivityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityStore.swift; sourceTree = "<group>"; };
+		764A92742A991759006402BE /* TodayActivityVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayActivityVM.swift; sourceTree = "<group>"; };
 		7669F5C52A86B461003F75ED /* DailyActivities.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyActivities.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7669F5C82A86B461003F75ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7669F5CA2A86B461003F75ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +103,8 @@
 		76F8B7DF2C5807F2002B4B27 /* ActivityTypeRepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypeRepositoryService.swift; sourceTree = "<group>"; };
 		76F8B7E12C580F82002B4B27 /* RGBAColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RGBAColor.swift; sourceTree = "<group>"; };
 		76F8B7E32C582216002B4B27 /* ActivityTypeRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypeRepositoryMock.swift; sourceTree = "<group>"; };
+		76F8B7E52C5978DF002B4B27 /* ActivityRepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityRepositoryService.swift; sourceTree = "<group>"; };
+		76F8B7E72C5A9A6E002B4B27 /* ActivityRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityRepositoryMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76A2C4C42C5BA3F00026F810 /* Collections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				760EFE732A8BFF55000C8776 /* ActivityTypeStore.swift */,
-				764A92742A991759006402BE /* ActivityStore.swift */,
+				764A92742A991759006402BE /* TodayActivityVM.swift */,
 			);
 			path = viewmodels;
 			sourceTree = "<group>";
@@ -347,6 +353,8 @@
 			children = (
 				76F8B7DF2C5807F2002B4B27 /* ActivityTypeRepositoryService.swift */,
 				76F8B7E32C582216002B4B27 /* ActivityTypeRepositoryMock.swift */,
+				76F8B7E52C5978DF002B4B27 /* ActivityRepositoryService.swift */,
+				76F8B7E72C5A9A6E002B4B27 /* ActivityRepositoryMock.swift */,
 			);
 			path = repository;
 			sourceTree = "<group>";
@@ -394,6 +402,9 @@
 				76481BB32C4C405600EB7DD2 /* PBXTargetDependency */,
 			);
 			name = DailyActivities;
+			packageProductDependencies = (
+				76A2C4C32C5BA3F00026F810 /* Collections */,
+			);
 			productName = DailyActivities;
 			productReference = 7669F5C52A86B461003F75ED /* DailyActivities.app */;
 			productType = "com.apple.product-type.application";
@@ -428,6 +439,7 @@
 			mainGroup = 7669F5BC2A86B461003F75ED;
 			packageReferences = (
 				76481BB12C4C404400EB7DD2 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				76A2C4C22C5BA3F00026F810 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 7669F5C62A86B461003F75ED /* Products */;
 			projectDirPath = "";
@@ -475,6 +487,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76F8B7E82C5A9A6E002B4B27 /* ActivityRepositoryMock.swift in Sources */,
 				76F8B7D72C512938002B4B27 /* ActivityTypeEntity+.swift in Sources */,
 				76F8B7D92C512938002B4B27 /* RGBAColorEntity+.swift in Sources */,
 				767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */,
@@ -485,6 +498,7 @@
 				7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */,
 				76F8B7E42C582216002B4B27 /* ActivityTypeRepositoryMock.swift in Sources */,
 				7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */,
+				76F8B7E62C5978DF002B4B27 /* ActivityRepositoryService.swift in Sources */,
 				5D32F9ED2AC3741E00D82544 /* ActivityTableViewCell.swift in Sources */,
 				7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */,
 				767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */,
@@ -497,7 +511,7 @@
 				76456DED2AFBAC6100690A21 /* ActivityEditTableViewController.swift in Sources */,
 				760EFE7A2A8C13D6000C8776 /* TypeManagerTableViewController.swift in Sources */,
 				768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */,
-				764A92752A991759006402BE /* ActivityStore.swift in Sources */,
+				764A92752A991759006402BE /* TodayActivityVM.swift in Sources */,
 				760EFE742A8BFF55000C8776 /* ActivityTypeStore.swift in Sources */,
 				5D3858B22B2DEBF300B37CB0 /* ChartData.swift in Sources */,
 				767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */,
@@ -636,6 +650,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -692,6 +707,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -796,6 +812,14 @@
 				minimumVersion = 0.55.1;
 			};
 		};
+		76A2C4C22C5BA3F00026F810 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -803,6 +827,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 76481BB12C4C404400EB7DD2 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		76A2C4C32C5BA3F00026F810 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76A2C4C22C5BA3F00026F810 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
 		};
 /* End XCSwiftPackageProductDependency section */
 
