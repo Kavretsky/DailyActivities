@@ -243,7 +243,7 @@ final class MainViewController: UIViewController {
                 
                 cell?.duration = durationAttributedString
                 cell?.activityDescription = activity.description
-                cell?.typeEmoji = typeStore.type(withID: activity.typeID).emoji
+                cell?.typeEmoji = typeStore.type(withID: activity.typeID)?.emoji
                 return cell
             }
         }
@@ -329,6 +329,7 @@ extension MainViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard Section(rawValue: indexPath.section) == .activities else { return nil }
         lastSelectedIndexPath = indexPath
         let activity = activityStore.activities[indexPath.row]
         if activity.finishDateTime == nil {

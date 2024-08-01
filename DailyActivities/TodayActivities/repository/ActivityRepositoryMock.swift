@@ -42,19 +42,19 @@ fileprivate var mockActivities: [Activity] = [
     Activity(
         description: "Coffee Break",
         typeID: "C6F4B514-1D9F-4B94-9C8F-123F456E7F89",
-        startDateTime: Date(timeIntervalSinceNow: -10800),
-        finishDateTime: Date(timeIntervalSinceNow: -9900)
+        startDateTime: Date(timeIntervalSinceNow: -9900),
+        finishDateTime: Date(timeIntervalSinceNow: -7200)
     ),
     Activity(
         description: "Project Planning",
         typeID: "B56A1C12-E1C5-4E1C-9D6A-ABCD78C4F2D3",
         startDateTime: Date(timeIntervalSinceNow: -14400),
-        finishDateTime: Date(timeIntervalSinceNow: -7200)
+        finishDateTime: Date(timeIntervalSinceNow: -10800)
     ),
     Activity(
         description: "Evening Yoga Session",
         typeID: "D7E5C614-8A2F-4E1A-9D4F-678CDEF9ABCD",
-        startDateTime: Date(timeIntervalSinceNow: -18000),
+        startDateTime: Date(timeIntervalSinceNow: -1800),
         finishDateTime: nil
     )
 ]
