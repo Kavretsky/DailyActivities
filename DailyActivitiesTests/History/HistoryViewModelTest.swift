@@ -12,6 +12,7 @@ final class HistoryViewModelTest: XCTestCase {
     
 //    var viewModel: HistoryViewModel!
 //    var mockActivityRepository: HistoryRepository!
+//    var 
 //    
 //
 //    override func setUp() {

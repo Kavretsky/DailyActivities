@@ -51,7 +51,7 @@ class HistoryTableViewCell: UITableViewCell {
             chart.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             chart.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             chart.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 10),
-            contentView.bottomAnchor.constraint(equalTo: chart.bottomAnchor, constant: 10)
+            contentView.bottomAnchor.constraint(equalTo: chart.bottomAnchor, constant: 20)
         ])
     }
 

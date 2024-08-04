@@ -14,7 +14,6 @@ final class MainViewController: UIViewController {
     private let typeStore: ActivityTypeStore
     private let activityStore: TodayActivityVM
     private let newActivityView: NewActivityView
-    private let activityListDate: Date
     private var lastSelectedIndexPath: IndexPath?
     private var isSwipeActionsShow = false
     private lazy var typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
@@ -67,7 +66,6 @@ final class MainViewController: UIViewController {
     init(typeStore: ActivityTypeStore, activityStore: TodayActivityVM) {
         self.activityStore = activityStore
         self.typeStore = typeStore
-        activityListDate = .now
         newActivityView = NewActivityView(typeStore: self.typeStore)
         super.init(nibName: nil, bundle: nil)
     }

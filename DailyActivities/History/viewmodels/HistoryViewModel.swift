@@ -12,10 +12,6 @@ protocol HistoryRepository {
     func fetchHistoryDates() async throws -> [Date]
 }
 
-protocol ChartDataService {
-    func chartData(for activities: [Activity]) -> [ActivityChartModel]
-}
-
 final class HistoryViewModel {
     private let historyService: HistoryRepository
     private let chartDataService: ChartDataService
@@ -34,7 +30,6 @@ final class HistoryViewModel {
                 activityDic[date] = await loadActivities(for: date)
                 chartDataDic[date] = chartDataService.chartData(for: activityDic[date] ?? [])
             }
-            
             dates = Dictionary(grouping: result) { date in
                 return Calendar.current.dateComponents([.year], from: date)
             }
@@ -49,6 +44,10 @@ final class HistoryViewModel {
             print("failed to load activities for \(date): \(error.localizedDescription)")
         }
         return []
+    }
+    
+    deinit {
+        print("HistoryViewModel deinit")
     }
     
     private func loadHistoryDates() async -> [Date] {

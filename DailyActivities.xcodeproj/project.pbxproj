@@ -334,6 +334,13 @@
 			path = models;
 			sourceTree = "<group>";
 		};
+		766F1A3E2C6002E000F6C8F9 /* mocks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = mocks;
+			sourceTree = "<group>";
+		};
 		768A1AE72A914CB5008C4CAC /* viewmodels */ = {
 			isa = PBXGroup;
 			children = (
@@ -413,6 +420,7 @@
 		76CA33312C5CD3CF00AC3B92 /* services */ = {
 			isa = PBXGroup;
 			children = (
+				766F1A3E2C6002E000F6C8F9 /* mocks */,
 				76CA33322C5CD3E700AC3B92 /* ActivityRepositoryService+HistoryRepository.swift */,
 				766F1A3A2C5FA1BB00F6C8F9 /* ChartDataService.swift */,
 			);

@@ -68,12 +68,14 @@ final class TodayActivityVM: ObservableObject {
         activities[index].update(from: data)
         if activityToUpdate.startDateTime != data.startDateTime || activityToUpdate.finishDateTime != data.finishDateTime {
             let detectedConflicts = detectActivityTimeConflicts(for: activities[index])
-            guard !detectedConflicts.isEmpty else { return }
-            updateConflictDictionary(for: activityToUpdate, with: detectedConflicts)
+            if !detectedConflicts.isEmpty {
+                updateConflictDictionary(for: activityToUpdate, with: detectedConflicts)
+            }
         }
         updateActivityChartData(activities[activityToUpdate])
         Task(priority: .userInitiated) {
             do {
+                print("try to update activity")
                 try await activityRepository.saveActivity(activities[index])
             } catch {
                 print("failed to save activity: \(error.localizedDescription)")

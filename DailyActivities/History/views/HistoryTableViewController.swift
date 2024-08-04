@@ -26,28 +26,21 @@ class HistoryTableViewController: UITableViewController {
         super.viewDidLoad()
         title = "History"
         setupToolBar()
-        // Uncomment the following line to preserve selection between presentations
-         self.clearsSelectionOnViewWillAppear = true
-        tableView.rowHeight = 150
         historyVM.$dates
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
             }
             .store(in: &cancellables)
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return historyVM.headers.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return historyVM.dates[historyVM.headers[section], default: [] ].count
     }
 
@@ -57,7 +50,7 @@ class HistoryTableViewController: UITableViewController {
         let date = historyVM.dates[key]?[indexPath.row] ?? .now
         cell.setupCell(date: date, chartData: historyVM.chartDataDic[date] ?? [])
         cell.accessoryType = .disclosureIndicator
-         
+        cell.selectionStyle = .none
         return cell
     }
     
@@ -78,7 +71,7 @@ class HistoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(historyVM.chartDataDic)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     deinit {

@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol ChartDataService {
+    func chartData(for activities: [Activity]) -> [ActivityChartModel]
+}
+
 struct ChartDataServiceIml: ChartDataService {
 
     private let typeRepository: ActivityTypeRepository
