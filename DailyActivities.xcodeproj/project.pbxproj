@@ -30,6 +30,10 @@
 		7669F5D52A86B462003F75ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7669F5D32A86B462003F75ED /* LaunchScreen.storyboard */; };
 		7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */; };
 		766F1A322C5E8D2A00F6C8F9 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A312C5E8D2A00F6C8F9 /* HistoryTableViewCell.swift */; };
+		766F1A362C5F96E700F6C8F9 /* ActivityChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A352C5F96E700F6C8F9 /* ActivityChart.swift */; };
+		766F1A392C5F9F2100F6C8F9 /* ActivityChartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A382C5F9F2100F6C8F9 /* ActivityChartModel.swift */; };
+		766F1A3B2C5FA1BB00F6C8F9 /* ChartDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A3A2C5FA1BB00F6C8F9 /* ChartDataService.swift */; };
+		766F1A3D2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A3C2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift */; };
 		767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */; };
 		767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */; };
 		767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */; };
@@ -100,6 +104,10 @@
 		7669F5D62A86B462003F75ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewActivityVIew.swift; sourceTree = "<group>"; };
 		766F1A312C5E8D2A00F6C8F9 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
+		766F1A352C5F96E700F6C8F9 /* ActivityChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChart.swift; sourceTree = "<group>"; };
+		766F1A382C5F9F2100F6C8F9 /* ActivityChartModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChartModel.swift; sourceTree = "<group>"; };
+		766F1A3A2C5FA1BB00F6C8F9 /* ChartDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDataService.swift; sourceTree = "<group>"; };
+		766F1A3C2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChartHostingController.swift; sourceTree = "<group>"; };
 		767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeEditorViewController.swift; sourceTree = "<group>"; };
 		767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSection.swift; sourceTree = "<group>"; };
 		767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypePickerTableViewCell.swift; sourceTree = "<group>"; };
@@ -318,6 +326,14 @@
 			path = DailyActivities;
 			sourceTree = "<group>";
 		};
+		766F1A372C5F9F0D00F6C8F9 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				766F1A382C5F9F2100F6C8F9 /* ActivityChartModel.swift */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
 		768A1AE72A914CB5008C4CAC /* viewmodels */ = {
 			isa = PBXGroup;
 			children = (
@@ -351,6 +367,7 @@
 		76CA331A2C5C25FF00AC3B92 /* History */ = {
 			isa = PBXGroup;
 			children = (
+				766F1A372C5F9F0D00F6C8F9 /* models */,
 				76CA33312C5CD3CF00AC3B92 /* services */,
 				76CA331C2C5C263800AC3B92 /* viewmodels */,
 				76CA331B2C5C263000AC3B92 /* views */,
@@ -363,6 +380,8 @@
 			children = (
 				76CA33352C5D25A600AC3B92 /* HistoryTableViewController.swift */,
 				766F1A312C5E8D2A00F6C8F9 /* HistoryTableViewCell.swift */,
+				766F1A352C5F96E700F6C8F9 /* ActivityChart.swift */,
+				766F1A3C2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -395,6 +414,7 @@
 			isa = PBXGroup;
 			children = (
 				76CA33322C5CD3E700AC3B92 /* ActivityRepositoryService+HistoryRepository.swift */,
+				766F1A3A2C5FA1BB00F6C8F9 /* ChartDataService.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -605,6 +625,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				766F1A392C5F9F2100F6C8F9 /* ActivityChartModel.swift in Sources */,
 				76F8B7E82C5A9A6E002B4B27 /* ActivityRepositoryMock.swift in Sources */,
 				76F8B7D72C512938002B4B27 /* ActivityTypeEntity+.swift in Sources */,
 				76F8B7D92C512938002B4B27 /* RGBAColorEntity+.swift in Sources */,
@@ -629,6 +650,7 @@
 				760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */,
 				76CA33302C5C2C5900AC3B92 /* HistoryViewModel.swift in Sources */,
 				762313222B13612900A6B238 /* DayActivityChart.swift in Sources */,
+				766F1A3B2C5FA1BB00F6C8F9 /* ChartDataService.swift in Sources */,
 				76456DED2AFBAC6100690A21 /* ActivityEditTableViewController.swift in Sources */,
 				760EFE7A2A8C13D6000C8776 /* TypeManagerTableViewController.swift in Sources */,
 				768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */,
@@ -636,8 +658,10 @@
 				760EFE742A8BFF55000C8776 /* ActivityTypeStore.swift in Sources */,
 				5D3858B22B2DEBF300B37CB0 /* ChartData.swift in Sources */,
 				767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */,
+				766F1A362C5F96E700F6C8F9 /* ActivityChart.swift in Sources */,
 				7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */,
 				76F8B7DB2C512E64002B4B27 /* CoreDataManager.swift in Sources */,
+				766F1A3D2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift in Sources */,
 				76F8B7E02C5807F2002B4B27 /* ActivityTypeRepositoryService.swift in Sources */,
 				766F1A322C5E8D2A00F6C8F9 /* HistoryTableViewCell.swift in Sources */,
 				7638BB9D2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift in Sources */,

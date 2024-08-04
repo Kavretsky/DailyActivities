@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 class HistoryTableViewController: UITableViewController {
     
     private let historyVM: HistoryViewModel
+    private var cancellables: Set<AnyCancellable> = []
     init(historyVM: HistoryViewModel) {
         self.historyVM = historyVM
         super.init(style: .insetGrouped)
@@ -26,7 +28,13 @@ class HistoryTableViewController: UITableViewController {
         setupToolBar()
         // Uncomment the following line to preserve selection between presentations
          self.clearsSelectionOnViewWillAppear = true
-
+        tableView.rowHeight = 150
+        historyVM.$dates
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
@@ -46,7 +54,8 @@ class HistoryTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryTableViewCell", for: indexPath) as? HistoryTableViewCell else { return .init() }
         let key = historyVM.headers[indexPath.section]
-        cell.date = historyVM.dates[key]?[indexPath.row]
+        let date = historyVM.dates[key]?[indexPath.row] ?? .now
+        cell.setupCell(date: date, chartData: historyVM.chartDataDic[date] ?? [])
         cell.accessoryType = .disclosureIndicator
          
         return cell
@@ -65,6 +74,15 @@ class HistoryTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let key = historyVM.headers[section]
-        return historyVM.dates[key]?.first?.formatted(.dateTime.month(.wide).year())
+        return historyVM.dates[key]?.first?.formatted(.dateTime.year())
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(historyVM.chartDataDic)
+    }
+    
+    deinit {
+        cancellables.forEach { $0.cancel() }
+        print("HistoryTableView deinit")
     }
 }

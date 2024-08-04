@@ -85,7 +85,7 @@ struct DayActivityChart: View {
     }
 }
                 
-fileprivate struct ActivityChartFormatter: FormatStyle {
+struct ActivityChartFormatter: FormatStyle {
     func format(_ value: Int) -> String {
         guard value > 0 else { return value.description }
         return "\(value)m"

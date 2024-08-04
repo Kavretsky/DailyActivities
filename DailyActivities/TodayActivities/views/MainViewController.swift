@@ -20,10 +20,6 @@ final class MainViewController: UIViewController {
     private lazy var typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
     private let mutex = NSLock()
     private lazy var activityTableView = UITableView(frame: .zero, style: .insetGrouped)
-    private lazy var historyVC: HistoryTableViewController = {
-        let historyVc = HistoryTableViewController(historyVM: HistoryViewModel(historyService: ActivityRepositoryService(context: CoreDataManager.shared.backgroundContext)))
-        return historyVc
-    }()
 
     private lazy var deleteActivityAlert: UIAlertController = {
         let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
@@ -159,7 +155,9 @@ final class MainViewController: UIViewController {
     
     private func setupNavBar() {
         let leftBarButtonAction = UIAction { [weak self] _ in
-            self?.presentHistoryVC()
+            Task {
+                await self?.presentHistoryVC()
+            }
         }
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "History", primaryAction: leftBarButtonAction)
     }
@@ -297,7 +295,9 @@ final class MainViewController: UIViewController {
         updateActivity(activity, with: data)
     }
     
-    private func presentHistoryVC() {
+    private func presentHistoryVC() async {
+        let historyVC = await HistoryTableViewController(historyVM: HistoryViewModel(historyService: ActivityRepositoryService(context: CoreDataManager.shared.backgroundContext), chartDataService: ChartDataServiceIml(typeRepository: ActivityTypeRepositoryService(context: CoreDataManager.shared.backgroundContext))))
+        
         let historyNC = UINavigationController(rootViewController: historyVC)
         historyNC.modalPresentationStyle = .fullScreen
         present(historyNC, animated: true)
