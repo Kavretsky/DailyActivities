@@ -26,7 +26,19 @@ struct ActivityRepositoryMock: ActivityRepository {
     }
 }
 
+extension ActivityRepositoryMock: HistoryRepository {
+    func fetchHistoryDates() async throws -> [Date] {
+        return mockActivities.map { Calendar.current.startOfDay(for: $0.startDateTime )}.uniqued().sorted(by: >)
+    }
+}
+
 fileprivate var mockActivities: [Activity] = [
+    Activity(
+        description: "Run with dog",
+        typeID: "8A94FA14-5D6D-4A94-9D61-1A8B16C70D48",
+        startDateTime: Date(timeIntervalSinceNow: -88000),
+        finishDateTime: Date(timeIntervalSinceNow: -86400)
+    ),
     Activity(
         description: "Morning Run",
         typeID: "8A94FA14-5D6D-4A94-9D61-1A8B16C70D48",
