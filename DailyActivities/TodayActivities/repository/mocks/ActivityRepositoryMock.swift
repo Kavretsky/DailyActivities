@@ -9,7 +9,7 @@ import Foundation
 
 struct ActivityRepositoryMock: ActivityRepository {
     func fetchActivities(for date: Date) async throws -> [Activity] {
-        return mockActivities
+        return mockActivities.filter({ $0.startDateTime.isSameDay(with: date)})
     }
     
     func addActivity(_ activity: Activity) async throws {

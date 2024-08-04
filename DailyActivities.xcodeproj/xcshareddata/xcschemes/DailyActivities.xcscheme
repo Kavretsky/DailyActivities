@@ -41,6 +41,17 @@
                ReferencedContainer = "container:DailyActivities.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "76CA33202C5C2BE200AC3B92"
+               BuildableName = "DailyActivitiesTests.xctest"
+               BlueprintName = "DailyActivitiesTests"
+               ReferencedContainer = "container:DailyActivities.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -64,13 +75,6 @@
             ReferencedContainer = "container:DailyActivities.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "CG_NUMERICS_SHOW_BACKTRACE"
-            value = "YES"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

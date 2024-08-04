@@ -20,6 +20,10 @@ final class MainViewController: UIViewController {
     private lazy var typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
     private let mutex = NSLock()
     private lazy var activityTableView = UITableView(frame: .zero, style: .insetGrouped)
+    private lazy var historyVC: HistoryTableViewController = {
+        let historyVc = HistoryTableViewController(historyVM: HistoryViewModel(historyService: ActivityRepositoryService(context: CoreDataManager.shared.backgroundContext)))
+        return historyVc
+    }()
 
     private lazy var deleteActivityAlert: UIAlertController = {
         let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
@@ -126,13 +130,14 @@ final class MainViewController: UIViewController {
         setupDeleteActivityAlert()
         configureSnapshot()
         setupBindings()
+        setupNavBar()
     }
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
     
-    func setupConstrains() {
+    private func setupConstrains() {
         NSLayoutConstraint.activate([
             newActivityView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             newActivityView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -150,6 +155,13 @@ final class MainViewController: UIViewController {
         ])
         
         view.keyboardLayoutGuide.keyboardDismissPadding = 52
+    }
+    
+    private func setupNavBar() {
+        let leftBarButtonAction = UIAction { [weak self] _ in
+            self?.presentHistoryVC()
+        }
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "History", primaryAction: leftBarButtonAction)
     }
     
     private func setupUI() {
@@ -283,6 +295,12 @@ final class MainViewController: UIViewController {
         var data = activity.data
         data.finishDateTime = .now
         updateActivity(activity, with: data)
+    }
+    
+    private func presentHistoryVC() {
+        let historyNC = UINavigationController(rootViewController: historyVC)
+        historyNC.modalPresentationStyle = .fullScreen
+        present(historyNC, animated: true)
     }
     
     deinit {

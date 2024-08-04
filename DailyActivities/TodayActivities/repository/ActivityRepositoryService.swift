@@ -10,7 +10,7 @@ import CoreData
 
 struct ActivityRepositoryService: ActivityRepository {
     
-    private let context: NSManagedObjectContext
+    let context: NSManagedObjectContext
     
     init(context: NSManagedObjectContext) {
         self.context = context

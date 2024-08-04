@@ -32,7 +32,7 @@ class ActivityTypeStore: ObservableObject {
     }
     
     deinit {
-        print("deinit")
+        print("\(self) deinited")
     }
     
     private func fetchTypes() async {

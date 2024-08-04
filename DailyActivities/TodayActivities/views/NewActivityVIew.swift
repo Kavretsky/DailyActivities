@@ -114,7 +114,8 @@ final class NewActivityView: UIView {
         super.init(frame: .null)
         setupUI()
         
-        typeStore.objectWillChange
+        typeStore.$isLoadingTypes
+            .dropFirst()
             .receive(on: DispatchQueue.main)
             .sink { _ in
                 self.chosenIndex %= typeStore.activeTypes.count

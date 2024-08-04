@@ -228,6 +228,7 @@ final class TodayActivityVM: ObservableObject {
     
     deinit {
         cancellables.forEach { $0.cancel() }
+        print("\(self) deinited")
     }
     
 }

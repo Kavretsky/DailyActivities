@@ -95,6 +95,7 @@ fileprivate struct ActivityChartFormatter: FormatStyle {
 struct DayActivityChart_Previews: PreviewProvider {
     static var previews: some View {
         DayActivityChart(activityStore: TodayActivityVM(activityRepository: ActivityRepositoryMock()), typeStore: ActivityTypeStore(activityTypeRepository: ActivityTypeRepositoryMock()))
+            .frame(width: 300, height: 84)
 //            .scaledToFit()
             
     }
