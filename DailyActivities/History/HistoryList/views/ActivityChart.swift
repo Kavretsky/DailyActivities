@@ -23,7 +23,7 @@ struct ActivityChart: View {
         Chart(chartData) { data in
             BarMark(x: .value("Hour", data.startDateTime, unit: .hour),
                     yStart: .value("Start", Int(data.startDateTime.formatted(.dateTime.minute(.twoDigits)))!),
-                    yEnd: .value("Finish", Int(data.startDateTime.formatted(.dateTime.minute(.twoDigits)))! + Int(data.finishDateTime.timeIntervalSince(data.startDateTime)) / 60)
+                    yEnd: .value("Finish", Int(data.startDateTime.formatted(.dateTime.minute(.twoDigits)))! + Int(data.duration))
                     )
             .foregroundStyle(Color(rgbaColor: data.color))
         }
@@ -41,9 +41,9 @@ struct ActivityChart: View {
 }
 
 #Preview {
-    ActivityChart(chartData: chartModelMock)
+    let chartModelMock = [
+        ActivityChartModel(typeID: UUID().uuidString, startDateTime: .now.addingTimeInterval(-1000), duration: 500, color: .randomBackgroundRGBA(), typeDescription: "Foo", activityID: "31902i49012")
+    ]
+    return ActivityChart(chartData: chartModelMock)
+        .frame(width: 320, height: 240)
 }
-
-let chartModelMock = [
-    ActivityChartModel(typeID: UUID().uuidString, startDateTime: .now, finishDateTime: .now.advanced(by: 300), color: .randomBackgroundRGBA())
-]

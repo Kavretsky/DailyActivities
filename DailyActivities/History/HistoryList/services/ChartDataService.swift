@@ -39,16 +39,24 @@ struct ChartDataServiceIml: ChartDataService {
     private func chartData(from activity: Activity) -> [ActivityChartModel] {
         var result = [ActivityChartModel]()
         var chartDataStartTime = activity.startDateTime
-        var activityStartSeconds = Int(activity.startDateTime.formatted(.dateTime.minute()))! * 60
-        var activityDuration = DateInterval(start: activity.startDateTime, end: activity.finishDateTime ?? .now.advanced(by: 60)).duration
+        var activityStartMinute = Int(activity.startDateTime.formatted(.dateTime.minute()))!
+        var activityDuration = DateInterval(start: activity.startDateTime, end: activity.finishDateTime ?? .now.advanced(by: 60)).duration / 60
         while activityDuration > 0 {
-            let chartDataDuration = min(3600 - Double(activityStartSeconds), activityDuration)
+            let chartDataDuration = min(60 - Double(activityStartMinute), activityDuration)
             let typeIndex = types.firstIndex(where: { $0.id == activity.typeID }) ?? 0
-            let chartData = ActivityChartModel(typeID: activity.typeID, startDateTime: chartDataStartTime, finishDateTime: chartDataStartTime.addingTimeInterval(chartDataDuration), color: types[typeIndex].backgroundRGBA)
+            let chartData = ActivityChartModel(
+                typeID: activity.typeID,
+                startDateTime: chartDataStartTime,
+                duration: chartDataDuration,
+                color: types[typeIndex].backgroundRGBA, 
+                typeDescription: types[typeIndex].description,
+                activityID: activity.id
+            )
+            
             result.append(chartData)
             activityDuration -= chartDataDuration
-            chartDataStartTime = chartDataStartTime.addingTimeInterval(TimeInterval(chartDataDuration))
-            activityStartSeconds = 0
+            chartDataStartTime = chartDataStartTime.addingTimeInterval(TimeInterval(chartDataDuration * 60))
+            activityStartMinute = 0
         }
         
         return result

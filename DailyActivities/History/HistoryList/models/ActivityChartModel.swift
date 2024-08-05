@@ -11,14 +11,18 @@ struct ActivityChartModel: Identifiable {
     let id: UUID
     let typeID: String
     let startDateTime: Date
-    let finishDateTime: Date
+    let duration: Double
     let color: RGBAColor
+    let typeDescription: String
+    let activityID: String
     
-    init(typeID: String, startDateTime: Date, finishDateTime: Date, color: RGBAColor) {
-        self.id = UUID()
+    init(id: UUID = UUID(), typeID: String, startDateTime: Date, duration: Double, color: RGBAColor, typeDescription: String, activityID: String) {
+        self.id = id
         self.typeID = typeID
         self.startDateTime = startDateTime
-        self.finishDateTime = finishDateTime
+        self.duration = duration
         self.color = color
+        self.typeDescription = typeDescription
+        self.activityID = activityID
     }
 }
