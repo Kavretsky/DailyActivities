@@ -341,6 +341,17 @@
 			path = mocks;
 			sourceTree = "<group>";
 		};
+		766F1A3F2C60F85100F6C8F9 /* HistoryList */ = {
+			isa = PBXGroup;
+			children = (
+				766F1A372C5F9F0D00F6C8F9 /* models */,
+				76CA33312C5CD3CF00AC3B92 /* services */,
+				76CA331C2C5C263800AC3B92 /* viewmodels */,
+				76CA331B2C5C263000AC3B92 /* views */,
+			);
+			path = HistoryList;
+			sourceTree = "<group>";
+		};
 		768A1AE72A914CB5008C4CAC /* viewmodels */ = {
 			isa = PBXGroup;
 			children = (
@@ -374,10 +385,7 @@
 		76CA331A2C5C25FF00AC3B92 /* History */ = {
 			isa = PBXGroup;
 			children = (
-				766F1A372C5F9F0D00F6C8F9 /* models */,
-				76CA33312C5CD3CF00AC3B92 /* services */,
-				76CA331C2C5C263800AC3B92 /* viewmodels */,
-				76CA331B2C5C263000AC3B92 /* views */,
+				766F1A3F2C60F85100F6C8F9 /* HistoryList */,
 			);
 			path = History;
 			sourceTree = "<group>";

@@ -16,7 +16,6 @@ protocol ActivityRepository {
     func deleteActivity(_ activity: Activity) async throws
 }
 
-@MainActor
 final class TodayActivityVM: ObservableObject {
     @Published private(set) var activities = [Activity]()
     @Published private(set) var chartData = [ChartData]()
@@ -30,6 +29,7 @@ final class TodayActivityVM: ObservableObject {
         self.activityRepository = activityRepository
         Task {
             await fetchActivities()
+            updateTimer()
         }
         $activities
             .sink { activities in
@@ -43,7 +43,7 @@ final class TodayActivityVM: ObservableObject {
         if let index = activities.firstIndex(where: { $0.finishDateTime == nil }) {
             activities[index].finishDateTime = .now
             activitiesToReconfigure = [activities[index].id]
-            updateActivityChartData(activities[index])
+//            updateActivityChartData(activities[index])
         }
         let activity = Activity(description: description, typeID: typeID, startDateTime: .now)
         activities.append(activity)
