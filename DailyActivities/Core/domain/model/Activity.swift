@@ -32,6 +32,10 @@ struct Activity: Identifiable, Hashable, Equatable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(description)
+        hasher.combine(typeID)
+        hasher.combine(startDateTime)
+        hasher.combine(finishDateTime)
     }
 }
 
@@ -54,7 +58,8 @@ extension Activity {
         finishDateTime = data.finishDateTime
     }
     
-    init(data: Data) {
+    init?(data: Data) {
+        guard !data.description.isEmpty else { return nil }
         description = data.description
         typeID = data.typeID
         startDateTime = data.startDateTime

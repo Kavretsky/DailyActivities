@@ -1,5 +1,5 @@
 //
-//  MainViewController.swift
+//  TodayActivitiesViewController.swift
 //  DailyActivities
 //
 //  Created by Nikolay Kavretsky on 11.08.2023.
@@ -10,20 +10,18 @@ import SwiftUI
 import Combine
 import Collections
 
-final class MainViewController: UIViewController {
-    private let typeStore: ActivityTypeStore
-    private let activityStore: TodayActivityVM
+final class TodayActivitiesViewController: UIViewController {
+    private let todayActivityVM: TodayActivityVM
     private let newActivityView: NewActivityView
     private var lastSelectedIndexPath: IndexPath?
     private var isSwipeActionsShow = false
-    private lazy var typeManagerVC = TypeManagerTableViewController(typeStore: typeStore)
     private let mutex = NSLock()
     private lazy var activityTableView = UITableView(frame: .zero, style: .insetGrouped)
-
     private lazy var deleteActivityAlert: UIAlertController = {
         let sheetAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         return sheetAlert
     }()
+    private let queue = DispatchQueue(label: "applyDatasource", target: .global(qos: .userInitiated))
     
     private lazy var emptyPlaceholder: UIView = {
         let label = UILabel()
@@ -63,58 +61,14 @@ final class MainViewController: UIViewController {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(typeStore: ActivityTypeStore, activityStore: TodayActivityVM) {
-        self.activityStore = activityStore
-        self.typeStore = typeStore
-        newActivityView = NewActivityView(typeStore: self.typeStore)
+    init(activityVM: TodayActivityVM) {
+        self.todayActivityVM = activityVM
+        newActivityView = NewActivityView(types: activityVM.activeTypes.elements)
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupBindings() {
-        activityStore.$activities
-            .receive(on: DispatchQueue.global())
-            .map({ $0.map({$0.id}) })
-            .sink { [weak self] activitiesID in
-                guard let self else { return }
-                DispatchQueue.main.async {
-                    self.showEmptyViewIfNeeded()
-                }
-                if !activitiesID.isEmpty {
-                    let currentSet = Set(self.snapshot.itemIdentifiers(inSection: .activities))
-                    let newSet = OrderedSet(activitiesID.map { AnyHashable($0) })
-                    let idsToDelete = currentSet.subtracting(newSet).map { $0 }
-                    let idsToAppend = newSet.subtracting(currentSet).map { $0 }
-                    
-                    self.mutex.withLock {
-                        self.snapshot.deleteItems(idsToDelete)
-                        self.snapshot.appendItems(idsToAppend, toSection: .activities)
-                        self.dataSource.apply(self.snapshot, animatingDifferences: true)
-                    }
-                    
-                    if !idsToAppend.isEmpty {
-                        DispatchQueue.main.async {
-                            self.activityTableView.scrollToRow(at: IndexPath(row: activitiesID.count - 1, section: 1), at: .bottom, animated: true)
-                        }
-                    }
-                    
-                }
-            }
-            .store(in: &cancellables)
-        
-        activityStore.$activitiesToReconfigure
-            .receive(on: DispatchQueue.global())
-            .sink { [weak self] activitiesID in
-                guard let self else { return }
-                mutex.withLock {
-                    self.snapshot.reconfigureItems(activitiesID)
-                    self.dataSource.apply(self.snapshot)
-                }
-            }
-            .store(in: &cancellables)
     }
     
     override func viewDidLoad() {
@@ -123,7 +77,6 @@ final class MainViewController: UIViewController {
         setupActivitiesTableview()
         setupDeleteActivityAlert()
         configureSnapshot()
-        setupBindings()
         setupNavBar()
     }
     
@@ -154,7 +107,7 @@ final class MainViewController: UIViewController {
     private func setupNavBar() {
         let leftBarButtonAction = UIAction { [weak self] _ in
             Task {
-                await self?.presentHistoryVC()
+                await self?.showHistory()
             }
         }
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "History", primaryAction: leftBarButtonAction)
@@ -168,14 +121,13 @@ final class MainViewController: UIViewController {
         view.addSubview(newActivityView)
         view.addSubview(emptyPlaceholder)
         showEmptyViewIfNeeded()
-        typeManagerVC.delegate = self
         setupConstrains()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
     }
     
     private func showEmptyViewIfNeeded() {
-        activityTableView.isHidden = activityStore.activities.isEmpty
-        emptyPlaceholder.isHidden = !activityStore.activities.isEmpty
+        activityTableView.isHidden = todayActivityVM.activities.isEmpty
+        emptyPlaceholder.isHidden = !todayActivityVM.activities.isEmpty
     }
     
     private func setupActivitiesTableview() {
@@ -191,6 +143,66 @@ final class MainViewController: UIViewController {
         dataSource.defaultRowAnimation = .automatic
     }
     
+    private func setupBindings() {
+        todayActivityVM.$activities
+            .receive(on: DispatchQueue.global())
+            .map({ $0.map({$0.id}) })
+            .sink { [weak self] activitiesID in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    self.showEmptyViewIfNeeded()
+                }
+                guard !activitiesID.isEmpty else { return }
+                queue.async(flags: .barrier) {
+                    var newSnapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
+                    newSnapshot.appendSections(Section.allCases)
+                    newSnapshot.appendItems(activitiesID, toSection: Section.activities)
+                    newSnapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
+                    self.dataSource.apply(newSnapshot, animatingDifferences: true)
+                }
+            }
+            .store(in: &cancellables)
+        
+        todayActivityVM.$activitiesToReconfigure
+            .receive(on: queue)
+            .sink { [weak self] activitiesID in
+                guard !activitiesID.isEmpty else { return }
+                guard let self else { return }
+                
+                queue.async {
+                    var newSnapshot = self.dataSource.snapshot()
+                    newSnapshot.reconfigureItems(activitiesID.map { $0 })
+                    self.dataSource.apply(newSnapshot, animatingDifferences: true)
+                }
+
+            }
+            .store(in: &cancellables)
+        
+        todayActivityVM.$activeTypes
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] types in
+                guard let self else { return }
+                self.newActivityView.reconfigure(with: types.elements)
+                queue.async {
+                    var newSnapshot = self.dataSource.snapshot()
+                    newSnapshot.reconfigureItems(["DayActivityChart"])
+                    newSnapshot.reconfigureItems(newSnapshot.itemIdentifiers(inSection: .activities))
+                    self.dataSource.apply(newSnapshot)
+                }
+            }
+            .store(in: &cancellables)
+        
+        todayActivityVM.$chartData
+            .receive(on: queue)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                var newSnapshot = self.dataSource.snapshot()
+                newSnapshot.reconfigureItems(["DayActivityChart"])
+                self.dataSource.apply(newSnapshot)
+            }
+            .store(in: &cancellables)
+    }
+    
     @objc private func handleCellTap(_ gesture: UITapGestureRecognizer) {
         guard let indexPath = activityTableView.indexPathForRow(at: gesture.location(in: activityTableView)) else { return }
 
@@ -202,27 +214,38 @@ final class MainViewController: UIViewController {
     }
     
     override func viewIsAppearing(_ animated: Bool) {
-        DispatchQueue.global(qos: .userInteractive).async { [unowned self] in
+        queue.async { [unowned self] in
             dataSource.apply(snapshot, animatingDifferences: false)
         }
+        setupBindings()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        cancellables.forEach { $0.cancel() }
     }
     
     private func makeDataSource() -> ActivityTableViewDiffableDataSource {
-        return ActivityTableViewDiffableDataSource(tableView: activityTableView) { [weak self] tableView, indexPath, item in
+        return ActivityTableViewDiffableDataSource(tableView: activityTableView) { [weak self] tableView, indexPath, _ in
             guard let self else { return .init() }
             guard let section = Section(rawValue: indexPath.section) else { return .init() }
             switch section {
             case .chart:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier", for: indexPath)
-                cell.contentConfiguration = UIHostingConfiguration(content: {
-                    DayActivityChart(activityStore: self.activityStore, typeStore: self.typeStore)
+                cell.contentConfiguration = UIHostingConfiguration(content: { [weak self] in
+                    if self != nil {
+                        ActivityChart(chartData: self!.todayActivityVM.chartData)
+                    }
                 })
                 return cell
             case .activities:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as? ActivityTableViewCell
-                guard let activity = activityStore.activities.first(where: {$0.id == item as? String}) else {
-                    return cell
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTableViewCellIdentifier", for: indexPath) as? ActivityTableViewCell 
+                else {
+                    fatalError("failed to dequeue ActivityTableViewCellIdentifier cell")
                 }
+                cell.selectionStyle = .none
+                
+                let activity = todayActivityVM.activities[indexPath.row]
                 var durationString = ""
                 if activity.finishDateTime != nil {
                     durationString = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
@@ -232,7 +255,7 @@ final class MainViewController: UIViewController {
                 }
                 
                 var durationAttributedString: NSMutableAttributedString
-                let isConflict = activityStore.conflictActivityDictionary.values.contains(where: {$0.contains(activity.id) }) || activityStore.conflictActivityDictionary.keys.contains(activity.id)
+                let isConflict = todayActivityVM.conflictActivityDictionary.values.contains(where: {$0.contains(activity.id) }) || todayActivityVM.conflictActivityDictionary.keys.contains(activity.id)
                 
                 if isConflict {
                     durationString = "Conflict  " + durationString
@@ -249,9 +272,9 @@ final class MainViewController: UIViewController {
                 }
                 durationAttributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 11), range: .init(location: 0, length: durationAttributedString.length))
                 
-                cell?.duration = durationAttributedString
-                cell?.activityDescription = activity.description
-                cell?.typeEmoji = typeStore.type(withID: activity.typeID)?.emoji
+                cell.duration = durationAttributedString
+                cell.activityDescription = activity.description
+                cell.typeEmoji = todayActivityVM.typeSet.first(where: { $0.id == activity.typeID })?.emoji ?? "unknown type"
                 return cell
             }
         }
@@ -260,7 +283,7 @@ final class MainViewController: UIViewController {
     private func configureSnapshot() {
         snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
         snapshot.appendSections(Section.allCases)
-        snapshot.appendItems(activityStore.activities.map {$0.id}, toSection: Section.activities)
+        snapshot.appendItems(todayActivityVM.activities.map {$0.id}, toSection: Section.activities)
         snapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
     }
     
@@ -275,7 +298,7 @@ final class MainViewController: UIViewController {
     
     private func showDeleteActivityAlert() {
         guard let index = lastSelectedIndexPath else { return }
-        let activityToDelete = activityStore.activities[index.row]
+        let activityToDelete = todayActivityVM.activities[index.row]
         deleteActivityAlert.title = activityToDelete.description
         self.present(deleteActivityAlert, animated: true)
         
@@ -283,7 +306,7 @@ final class MainViewController: UIViewController {
     
     private func deleteActivityButtonTapped() {
         guard let index = lastSelectedIndexPath else { return }
-        let activity = activityStore.activities[index.row]
+        let activity = todayActivityVM.activities[index.row]
         self.deleteActivity(activity)
     }
     
@@ -293,12 +316,8 @@ final class MainViewController: UIViewController {
         updateActivity(activity, with: data)
     }
     
-    private func presentHistoryVC() async {
-        let historyVC = await HistoryTableViewController(historyVM: HistoryViewModel(historyService: ActivityRepositoryService(context: CoreDataManager.shared.backgroundContext), chartDataService: ChartDataServiceIml(typeRepository: ActivityTypeRepositoryService(context: CoreDataManager.shared.backgroundContext))))
-        
-        let historyNC = UINavigationController(rootViewController: historyVC)
-        historyNC.modalPresentationStyle = .fullScreen
-        present(historyNC, animated: true)
+    private func showHistory() async {
+        todayActivityVM.showHistory()
     }
     
     deinit {
@@ -306,24 +325,22 @@ final class MainViewController: UIViewController {
     }
 }
 
-extension MainViewController: NewActivityViewDelegate {
+extension TodayActivitiesViewController: NewActivityViewDelegate {
     func addNewActivity(description: String, typeID: String) {
-        activityStore.addActivity(description: description, typeID: typeID)
+        todayActivityVM.addActivity(description: description, typeID: typeID)
     }
     
     func showTypeManager() {
-        let typeManagerNC = UINavigationController(rootViewController: typeManagerVC)
-        typeManagerNC.modalPresentationStyle = .fullScreen
-        self.present(typeManagerNC, animated: true)
+        todayActivityVM.showTypeManager()
     }
 }
 
-extension MainViewController: UITableViewDelegate {
+extension TodayActivitiesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard Section(rawValue: indexPath.section) == .activities else { return }
         dismissKeyboard()
         lastSelectedIndexPath = indexPath
-        let activityEditVC = ActivityEditTableViewController(types: typeStore.activeTypes, activity: activityStore.activities[indexPath.row])
+        let activityEditVC = ActivityEditTableViewController(types: todayActivityVM.activeTypes.elements, activity: todayActivityVM.activities[indexPath.row])
         activityEditVC.delegate = self
         activityEditVC.isModalInPresentation = true
         let activityEditNC = UINavigationController(rootViewController: activityEditVC)
@@ -347,7 +364,7 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard Section(rawValue: indexPath.section) == .activities else { return nil }
         lastSelectedIndexPath = indexPath
-        let activity = activityStore.activities[indexPath.row]
+        let activity = todayActivityVM.activities[indexPath.row]
         if activity.finishDateTime == nil {
             let completeActivity = UIContextualAction(style: .normal, title: "Complete") { [weak self] (_, _, completionHandler) in
                 self?.finishActivity(activity, at: indexPath)
@@ -373,23 +390,18 @@ extension MainViewController: UITableViewDelegate {
     }
 }
 
-extension MainViewController: ActivityEditTableViewControllerDelegate {
+extension TodayActivitiesViewController: ActivityEditTableViewControllerDelegate {
     func deleteActivity(_ activity: Activity) {
         if lastSelectedIndexPath != nil {
-            activityStore.deleteActivity(activity)
+            Task(priority: .userInitiated) {
+                await todayActivityVM.deleteActivity(activity)
+            }
         }
     }
     
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
-        let activityIndexBeforeUpdate = activityStore.activities.index(matching: activity)
-        activityStore.updateActivity(activity, with: data)
-        let activityIndexAfterUpdate = activityStore.activities.index(matching: activity)
-        if activityIndexBeforeUpdate != activityIndexAfterUpdate {
-            if activityIndexAfterUpdate == activityStore.activities.count - 1 {
-                snapshot.moveItem(activity.id, afterItem: activityStore.activities[activityIndexAfterUpdate! - 1].id)
-            } else {
-                snapshot.moveItem(activity.id, beforeItem: activityStore.activities[activityIndexAfterUpdate! + 1].id)
-            }
+        Task(priority: .userInitiated) {
+            await todayActivityVM.updateActivity(activity, with: data)
         }
     }
     
@@ -403,19 +415,8 @@ extension MainViewController: ActivityEditTableViewControllerDelegate {
     }
 }
 
-extension MainViewController: TypeManagerTableViewControllerDelegate {
-    func activityTypeChanged(_ typeID: ActivityType.ID) {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self else { return }
-            snapshot.reconfigureItems(activityStore.activities.filter { $0.typeID == typeID }.map { $0.id })
-            
-        }
-    }
-}
-
 #Preview("Main") {
-    let activityStore = TodayActivityVM(activityRepository: ActivityRepositoryMock())
-    let typeStore = ActivityTypeStore(activityTypeRepository: ActivityTypeRepositoryMock())
-    let controller = MainViewController(typeStore: typeStore, activityStore: activityStore)
+    let activityStore = TodayActivityVM(activityRepository: ActivityRepositoryMock(), typeRepository: ActivityTypeRepositoryMock(), delegate: TodayActivityVMDelegateMock())
+    let controller = TodayActivitiesViewController(activityVM: activityStore)
     return UINavigationController(rootViewController: controller)
 }

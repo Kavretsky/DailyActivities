@@ -15,10 +15,17 @@ protocol NewActivityViewDelegate: AnyObject {
 
 final class NewActivityView: UIView {
     
-    private let typeStore: ActivityTypeStore
+    private var types: [ActivityType] {
+        didSet {
+            chosenIndex %= types.count
+            descriptionTF.placeholder = self.chosenType.description
+            typeButton.setTitle(self.chosenType.emoji, for: .normal)
+            typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
+        }
+    }
     private var chosenIndex = 0
     private var chosenType: ActivityType {
-        typeStore.activeTypes[chosenIndex]
+        types[chosenIndex]
     }
     
     private var cancellables = Set<AnyCancellable>()
@@ -92,13 +99,13 @@ final class NewActivityView: UIView {
         }
         
         var typeSelectionActions = [UIAction]()
-        typeStore.activeTypes.forEach { [weak self] type in
+        types.forEach { [weak self] type in
             guard let self else { return }
             let action = UIAction(title: type.emoji + " " + type.description,
                                   image: type == self.chosenType ? UIImage(systemName: "checkmark") : nil
             ) { [weak self]  _ in
                 guard let self else { return }
-                self.chosenIndex = self.typeStore.activeTypes.firstIndex(of: type) ?? 0
+                self.chosenIndex = self.types.firstIndex(of: type) ?? 0
                 self.animateTypeChange()
             }
             typeSelectionActions.append(action)
@@ -109,21 +116,10 @@ final class NewActivityView: UIView {
         return UIMenu(title: "", children: [managerAction, goToMenu])
     }()
     
-    init(typeStore: ActivityTypeStore) {
-        self.typeStore = typeStore
+    init(types: [ActivityType]) {
+        self.types = types
         super.init(frame: .null)
         setupUI()
-        
-        typeStore.$isLoadingTypes
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.chosenIndex %= typeStore.activeTypes.count
-                self.descriptionTF.placeholder = self.chosenType.description
-                self.typeButton.setTitle(self.chosenType.emoji, for: .normal)
-                self.typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
-            }
-            .store(in: &cancellables)
     }
 
     required init?(coder: NSCoder) {
@@ -208,7 +204,7 @@ final class NewActivityView: UIView {
     }
     
     @objc private func typeButtonTapped() {
-        chosenIndex = (chosenIndex + 1) % typeStore.activeTypes.count
+        chosenIndex = (chosenIndex + 1) % types.count
         animateTypeChange()
     }
     
@@ -266,11 +262,14 @@ final class NewActivityView: UIView {
             divider.heightAnchor.constraint(equalToConstant: 1)
         ])
     }
+    
+    func reconfigure(with newTypes: [ActivityType]) {
+        self.types = newTypes
+    }
 
     deinit {
         cancellables.forEach { $0.cancel() }
     }
-
 }
 
 extension NewActivityView: UIContextMenuInteractionDelegate {

@@ -1,5 +1,5 @@
 //
-//  ActivityRepositoryService+HistoryRepository.swift
+//  ActivityCoreDataRepository+HistoryRepository.swift
 //  DailyActivities
 //
 //  Created by Nikolay Kavretsky on 02.08.2024.
@@ -8,10 +8,11 @@
 import Foundation
 import Collections
 
-extension ActivityRepositoryService: HistoryRepository {
+extension ActivityCoreDataRepository: HistoryRepository {
     
     func fetchHistoryDates() async throws -> [Date] {
-        try await context.perform {
+        try await context.perform { [weak self] in
+            guard let self else { return [] }
             let request = ActivityEntity.fetchRequest()
             request.propertiesToFetch = ["startDateTime"]
             request.sortDescriptors = [NSSortDescriptor(keyPath: \ActivityEntity.startDateTime, ascending: true)]

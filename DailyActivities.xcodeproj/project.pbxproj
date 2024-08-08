@@ -25,7 +25,7 @@
 		764A92752A991759006402BE /* TodayActivityVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764A92742A991759006402BE /* TodayActivityVM.swift */; };
 		7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5C82A86B461003F75ED /* AppDelegate.swift */; };
 		7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5CA2A86B461003F75ED /* SceneDelegate.swift */; };
-		7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5CC2A86B461003F75ED /* MainViewController.swift */; };
+		7669F5CD2A86B461003F75ED /* TodayActivitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5CC2A86B461003F75ED /* TodayActivitiesViewController.swift */; };
 		7669F5D22A86B462003F75ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7669F5D12A86B462003F75ED /* Assets.xcassets */; };
 		7669F5D52A86B462003F75ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7669F5D32A86B462003F75ED /* LaunchScreen.storyboard */; };
 		7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */; };
@@ -34,6 +34,11 @@
 		766F1A392C5F9F2100F6C8F9 /* ActivityChartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A382C5F9F2100F6C8F9 /* ActivityChartModel.swift */; };
 		766F1A3B2C5FA1BB00F6C8F9 /* ChartDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A3A2C5FA1BB00F6C8F9 /* ChartDataService.swift */; };
 		766F1A3D2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A3C2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift */; };
+		766F1A462C61396800F6C8F9 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A452C61396800F6C8F9 /* AppCoordinator.swift */; };
+		766F1A482C6159EC00F6C8F9 /* TodayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A472C6159EC00F6C8F9 /* TodayCoordinator.swift */; };
+		766F1A4A2C616BDE00F6C8F9 /* TypeManagerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A492C616BDE00F6C8F9 /* TypeManagerCoordinator.swift */; };
+		766F1A512C64010000F6C8F9 /* HistoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A502C64010000F6C8F9 /* HistoryCoordinator.swift */; };
+		766F1A542C64E92900F6C8F9 /* TodayActivityVMDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766F1A532C64E92900F6C8F9 /* TodayActivityVMDelegateMock.swift */; };
 		767B10702A939DF200E55ED8 /* TypeEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */; };
 		767B10722A93A70A00E55ED8 /* ColorPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */; };
 		767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */; };
@@ -43,7 +48,7 @@
 		76B0896C2BEB68FB00EA63D1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 76B0896B2BEB68FB00EA63D1 /* README.md */; };
 		76CA332E2C5C2C4200AC3B92 /* HistoryViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CA332D2C5C2C4200AC3B92 /* HistoryViewModelTest.swift */; };
 		76CA33302C5C2C5900AC3B92 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CA332F2C5C2C5900AC3B92 /* HistoryViewModel.swift */; };
-		76CA33332C5CD3E700AC3B92 /* ActivityRepositoryService+HistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CA33322C5CD3E700AC3B92 /* ActivityRepositoryService+HistoryRepository.swift */; };
+		76CA33332C5CD3E700AC3B92 /* ActivityCoreDataRepository+HistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CA33322C5CD3E700AC3B92 /* ActivityCoreDataRepository+HistoryRepository.swift */; };
 		76CA33362C5D25A600AC3B92 /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CA33352C5D25A600AC3B92 /* HistoryTableViewController.swift */; };
 		76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */; };
 		76F8B7B82C4C42C5002B4B27 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */; };
@@ -53,10 +58,10 @@
 		76F8B7D72C512938002B4B27 /* ActivityTypeEntity+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7D32C512938002B4B27 /* ActivityTypeEntity+.swift */; };
 		76F8B7D92C512938002B4B27 /* RGBAColorEntity+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7D52C512938002B4B27 /* RGBAColorEntity+.swift */; };
 		76F8B7DB2C512E64002B4B27 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7DA2C512E64002B4B27 /* CoreDataManager.swift */; };
-		76F8B7E02C5807F2002B4B27 /* ActivityTypeRepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7DF2C5807F2002B4B27 /* ActivityTypeRepositoryService.swift */; };
+		76F8B7E02C5807F2002B4B27 /* ActivityTypeCoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7DF2C5807F2002B4B27 /* ActivityTypeCoreDataRepository.swift */; };
 		76F8B7E22C580F82002B4B27 /* RGBAColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7E12C580F82002B4B27 /* RGBAColor.swift */; };
 		76F8B7E42C582216002B4B27 /* ActivityTypeRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7E32C582216002B4B27 /* ActivityTypeRepositoryMock.swift */; };
-		76F8B7E62C5978DF002B4B27 /* ActivityRepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7E52C5978DF002B4B27 /* ActivityRepositoryService.swift */; };
+		76F8B7E62C5978DF002B4B27 /* ActivityCoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7E52C5978DF002B4B27 /* ActivityCoreDataRepository.swift */; };
 		76F8B7E82C5A9A6E002B4B27 /* ActivityRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8B7E72C5A9A6E002B4B27 /* ActivityRepositoryMock.swift */; };
 /* End PBXBuildFile section */
 
@@ -98,7 +103,7 @@
 		7669F5C52A86B461003F75ED /* DailyActivities.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyActivities.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7669F5C82A86B461003F75ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7669F5CA2A86B461003F75ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		7669F5CC2A86B461003F75ED /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		7669F5CC2A86B461003F75ED /* TodayActivitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayActivitiesViewController.swift; sourceTree = "<group>"; };
 		7669F5D12A86B462003F75ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7669F5D42A86B462003F75ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7669F5D62A86B462003F75ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -108,6 +113,11 @@
 		766F1A382C5F9F2100F6C8F9 /* ActivityChartModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChartModel.swift; sourceTree = "<group>"; };
 		766F1A3A2C5FA1BB00F6C8F9 /* ChartDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDataService.swift; sourceTree = "<group>"; };
 		766F1A3C2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChartHostingController.swift; sourceTree = "<group>"; };
+		766F1A452C61396800F6C8F9 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		766F1A472C6159EC00F6C8F9 /* TodayCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCoordinator.swift; sourceTree = "<group>"; };
+		766F1A492C616BDE00F6C8F9 /* TypeManagerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerCoordinator.swift; sourceTree = "<group>"; };
+		766F1A502C64010000F6C8F9 /* HistoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinator.swift; sourceTree = "<group>"; };
+		766F1A532C64E92900F6C8F9 /* TodayActivityVMDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayActivityVMDelegateMock.swift; sourceTree = "<group>"; };
 		767B106F2A939DF200E55ED8 /* TypeEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeEditorViewController.swift; sourceTree = "<group>"; };
 		767B10712A93A70A00E55ED8 /* ColorPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSection.swift; sourceTree = "<group>"; };
 		767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypePickerTableViewCell.swift; sourceTree = "<group>"; };
@@ -117,7 +127,7 @@
 		76CA33212C5C2BE200AC3B92 /* DailyActivitiesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DailyActivitiesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		76CA332D2C5C2C4200AC3B92 /* HistoryViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModelTest.swift; sourceTree = "<group>"; };
 		76CA332F2C5C2C5900AC3B92 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
-		76CA33322C5CD3E700AC3B92 /* ActivityRepositoryService+HistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActivityRepositoryService+HistoryRepository.swift"; sourceTree = "<group>"; };
+		76CA33322C5CD3E700AC3B92 /* ActivityCoreDataRepository+HistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActivityCoreDataRepository+HistoryRepository.swift"; sourceTree = "<group>"; };
 		76CA33352C5D25A600AC3B92 /* HistoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
 		76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
 		76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -126,10 +136,10 @@
 		76F8B7D32C512938002B4B27 /* ActivityTypeEntity+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActivityTypeEntity+.swift"; sourceTree = "<group>"; };
 		76F8B7D52C512938002B4B27 /* RGBAColorEntity+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RGBAColorEntity+.swift"; sourceTree = "<group>"; };
 		76F8B7DA2C512E64002B4B27 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		76F8B7DF2C5807F2002B4B27 /* ActivityTypeRepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypeRepositoryService.swift; sourceTree = "<group>"; };
+		76F8B7DF2C5807F2002B4B27 /* ActivityTypeCoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypeCoreDataRepository.swift; sourceTree = "<group>"; };
 		76F8B7E12C580F82002B4B27 /* RGBAColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RGBAColor.swift; sourceTree = "<group>"; };
 		76F8B7E32C582216002B4B27 /* ActivityTypeRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypeRepositoryMock.swift; sourceTree = "<group>"; };
-		76F8B7E52C5978DF002B4B27 /* ActivityRepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityRepositoryService.swift; sourceTree = "<group>"; };
+		76F8B7E52C5978DF002B4B27 /* ActivityCoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCoreDataRepository.swift; sourceTree = "<group>"; };
 		76F8B7E72C5A9A6E002B4B27 /* ActivityRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityRepositoryMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -188,7 +198,9 @@
 		76481BA02C4BD6E000EB7DD2 /* TypeManager */ = {
 			isa = PBXGroup;
 			children = (
+				766F1A4F2C63EF3600F6C8F9 /* viewmodels */,
 				76481BA12C4BDD9600EB7DD2 /* views */,
+				766F1A492C616BDE00F6C8F9 /* TypeManagerCoordinator.swift */,
 			);
 			path = TypeManager;
 			sourceTree = "<group>";
@@ -226,6 +238,7 @@
 		76481BA42C4C2A6300EB7DD2 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				766F1A442C61395E00F6C8F9 /* coordinator */,
 				76F8B7C22C50367D002B4B27 /* data */,
 				76F8B7DE2C57DC00002B4B27 /* domain */,
 				76481BA52C4C2A6B00EB7DD2 /* views */,
@@ -244,7 +257,7 @@
 		76481BA62C4C2C7200EB7DD2 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				7669F5CC2A86B461003F75ED /* MainViewController.swift */,
+				7669F5CC2A86B461003F75ED /* TodayActivitiesViewController.swift */,
 				7669F5DC2A87FA64003F75ED /* NewActivityVIew.swift */,
 				5D32F9EC2AC3741E00D82544 /* ActivityTableViewCell.swift */,
 			);
@@ -271,6 +284,8 @@
 		76481BA92C4C30E600EB7DD2 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				766F1A352C5F96E700F6C8F9 /* ActivityChart.swift */,
+				766F1A3C2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift */,
 				762313212B13612900A6B238 /* DayActivityChart.swift */,
 			);
 			path = views;
@@ -280,6 +295,7 @@
 			isa = PBXGroup;
 			children = (
 				5D3858B12B2DEBF300B37CB0 /* ChartData.swift */,
+				766F1A382C5F9F2100F6C8F9 /* ActivityChartModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -329,7 +345,6 @@
 		766F1A372C5F9F0D00F6C8F9 /* models */ = {
 			isa = PBXGroup;
 			children = (
-				766F1A382C5F9F2100F6C8F9 /* ActivityChartModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -348,14 +363,48 @@
 				76CA33312C5CD3CF00AC3B92 /* services */,
 				76CA331C2C5C263800AC3B92 /* viewmodels */,
 				76CA331B2C5C263000AC3B92 /* views */,
+				766F1A502C64010000F6C8F9 /* HistoryCoordinator.swift */,
 			);
 			path = HistoryList;
+			sourceTree = "<group>";
+		};
+		766F1A442C61395E00F6C8F9 /* coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				766F1A452C61396800F6C8F9 /* AppCoordinator.swift */,
+			);
+			path = coordinator;
+			sourceTree = "<group>";
+		};
+		766F1A4E2C624CF100F6C8F9 /* repository */ = {
+			isa = PBXGroup;
+			children = (
+				76F8B7DF2C5807F2002B4B27 /* ActivityTypeCoreDataRepository.swift */,
+				76F8B7E52C5978DF002B4B27 /* ActivityCoreDataRepository.swift */,
+				76CA33342C5D06EB00AC3B92 /* mocks */,
+			);
+			path = repository;
+			sourceTree = "<group>";
+		};
+		766F1A4F2C63EF3600F6C8F9 /* viewmodels */ = {
+			isa = PBXGroup;
+			children = (
+				760EFE732A8BFF55000C8776 /* ActivityTypeStore.swift */,
+			);
+			path = viewmodels;
+			sourceTree = "<group>";
+		};
+		766F1A522C64E92300F6C8F9 /* mocks */ = {
+			isa = PBXGroup;
+			children = (
+				766F1A532C64E92900F6C8F9 /* TodayActivityVMDelegateMock.swift */,
+			);
+			path = mocks;
 			sourceTree = "<group>";
 		};
 		768A1AE72A914CB5008C4CAC /* viewmodels */ = {
 			isa = PBXGroup;
 			children = (
-				760EFE732A8BFF55000C8776 /* ActivityTypeStore.swift */,
 				764A92742A991759006402BE /* TodayActivityVM.swift */,
 			);
 			path = viewmodels;
@@ -364,10 +413,11 @@
 		768A1AEA2A914CDF008C4CAC /* TodayActivities */ = {
 			isa = PBXGroup;
 			children = (
-				76F8B7DD2C57DB8E002B4B27 /* repository */,
+				766F1A522C64E92300F6C8F9 /* mocks */,
 				768A1AE72A914CB5008C4CAC /* viewmodels */,
 				76481BA72C4C2C8000EB7DD2 /* datasource */,
 				76481BA62C4C2C7200EB7DD2 /* views */,
+				766F1A472C6159EC00F6C8F9 /* TodayCoordinator.swift */,
 			);
 			path = TodayActivities;
 			sourceTree = "<group>";
@@ -395,8 +445,6 @@
 			children = (
 				76CA33352C5D25A600AC3B92 /* HistoryTableViewController.swift */,
 				766F1A312C5E8D2A00F6C8F9 /* HistoryTableViewCell.swift */,
-				766F1A352C5F96E700F6C8F9 /* ActivityChart.swift */,
-				766F1A3C2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -429,7 +477,7 @@
 			isa = PBXGroup;
 			children = (
 				766F1A3E2C6002E000F6C8F9 /* mocks */,
-				76CA33322C5CD3E700AC3B92 /* ActivityRepositoryService+HistoryRepository.swift */,
+				76CA33322C5CD3E700AC3B92 /* ActivityCoreDataRepository+HistoryRepository.swift */,
 				766F1A3A2C5FA1BB00F6C8F9 /* ChartDataService.swift */,
 			);
 			path = services;
@@ -457,6 +505,7 @@
 		76F8B7C22C50367D002B4B27 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				766F1A4E2C624CF100F6C8F9 /* repository */,
 				76F8B7BA2C4EC9F9002B4B27 /* coreData */,
 			);
 			path = data;
@@ -470,16 +519,6 @@
 				76F8B7CF2C504550002B4B27 /* ActivityEntity+.swift */,
 			);
 			path = entity;
-			sourceTree = "<group>";
-		};
-		76F8B7DD2C57DB8E002B4B27 /* repository */ = {
-			isa = PBXGroup;
-			children = (
-				76CA33342C5D06EB00AC3B92 /* mocks */,
-				76F8B7DF2C5807F2002B4B27 /* ActivityTypeRepositoryService.swift */,
-				76F8B7E52C5978DF002B4B27 /* ActivityRepositoryService.swift */,
-			);
-			path = repository;
 			sourceTree = "<group>";
 		};
 		76F8B7DE2C57DC00002B4B27 /* domain */ = {
@@ -650,14 +689,16 @@
 				7642D7482B03E8BB0035E225 /* TimeFinishTableViewCell.swift in Sources */,
 				76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */,
 				7642D7462B03E0B90035E225 /* TimeStartTableViewCell.swift in Sources */,
-				7669F5CD2A86B461003F75ED /* MainViewController.swift in Sources */,
+				766F1A4A2C616BDE00F6C8F9 /* TypeManagerCoordinator.swift in Sources */,
+				7669F5CD2A86B461003F75ED /* TodayActivitiesViewController.swift in Sources */,
+				766F1A512C64010000F6C8F9 /* HistoryCoordinator.swift in Sources */,
 				76F8B7E42C582216002B4B27 /* ActivityTypeRepositoryMock.swift in Sources */,
 				7669F5C92A86B461003F75ED /* AppDelegate.swift in Sources */,
-				76F8B7E62C5978DF002B4B27 /* ActivityRepositoryService.swift in Sources */,
+				76F8B7E62C5978DF002B4B27 /* ActivityCoreDataRepository.swift in Sources */,
 				5D32F9ED2AC3741E00D82544 /* ActivityTableViewCell.swift in Sources */,
 				7669F5DD2A87FA64003F75ED /* NewActivityVIew.swift in Sources */,
 				767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */,
-				76CA33332C5CD3E700AC3B92 /* ActivityRepositoryService+HistoryRepository.swift in Sources */,
+				76CA33332C5CD3E700AC3B92 /* ActivityCoreDataRepository+HistoryRepository.swift in Sources */,
 				76F8B7D12C504550002B4B27 /* ActivityEntity+.swift in Sources */,
 				760EFE782A8BFFE4000C8776 /* UtilityExtensions.swift in Sources */,
 				76F8B7E22C580F82002B4B27 /* RGBAColor.swift in Sources */,
@@ -665,6 +706,7 @@
 				7669F5CB2A86B461003F75ED /* SceneDelegate.swift in Sources */,
 				760EFE762A8BFF73000C8776 /* ActivityType.swift in Sources */,
 				76CA33302C5C2C5900AC3B92 /* HistoryViewModel.swift in Sources */,
+				766F1A542C64E92900F6C8F9 /* TodayActivityVMDelegateMock.swift in Sources */,
 				762313222B13612900A6B238 /* DayActivityChart.swift in Sources */,
 				766F1A3B2C5FA1BB00F6C8F9 /* ChartDataService.swift in Sources */,
 				76456DED2AFBAC6100690A21 /* ActivityEditTableViewController.swift in Sources */,
@@ -678,7 +720,9 @@
 				7642D7402B035B510035E225 /* SelfSizingCollectionView.swift in Sources */,
 				76F8B7DB2C512E64002B4B27 /* CoreDataManager.swift in Sources */,
 				766F1A3D2C5FAE1900F6C8F9 /* ActivityChartHostingController.swift in Sources */,
-				76F8B7E02C5807F2002B4B27 /* ActivityTypeRepositoryService.swift in Sources */,
+				766F1A462C61396800F6C8F9 /* AppCoordinator.swift in Sources */,
+				766F1A482C6159EC00F6C8F9 /* TodayCoordinator.swift in Sources */,
+				76F8B7E02C5807F2002B4B27 /* ActivityTypeCoreDataRepository.swift in Sources */,
 				766F1A322C5E8D2A00F6C8F9 /* HistoryTableViewCell.swift in Sources */,
 				7638BB9D2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift in Sources */,
 				76F8B7C82C50371F002B4B27 /* DailyActivities.xcdatamodeld in Sources */,

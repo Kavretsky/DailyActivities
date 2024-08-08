@@ -6,18 +6,15 @@
 //
 
 import UIKit
-
-protocol TypeManagerTableViewControllerDelegate: AnyObject {
-    func activityTypeChanged(_ typeID: ActivityType.ID)
-}
+import Combine
 
 final class TypeManagerTableViewController: UITableViewController {
 
-    private let typeStore: ActivityTypeStore
-    weak var delegate: TypeManagerTableViewControllerDelegate?
+    private let typeRepository: TypeManagerVM
+    private var cancellables = Set<AnyCancellable>()
     
-    init(typeStore: ActivityTypeStore) {
-        self.typeStore = typeStore
+    init(typeRepository: TypeManagerVM) {
+        self.typeRepository = typeRepository
         super.init(style: .insetGrouped)
         tableView.register(TypeManagerTableViewCell.self, forCellReuseIdentifier: "TypeManagerCellIdentifier")
     }
@@ -34,7 +31,13 @@ final class TypeManagerTableViewController: UITableViewController {
         tableView.delegate = self
         view.backgroundColor = .secondarySystemBackground
         setupToolBar()
-//        tableView.rowHeight = UITableView.automaticDimension
+        
+        typeRepository.$types
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -42,21 +45,21 @@ final class TypeManagerTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return typeStore.activeTypes.count
+        return typeRepository.types.filter { $0.isActive }.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TypeManagerCellIdentifier", for: indexPath) as? TypeManagerTableViewCell else { return UITableViewCell() }
 
         let index = indexPath.row
-        cell.type = typeStore.activeTypes[index]
+        cell.type = typeRepository.types[index]
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let index = indexPath.row
-        let selectedType = typeStore.activeTypes[index]
+        let selectedType = typeRepository.types[index]
         presentTypeEditorVC(with: selectedType)
     }
     
@@ -77,32 +80,36 @@ final class TypeManagerTableViewController: UITableViewController {
     }
     
     @objc private func addNewType() {
-        guard let newType = typeStore.addType(with: ActivityType.sampleData()) else { return }
-        presentTypeEditorVC(with: newType)
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
+        Task {
+            guard let newType = await typeRepository.addType(with: ActivityType.sampleData()) else { return }
+            presentTypeEditorVC(with: newType)
         }
     }
     
     @objc private func closeButtonTapped() {
         dismiss(animated: true)
     }
+    
+    deinit {
+        cancellables.forEach { $0.cancel() }
+    }
 }
 
 extension TypeManagerTableViewController: TypeEditorViewControllerDelegate {
     func deleteType(_ type: ActivityType) {
-        typeStore.removeType(type)
-        tableView.reloadData()
+        Task {
+            await typeRepository.removeType(type)
+        }
     }
     
     func updateType(type: ActivityType, with data: ActivityType.Data) {
-        typeStore.updateType(type, with: data)
-        tableView.reloadData()
-        delegate?.activityTypeChanged(type.id)
+        Task {
+            await typeRepository.updateType(type, with: data)
+        }
     }
     
     var isTypeDeletable: Bool {
-        typeStore.activeTypes.count > 2
+        typeRepository.types.count > 2
     }
     
 }

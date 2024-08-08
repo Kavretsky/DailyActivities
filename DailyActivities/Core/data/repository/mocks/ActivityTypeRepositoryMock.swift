@@ -7,18 +7,23 @@
 
 import Foundation
 
-struct ActivityTypeRepositoryMock: ActivityTypeRepository {
+class ActivityTypeRepositoryMock: ActivityTypeReadableRepository {
+    @Published var types: [ActivityType] = mockTypes
     
-    func fetchTypes() async throws -> [ActivityType] {
-        return mockTypes
-    }
-    
-    func saveType(_ type: ActivityType) async throws {
+    var typesPublisher: Published<[ActivityType]>.Publisher { $types }
+}
+
+extension ActivityTypeRepositoryMock: ActivityTypeWritableRepository {
+    func updateType(_ type: ActivityType, with data: ActivityType.Data) async throws {
         if let index = mockTypes.firstIndex(where: { $0.id == type.id }) {
             mockTypes[index].update(from: type.data)
-        } else {
-            mockTypes.append(type)
         }
+    }
+    
+    func addType(with data: ActivityType.Data) async throws -> ActivityType {
+        let newType = ActivityType(data: data)
+        mockTypes.append(newType)
+        return newType
     }
     
     func deleteType(_ type: ActivityType) async throws {
@@ -26,7 +31,6 @@ struct ActivityTypeRepositoryMock: ActivityTypeRepository {
             mockTypes[index].isActive = false
         }
     }
-    
 }
 
 fileprivate var mockTypes: [ActivityType] = [

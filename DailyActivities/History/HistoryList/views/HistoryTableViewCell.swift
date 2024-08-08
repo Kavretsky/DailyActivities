@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Collections
 
 class HistoryTableViewCell: UITableViewCell {
     private let dateLabel: UILabel = {

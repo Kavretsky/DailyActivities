@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import Collections
 
 class HistoryTableViewController: UITableViewController {
     

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Collections
 
 protocol HistoryRepository {
     func fetchActivities(for date: Date) async throws -> [Activity]

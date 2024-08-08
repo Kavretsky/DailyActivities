@@ -7,35 +7,58 @@
 
 import Foundation
 import Combine
-import CoreData
+import Collections
 
-protocol ActivityRepository {
-    func fetchActivities(for date: Date) async throws -> [Activity]
-    func addActivity(_ activity: Activity) async throws
-    func saveActivity(_ activity: Activity) async throws
-    func deleteActivity(_ activity: Activity) async throws
+protocol TodayActivityVMDelegate: AnyObject {
+    func showTypeManager()
+    func showHistory()
 }
 
 final class TodayActivityVM: ObservableObject {
     @Published private(set) var activities = [Activity]()
-    @Published private(set) var chartData = [ChartData]()
+    @Published private(set) var activeTypes: OrderedSet<ActivityType> = []
+    private(set) var typeSet: OrderedSet<ActivityType> = []
+    @Published private(set) var chartData = [ActivityChartModel]()
     private var updateLastActivityChartDataTimer: Timer?
+    private let delegate: TodayActivityVMDelegate
     private(set) var conflictActivityDictionary: [Activity.ID: Set<Activity.ID>] = [:]
-    @Published private(set) var activitiesToReconfigure = [Activity.ID]()
-    private let activityRepository: ActivityRepository
+    @Published private(set) var activitiesToReconfigure = Set<Activity.ID>()
+    private let chartDataService: ChartDataService
+    private let activityRepository: ActivityReadableRepository & ActivityWritableRepository
+    private let typeRepository: ActivityTypeReadableRepository
     private var cancellables = Set<AnyCancellable>()
-    
-    init(activityRepository: ActivityRepository) {
+    private let mutex = NSLock()
+
+    init(activityRepository: ActivityReadableRepository & ActivityWritableRepository, typeRepository: ActivityTypeReadableRepository, delegate: TodayActivityVMDelegate) {
+        self.delegate = delegate
         self.activityRepository = activityRepository
-        Task {
-            await fetchActivities()
-            updateTimer()
-        }
-        $activities
-            .sink { activities in
-                activities.forEach { [weak self] in self?.updateActivityChartData($0) }
+        self.typeRepository = typeRepository
+        self.chartDataService = ChartDataServiceIml(typeRepository: typeRepository)
+        activities = activityRepository.fetchActivities(for: .now)
+        typeSet = .init(typeRepository.types)
+        activeTypes = .init(typeRepository.types.filter { $0.isActive })
+        typeRepository.typesPublisher
+            .dropFirst()
+            .receive(on: DispatchQueue.global())
+            .sink { [weak self] newTypes in
+                guard let self else { return }
+                typeSet = .init(newTypes)
+                activeTypes = .init(newTypes.filter { $0.isActive })
+                let activities = activities
+                updateChartData(activities)
             }
             .store(in: &cancellables)
+        
+        Task(priority: .high) {
+            let activities = activities
+            var newActivitiesToReconfigure = Set<Activity.ID>()
+            for activity in activities {
+                let conflicts = detectActivityTimeConflicts(for: activity)
+                newActivitiesToReconfigure = newActivitiesToReconfigure.union(updateConflictDictionary(for: activity, with: conflictActivityDictionary[activity.id, default: conflicts]))
+            }
+            activitiesToReconfigure = newActivitiesToReconfigure
+            updateChartData(activities)
+        }
     }
     
     // MARK: Intents
@@ -43,7 +66,7 @@ final class TodayActivityVM: ObservableObject {
         if let index = activities.firstIndex(where: { $0.finishDateTime == nil }) {
             activities[index].finishDateTime = .now
             activitiesToReconfigure = [activities[index].id]
-//            updateActivityChartData(activities[index])
+//            updateChartData(activities[index])
         }
         let activity = Activity(description: description, typeID: typeID, startDateTime: .now)
         activities.append(activity)
@@ -54,61 +77,67 @@ final class TodayActivityVM: ObservableObject {
                 print("failed to add activity: \(error.localizedDescription)")
             }
         }
-        updateActivityChartData(activity)
+        updateChartData(activities)
         updateTimer()
     }
     
-    func updateActivity(_ activityToUpdate: Activity, with data: Activity.Data) {
+    func updateActivity(_ activityToUpdate: Activity, with data: Activity.Data) async {
         guard let index = activities.firstIndex(where: {$0.id == activityToUpdate.id}) else { return }
         guard data.startDateTime <= data.finishDateTime ?? data.startDateTime
                 && data.startDateTime.isSameDay(with: data.finishDateTime ?? data.startDateTime)
                 && !data.description.isEmpty else { return }
-        
-        activitiesToReconfigure = [activityToUpdate.id]
         activities[index].update(from: data)
+        do {
+            print("try to update activity")
+            try await activityRepository.updateActivity(activities[index])
+        } catch {
+            print("failed to save activity: \(error.localizedDescription)")
+        }
+        var newActivitiesToReconfigure = Set<Activity.ID>()
+        newActivitiesToReconfigure.insert(activityToUpdate.id)
+        
         if activityToUpdate.startDateTime != data.startDateTime || activityToUpdate.finishDateTime != data.finishDateTime {
             let detectedConflicts = detectActivityTimeConflicts(for: activities[index])
-            if !detectedConflicts.isEmpty {
-                updateConflictDictionary(for: activityToUpdate, with: detectedConflicts)
-            }
+            newActivitiesToReconfigure = newActivitiesToReconfigure.union(updateConflictDictionary(for: activityToUpdate, with: detectedConflicts))
         }
-        updateActivityChartData(activities[activityToUpdate])
-        Task(priority: .userInitiated) {
-            do {
-                print("try to update activity")
-                try await activityRepository.saveActivity(activities[index])
-            } catch {
-                print("failed to save activity: \(error.localizedDescription)")
-            }
-        }
+        activitiesToReconfigure = newActivitiesToReconfigure
+//        updateChartData(activities[activityToUpdate])
+        updateChartData(activities)
         updateTimer()
     }
     
-    func deleteActivity(_ activityToDelete: Activity) {
+    func deleteActivity(_ activityToDelete: Activity) async {
         guard let index = activities.firstIndex(where: {$0.id == activityToDelete.id}) else { return }
-        Task(priority: .userInitiated) {
-            do {
-                try await activityRepository.deleteActivity(activityToDelete)
-                activities.remove(at: index)
-                updateActivityChartData(activityToDelete)
-                var chartData = chartData
-                chartData.removeAll(where: {$0.activityID == activityToDelete.id})
-                self.chartData = chartData
-                updateConflictDictionary(for: activityToDelete, with: [])
-                updateTimer()
-            } catch {
-                print("failed delete activity: \(error.localizedDescription)")
-            }
+        do {
+            try await activityRepository.deleteActivity(activityToDelete)
+            
+        } catch {
+            print("failed delete activity: \(error.localizedDescription)")
         }
+        activities.remove(at: index)
+        var newActivitiesToReconfigure = updateConflictDictionary(for: activityToDelete, with: [])
+        newActivitiesToReconfigure.remove(activityToDelete.id)
+        updateChartData(activities)
+        updateTimer()
+        activitiesToReconfigure = newActivitiesToReconfigure
+        
     }
     
+    private func deleteActivityChartData(for activity: Activity) {
+        var chartData = chartData
+        chartData.removeAll { $0.activityID == activity.id }
+        self.chartData = chartData
+    }
+    
+    // MARK: Conflicts
     private func detectActivityTimeConflicts(for activity: Activity) -> Set<Activity.ID> {
         activities.sort { $0.startDateTime < $1.startDateTime }
         guard let activityIndex = activities.index(matching: activity) else { return [] }
         var conflictActivitiesID = Set<Activity.ID>()
         var currentCheckIndex = activityIndex - 1
         while currentCheckIndex >= 0 {
-            if let activityFinishDateTime = activities[currentCheckIndex].finishDateTime, activityFinishDateTime > activity.startDateTime {
+            if activities[currentCheckIndex].finishDateTime ?? .now > activity.startDateTime {
+                
                 conflictActivitiesID.insert(activities[currentCheckIndex].id)
                 currentCheckIndex -= 1
             } else {
@@ -136,96 +165,78 @@ final class TodayActivityVM: ObservableObject {
         return lhsActivity.finishDateTime ?? .now > rhsActivity.startDateTime && lhsActivity.startDateTime < rhsActivity.finishDateTime ?? .now
     }
     
-    private func updateConflictDictionary(for activity: Activity, with conflictSet: Set<Activity.ID>) {
+    private func updateConflictDictionary(for activity: Activity, with conflictSet: Set<Activity.ID>) -> Set<Activity.ID> {
         let lastConflictActivities = conflictActivityDictionary[activity.id] ?? []
         var activitiesWithoutConflict = lastConflictActivities.subtracting(conflictSet)
-        conflictActivityDictionary.removeValue(forKey: activity.id)
+        mutex.withLock {
+            conflictActivityDictionary.removeValue(forKey: activity.id)
+        }
         
         if !conflictSet.isEmpty {
-            conflictActivityDictionary[activity.id] = conflictSet
-            for activityID in conflictSet {
-                if let index = activities.index(matching: activityID) {
-                    updateActivityChartData(activities[index])
-                }
+            mutex.withLock {
+                conflictActivityDictionary[activity.id] = conflictSet
             }
+//            for activityID in conflictSet {
+//                if let index = activities.index(matching: activityID) {
+//                    updateChartData(activities[index])
+//                }
+//            }
         }
         
-        for activityID in activitiesWithoutConflict {
-            if let index = activities.index(matching: activityID) {
-                updateActivityChartData(activities[index])
-            }
-        }
+//        for activityID in activitiesWithoutConflict {
+//            if let index = activities.index(matching: activityID) {
+//                updateChartData(activities[index])
+//            }
+//        }
         
         for activityID in conflictActivityDictionary.keys {
             if let conflicts = conflictActivityDictionary[activityID], conflicts.contains(activity.id) {
                 if !isActivityConflict(activityID, activity.id) {
                     if conflictActivityDictionary[activityID]!.count > 1 {
-                        conflictActivityDictionary[activityID]?.remove(activity.id)
+                        mutex.withLock {
+                            conflictActivityDictionary[activityID]?.remove(activity.id)
+                        }
                     } else {
                         activitiesWithoutConflict.insert(activityID)
-                        conflictActivityDictionary.removeValue(forKey: activityID)
-                        if let index = activities.index(matching: activityID) {
-                            updateActivityChartData(activities[index])
+                        mutex.withLock {
+                            conflictActivityDictionary.removeValue(forKey: activityID)
                         }
+//                        if let index = activities.index(matching: activityID) {
+//                            updateChartData(activities[index])
+//                        }
                     }
                 }
             }
         }
-        activitiesToReconfigure = Array(activitiesWithoutConflict.union(conflictSet))
+        return activitiesWithoutConflict.union(conflictSet)
+        
+//            .subtracting([activity.id])
     }
     
-    private func chartDataFromActivity(_ activity: Activity) -> [ChartData] {
-        var result = [ChartData]()
-        var chartDataStartTime = activity.startDateTime
-        var activityStartMinute = Int(activity.startDateTime.formatted(.dateTime.minute()))!
-        var activityDuration = DateInterval(start: activity.startDateTime, end: activity.finishDateTime ?? .now.advanced(by: 60)).duration / 60
+    private func updateChartData(_ activities: [Activity]) {
+        let activitiesWithoutConflict = activities.filter { activity in conflictActivityDictionary[activity.id] == nil && !conflictActivityDictionary.values.contains(where: { $0.contains(activity.id) }) }
+        let newChartData = chartDataService.chartData(for: activitiesWithoutConflict)
         
-        while activityDuration > 0 {
-            let chartDataDuration = min(60 - Double(activityStartMinute), activityDuration)
-            let chartData = ChartData(typeID: activity.typeID, startTime: chartDataStartTime, duration: chartDataDuration, activityID: activity.id)
-            result.append(chartData)
-            activityDuration -= chartDataDuration
-            chartDataStartTime = chartDataStartTime.addingTimeInterval(TimeInterval(chartDataDuration * 60))
-            activityStartMinute = 0
-        }
-        
-        return result
-    }
-    
-    private func updateActivityChartData(_ activity: Activity) {
-        var chartData = chartData
-        chartData.removeAll(where: {$0.activityID == activity.id})
-        guard !conflictActivityDictionary.contains(where: {
-            $0.key == activity.id || $0.value.contains(activity.id)
-        }) else {
-            self.chartData = chartData
-            return
-        }
-        
-        chartDataFromActivity(activity).forEach { element in
-            chartData.append(element)
-        }
-        chartData.sort(by: {$0.startTime < $1.startTime})
-        self.chartData = chartData
+        self.chartData = newChartData
     }
     
     private func updateTimer() {
         updateLastActivityChartDataTimer?.invalidate()
         if let activity = activities.first(where: {$0.finishDateTime == nil}) {
             updateLastActivityChartDataTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: { [weak self] _ in
-                self?.updateActivityChartData(activity)
+                self?.updateChartData([activity])
             })
         } else {
             updateLastActivityChartDataTimer?.invalidate()
         }
     }
     
-    private func fetchActivities() async {
-        do {
-            activities = try await activityRepository.fetchActivities(for: Date.now)
-        } catch {
-            print("failed to fetch activities: \(error.localizedDescription)")
-        }
+    func showTypeManager() {
+        delegate.showTypeManager()
+    }
+    
+    func showHistory() {
+        delegate.showHistory()
     }
     
     deinit {

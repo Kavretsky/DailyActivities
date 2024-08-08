@@ -13,17 +13,10 @@ protocol ChartDataService {
 
 struct ChartDataServiceIml: ChartDataService {
 
-    private let typeRepository: ActivityTypeRepository
-    private var types: [ActivityType] = []
+    private let typeRepository: ActivityTypeReadableRepository
     
-    init(typeRepository: ActivityTypeRepository) async {
+    init(typeRepository: ActivityTypeReadableRepository) {
         self.typeRepository = typeRepository
-        do {
-            types = try await typeRepository.fetchTypes()
-        } catch {
-            print("failed to load types")
-        }
-        
     }
     
     func chartData(for activities: [Activity]) -> [ActivityChartModel] {
@@ -43,13 +36,13 @@ struct ChartDataServiceIml: ChartDataService {
         var activityDuration = DateInterval(start: activity.startDateTime, end: activity.finishDateTime ?? .now.advanced(by: 60)).duration / 60
         while activityDuration > 0 {
             let chartDataDuration = min(60 - Double(activityStartMinute), activityDuration)
-            let typeIndex = types.firstIndex(where: { $0.id == activity.typeID }) ?? 0
+            let type = typeRepository.types.first(where: { $0.id == activity.typeID })
             let chartData = ActivityChartModel(
                 typeID: activity.typeID,
                 startDateTime: chartDataStartTime,
                 duration: chartDataDuration,
-                color: types[typeIndex].backgroundRGBA, 
-                typeDescription: types[typeIndex].description,
+                color: type?.backgroundRGBA ?? .init(red: 1, green: 1, blue: 1, alpha: 1),
+                typeDescription: type?.description ?? "unknown type",
                 activityID: activity.id
             )
             
