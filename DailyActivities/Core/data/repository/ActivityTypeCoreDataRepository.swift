@@ -32,13 +32,16 @@ final class ActivityTypeCoreDataRepository: ObservableObject, ActivityTypeReadab
     
     init(context: NSManagedObjectContext) {
         self.context = context
-        do {
-            types = try fetchTypesFromCoreData()
-            if types.isEmpty {
-                loadDefaultTypes()
+        Task.detached(priority: .userInitiated) { [weak self] in
+            guard let self else { return }
+            do {
+                types = try fetchTypesFromCoreData()
+                if types.isEmpty {
+                    loadDefaultTypes()
+                }
+            } catch {
+                print("failed to fetch types from CoreData: \(error.localizedDescription)")
             }
-        } catch {
-            print("failed to fetch types from CoreData: \(error.localizedDescription)")
         }
     }
     

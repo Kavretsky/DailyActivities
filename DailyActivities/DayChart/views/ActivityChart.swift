@@ -11,8 +11,9 @@ import Charts
 struct ActivityChart: View {
     private let chartData: [ActivityChartModel]
     private var chartDataWithUniqueTypes: [ActivityChartModel]
+    private let showLegend: Bool
     
-    init(chartData: [ActivityChartModel]) {
+    init(chartData: [ActivityChartModel], showLegend: Bool = true) {
         self.chartData = chartData
         var result = [ActivityChartModel]()
         var usedTypes = Set<String>()
@@ -20,11 +21,17 @@ struct ActivityChart: View {
             result.append(data)
             usedTypes.insert(data.typeID)
         }
+        self.showLegend = showLegend
         chartDataWithUniqueTypes = result
     }
     
     var body: some View {
-        chart
+        if showLegend {
+            chart
+        } else {
+            chart
+                .chartLegend(.hidden)
+        }
     }
     
     var chart: some View {
@@ -62,8 +69,7 @@ struct ActivityChart: View {
                     }
                 }
             }
-        }
-        
+        } 
     }
     
     struct ActivityChartFormatter: FormatStyle {

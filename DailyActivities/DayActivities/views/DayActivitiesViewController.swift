@@ -1,5 +1,5 @@
 //
-//  TodayActivitiesViewController.swift
+//  DayActivitiesViewController.swift
 //  DailyActivities
 //
 //  Created by Nikolay Kavretsky on 11.08.2023.
@@ -10,8 +10,8 @@ import SwiftUI
 import Combine
 import Collections
 
-final class TodayActivitiesViewController: UIViewController {
-    private let todayActivityVM: TodayActivityVM
+final class DayActivitiesViewController: UIViewController {
+    private let dayActivityVM: DayActivityVM
     private let newActivityView: NewActivityView
     private var lastSelectedIndexPath: IndexPath?
     private var isSwipeActionsShow = false
@@ -42,6 +42,12 @@ final class TodayActivitiesViewController: UIViewController {
         return view
     }()
     
+    private lazy var activityEditVC: ActivityEditTableViewController = {
+        let activityEditVC = ActivityEditTableViewController()
+        activityEditVC.delegate = self
+        return activityEditVC
+    }()
+    
     enum Section: Int, CaseIterable, Hashable {
         case chart
         case activities
@@ -61,8 +67,8 @@ final class TodayActivitiesViewController: UIViewController {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(activityVM: TodayActivityVM) {
-        self.todayActivityVM = activityVM
+    init(activityVM: DayActivityVM) {
+        self.dayActivityVM = activityVM
         newActivityView = NewActivityView(types: activityVM.activeTypes.elements)
         super.init(nibName: nil, bundle: nil)
     }
@@ -77,7 +83,9 @@ final class TodayActivitiesViewController: UIViewController {
         setupActivitiesTableview()
         setupDeleteActivityAlert()
         configureSnapshot()
-        setupNavBar()
+        if dayActivityVM.date.isSameDay(with: .now) {
+            setupNavBar()
+        }
     }
     
     @objc private func dismissKeyboard() {
@@ -116,7 +124,11 @@ final class TodayActivitiesViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .tertiarySystemGroupedBackground
         newActivityView.delegate = self
-        title = "Today"
+        if dayActivityVM.date.isSameDay(with: .now) {
+            title = "Today"
+        } else {
+            title = dayActivityVM.date.formatted(.dateTime.month(.wide).day())
+        }
         view.addSubview(activityTableView)
         view.addSubview(newActivityView)
         view.addSubview(emptyPlaceholder)
@@ -126,8 +138,8 @@ final class TodayActivitiesViewController: UIViewController {
     }
     
     private func showEmptyViewIfNeeded() {
-        activityTableView.isHidden = todayActivityVM.activities.isEmpty
-        emptyPlaceholder.isHidden = !todayActivityVM.activities.isEmpty
+        activityTableView.isHidden = dayActivityVM.activities.isEmpty
+        emptyPlaceholder.isHidden = !dayActivityVM.activities.isEmpty
     }
     
     private func setupActivitiesTableview() {
@@ -144,7 +156,7 @@ final class TodayActivitiesViewController: UIViewController {
     }
     
     private func setupBindings() {
-        todayActivityVM.$activities
+        dayActivityVM.$activities
             .receive(on: DispatchQueue.global())
             .map({ $0.map({$0.id}) })
             .sink { [weak self] activitiesID in
@@ -163,7 +175,7 @@ final class TodayActivitiesViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        todayActivityVM.$activitiesToReconfigure
+        dayActivityVM.$activitiesToReconfigure
             .receive(on: queue)
             .sink { [weak self] activitiesID in
                 guard !activitiesID.isEmpty else { return }
@@ -178,7 +190,7 @@ final class TodayActivitiesViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        todayActivityVM.$activeTypes
+        dayActivityVM.$activeTypes
             .receive(on: DispatchQueue.main)
             .sink { [weak self] types in
                 guard let self else { return }
@@ -192,13 +204,15 @@ final class TodayActivitiesViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        todayActivityVM.$chartData
+        dayActivityVM.$chartData
             .receive(on: queue)
             .sink { [weak self] _ in
                 guard let self else { return }
-                var newSnapshot = self.dataSource.snapshot()
-                newSnapshot.reconfigureItems(["DayActivityChart"])
-                self.dataSource.apply(newSnapshot)
+                queue.async {
+                    var newSnapshot = self.dataSource.snapshot()
+                    newSnapshot.reconfigureItems(["DayActivityChart"])
+                    self.dataSource.apply(newSnapshot)
+                }
             }
             .store(in: &cancellables)
     }
@@ -234,7 +248,7 @@ final class TodayActivitiesViewController: UIViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityChartTableViewCellIdentifier", for: indexPath)
                 cell.contentConfiguration = UIHostingConfiguration(content: { [weak self] in
                     if self != nil {
-                        ActivityChart(chartData: self!.todayActivityVM.chartData)
+                        ActivityChart(chartData: self!.dayActivityVM.chartData)
                     }
                 })
                 return cell
@@ -245,7 +259,7 @@ final class TodayActivitiesViewController: UIViewController {
                 }
                 cell.selectionStyle = .none
                 
-                let activity = todayActivityVM.activities[indexPath.row]
+                let activity = dayActivityVM.activities[indexPath.row]
                 var durationString = ""
                 if activity.finishDateTime != nil {
                     durationString = "\(activity.startDateTime.formatted(date: .omitted, time: .shortened)) — \(activity.finishDateTime!.formatted(date: .omitted, time: .shortened))"
@@ -255,7 +269,7 @@ final class TodayActivitiesViewController: UIViewController {
                 }
                 
                 var durationAttributedString: NSMutableAttributedString
-                let isConflict = todayActivityVM.conflictActivityDictionary.values.contains(where: {$0.contains(activity.id) }) || todayActivityVM.conflictActivityDictionary.keys.contains(activity.id)
+                let isConflict = dayActivityVM.conflictActivityDictionary.values.contains(where: {$0.contains(activity.id) }) || dayActivityVM.conflictActivityDictionary.keys.contains(activity.id)
                 
                 if isConflict {
                     durationString = "Conflict  " + durationString
@@ -274,7 +288,7 @@ final class TodayActivitiesViewController: UIViewController {
                 
                 cell.duration = durationAttributedString
                 cell.activityDescription = activity.description
-                cell.typeEmoji = todayActivityVM.typeSet.first(where: { $0.id == activity.typeID })?.emoji ?? "unknown type"
+                cell.typeEmoji = dayActivityVM.typeSet.first(where: { $0.id == activity.typeID })?.emoji ?? "unknown type"
                 return cell
             }
         }
@@ -283,7 +297,7 @@ final class TodayActivitiesViewController: UIViewController {
     private func configureSnapshot() {
         snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
         snapshot.appendSections(Section.allCases)
-        snapshot.appendItems(todayActivityVM.activities.map {$0.id}, toSection: Section.activities)
+        snapshot.appendItems(dayActivityVM.activities.map {$0.id}, toSection: Section.activities)
         snapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
     }
     
@@ -298,7 +312,7 @@ final class TodayActivitiesViewController: UIViewController {
     
     private func showDeleteActivityAlert() {
         guard let index = lastSelectedIndexPath else { return }
-        let activityToDelete = todayActivityVM.activities[index.row]
+        let activityToDelete = dayActivityVM.activities[index.row]
         deleteActivityAlert.title = activityToDelete.description
         self.present(deleteActivityAlert, animated: true)
         
@@ -306,7 +320,7 @@ final class TodayActivitiesViewController: UIViewController {
     
     private func deleteActivityButtonTapped() {
         guard let index = lastSelectedIndexPath else { return }
-        let activity = todayActivityVM.activities[index.row]
+        let activity = dayActivityVM.activities[index.row]
         self.deleteActivity(activity)
     }
     
@@ -317,34 +331,35 @@ final class TodayActivitiesViewController: UIViewController {
     }
     
     private func showHistory() async {
-        todayActivityVM.showHistory()
+        dayActivityVM.showHistory()
     }
     
     deinit {
+        print("\(self) deinit")
         cancellables.forEach { $0.cancel() }
     }
 }
 
-extension TodayActivitiesViewController: NewActivityViewDelegate {
+extension DayActivitiesViewController: NewActivityViewDelegate {
     func addNewActivity(description: String, typeID: String) {
-        todayActivityVM.addActivity(description: description, typeID: typeID)
+        dayActivityVM.addActivity(description: description, typeID: typeID)
     }
     
     func showTypeManager() {
-        todayActivityVM.showTypeManager()
+        dayActivityVM.showTypeManager()
     }
 }
 
-extension TodayActivitiesViewController: UITableViewDelegate {
+extension DayActivitiesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard Section(rawValue: indexPath.section) == .activities else { return }
         dismissKeyboard()
         lastSelectedIndexPath = indexPath
-        let activityEditVC = ActivityEditTableViewController(types: todayActivityVM.activeTypes.elements, activity: todayActivityVM.activities[indexPath.row])
-        activityEditVC.delegate = self
-        activityEditVC.isModalInPresentation = true
-        let activityEditNC = UINavigationController(rootViewController: activityEditVC)
-        self.present(activityEditNC, animated: true)
+        Task {
+            activityEditVC.setupWith(types: dayActivityVM.activeTypes.elements, activity: dayActivityVM.activities[indexPath.row])
+            let activityEditNC = UINavigationController(rootViewController: activityEditVC)
+            self.present(activityEditNC, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) ->
@@ -364,7 +379,7 @@ extension TodayActivitiesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard Section(rawValue: indexPath.section) == .activities else { return nil }
         lastSelectedIndexPath = indexPath
-        let activity = todayActivityVM.activities[indexPath.row]
+        let activity = dayActivityVM.activities[indexPath.row]
         if activity.finishDateTime == nil {
             let completeActivity = UIContextualAction(style: .normal, title: "Complete") { [weak self] (_, _, completionHandler) in
                 self?.finishActivity(activity, at: indexPath)
@@ -390,18 +405,18 @@ extension TodayActivitiesViewController: UITableViewDelegate {
     }
 }
 
-extension TodayActivitiesViewController: ActivityEditTableViewControllerDelegate {
+extension DayActivitiesViewController: ActivityEditTableViewControllerDelegate {
     func deleteActivity(_ activity: Activity) {
         if lastSelectedIndexPath != nil {
             Task(priority: .userInitiated) {
-                await todayActivityVM.deleteActivity(activity)
+                await dayActivityVM.deleteActivity(activity)
             }
         }
     }
     
     func updateActivity(_ activity: Activity, with data: Activity.Data) {
         Task(priority: .userInitiated) {
-            await todayActivityVM.updateActivity(activity, with: data)
+            await dayActivityVM.updateActivity(activity, with: data)
         }
     }
     
@@ -416,7 +431,7 @@ extension TodayActivitiesViewController: ActivityEditTableViewControllerDelegate
 }
 
 #Preview("Main") {
-    let activityStore = TodayActivityVM(activityRepository: ActivityRepositoryMock(), typeRepository: ActivityTypeRepositoryMock(), delegate: TodayActivityVMDelegateMock())
-    let controller = TodayActivitiesViewController(activityVM: activityStore)
+    let activityStore = DayActivityVM(activityRepository: ActivityRepositoryMock(), typeRepository: ActivityTypeRepositoryMock(), delegate: DayActivityVMDelegateMock(), date: .now)
+    let controller = DayActivitiesViewController(activityVM: activityStore)
     return UINavigationController(rootViewController: controller)
 }

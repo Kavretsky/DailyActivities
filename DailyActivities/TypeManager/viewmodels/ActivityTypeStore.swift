@@ -49,7 +49,7 @@ class TypeManagerVM {
     }
     
     func updateType(_ type: ActivityType, with data: ActivityType.Data) async {
-        guard !data.emoji.isEmpty, let _ = types.firstIndex(where: { $0.id == type.id }) else { return }
+        guard !data.emoji.isEmpty, types.firstIndex(where: { $0.id == type.id }) != nil else { return }
         do {
             try await typeRepository.updateType(type, with: data)
         } catch ActivityTypeCoreDataRepositoryError.invalidTypeData {

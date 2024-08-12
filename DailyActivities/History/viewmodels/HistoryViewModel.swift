@@ -13,29 +13,22 @@ protocol HistoryRepository {
     func fetchHistoryDates() async throws -> [Date]
 }
 
-final class HistoryViewModel {
+protocol HistoryViewModelDelegate: AnyObject {
+    func openDayActivityVC(for date: Date)
+}
+
+final class HistoryViewModel: ObservableObject {
     private let historyService: HistoryRepository
     private let chartDataService: ChartDataService
     @Published private(set) var dates: [DateComponents: [Date]] = [:]
     private(set) var headers: [DateComponents] = []
     private var activityDic: [Date: [Activity]] = [:]
     private(set) var chartDataDic: [Date: [ActivityChartModel]] = [:]
+    var delegate: HistoryViewModelDelegate?
     
     init(historyService: HistoryRepository, chartDataService: ChartDataService) {
         self.chartDataService = chartDataService
         self.historyService = historyService
-        Task {
-            let result = try await historyService.fetchHistoryDates()
-            
-            for date in result {
-                activityDic[date] = await loadActivities(for: date)
-                chartDataDic[date] = chartDataService.chartData(for: activityDic[date] ?? [])
-            }
-            dates = Dictionary(grouping: result) { date in
-                return Calendar.current.dateComponents([.year], from: date)
-            }
-            headers = dates.keys.map { $0 }
-        }
     }
     
     private func loadActivities(for date: Date) async -> [Activity] {
@@ -58,5 +51,31 @@ final class HistoryViewModel {
             print("failed to load history dates: \(error.localizedDescription)")
         }
         return []
+    }
+    
+    func didSelectRowAt(_ indexPath: IndexPath) async {
+        let key = headers[indexPath.section]
+        let daysArray = dates[key, default: []]
+        guard daysArray.count > indexPath.row else { return }
+        
+        delegate?.openDayActivityVC(for: daysArray[indexPath.row])
+        
+    }
+    
+    func loadData() {
+        Task {
+            let result = try await historyService.fetchHistoryDates().filter { !$0.isSameDay(with: .now) }
+            
+            for date in result {
+                activityDic[date] = await loadActivities(for: date)
+                chartDataDic[date] = chartDataService.chartData(for: activityDic[date] ?? [])
+            }
+            let dates = Dictionary(grouping: result) { date in
+                return Calendar.current.dateComponents([.year], from: date)
+            }
+                headers = dates.keys.map { $0 }
+                self.dates = dates
+            
+        }
     }
 }

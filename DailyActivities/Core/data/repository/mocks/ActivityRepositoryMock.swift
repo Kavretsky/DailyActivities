@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class ActivityRepositoryMock: ActivityReadableRepository {
     private(set) var mockActivities: [Activity] = [
@@ -54,6 +55,8 @@ class ActivityRepositoryMock: ActivityReadableRepository {
 }
 
 extension ActivityRepositoryMock: ActivityWritableRepository {
+    var activityDidChangedPublisher: PassthroughSubject<Bool, Never> { .init() }
+    
     func addActivity(_ activity: Activity) async throws {
         mockActivities.append(activity)
     }

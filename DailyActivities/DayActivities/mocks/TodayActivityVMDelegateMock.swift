@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TodayActivityVMDelegateMock: TodayActivityVMDelegate {
+class DayActivityVMDelegateMock: DayActivityVMDelegate {
     func showHistory() {
         
     }

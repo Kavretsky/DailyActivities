@@ -15,7 +15,7 @@ protocol TypeEditorViewControllerDelegate: AnyObject {
 
 final class TypeEditorViewController: UIViewController {
     
-    let typeToEdit: ActivityType
+   private let typeToEdit: ActivityType
     
     private var typeData: ActivityType.Data {
         didSet {

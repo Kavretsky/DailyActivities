@@ -37,9 +37,9 @@ class HistoryTableViewCell: UITableViewCell {
     func setupCell(date: Date, chartData: [ActivityChartModel]) {
         dateLabel.text = date.formatted(.dateTime.month(.wide).day())
         if let chartViewHC {
-            chartViewHC.rootView = ActivityChart(chartData: chartData)
+            chartViewHC.rootView = ActivityChart(chartData: chartData, showLegend: false)
         } else {
-            chartViewHC = ActivityChartHostingController(chartData: chartData)
+            chartViewHC = ActivityChartHostingController(chartData: chartData, showLegend: false)
             addChartToView(chartViewHC!.view)
         }
         

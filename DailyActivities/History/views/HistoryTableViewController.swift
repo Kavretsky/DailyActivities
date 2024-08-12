@@ -72,7 +72,11 @@ class HistoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
+        historyVM.didSelectRowAt(indexPath)
+    }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        historyVM.loadData()
     }
     
     deinit {

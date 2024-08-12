@@ -36,7 +36,7 @@ extension RGBAColor {
 
 extension Date {
     func isSameDay(with comparingDate: Date) -> Bool {
-        self.formatted(.dateTime.day().month().year()) == comparingDate.formatted(.dateTime.day().month().year())
+        Calendar.current.isDate(self, inSameDayAs: comparingDate)
     }
     
     static func endOfDay(for date: Date) -> Date {

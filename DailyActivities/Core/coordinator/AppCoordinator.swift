@@ -21,7 +21,7 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        let activityCoordinator = TodayCoordinator(navigationController: navigationController)
+        let activityCoordinator = DayActivityCoordinator(navigationController: navigationController, date: .now)
         activityCoordinator.start()
         window.rootViewController = navigationController
         window.makeKeyAndVisible()

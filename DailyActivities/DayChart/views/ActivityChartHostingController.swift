@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 class ActivityChartHostingController: UIHostingController<ActivityChart> {
-    init(chartData: [ActivityChartModel]) {
-        super.init(rootView: ActivityChart(chartData: chartData))
+    init(chartData: [ActivityChartModel], showLegend: Bool = true) {
+        super.init(rootView: ActivityChart(chartData: chartData, showLegend: showLegend))
     }
     
     @MainActor required dynamic init?(coder aDecoder: NSCoder) {

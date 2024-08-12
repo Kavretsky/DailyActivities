@@ -9,36 +9,41 @@ import Foundation
 import Combine
 import Collections
 
-protocol TodayActivityVMDelegate: AnyObject {
+protocol DayActivityVMDelegate: AnyObject {
     func showTypeManager()
     func showHistory()
 }
 
-final class TodayActivityVM: ObservableObject {
+final class DayActivityVM: ObservableObject {
     @Published private(set) var activities = [Activity]()
     @Published private(set) var activeTypes: OrderedSet<ActivityType> = []
+    
     private(set) var typeSet: OrderedSet<ActivityType> = []
     @Published private(set) var chartData = [ActivityChartModel]()
+    
     private var updateLastActivityChartDataTimer: Timer?
-    private let delegate: TodayActivityVMDelegate
+    private let delegate: DayActivityVMDelegate
+    
     private(set) var conflictActivityDictionary: [Activity.ID: Set<Activity.ID>] = [:]
     @Published private(set) var activitiesToReconfigure = Set<Activity.ID>()
+    
     private let chartDataService: ChartDataService
     private let activityRepository: ActivityReadableRepository & ActivityWritableRepository
     private let typeRepository: ActivityTypeReadableRepository
     private var cancellables = Set<AnyCancellable>()
     private let mutex = NSLock()
+    let date: Date
 
-    init(activityRepository: ActivityReadableRepository & ActivityWritableRepository, typeRepository: ActivityTypeReadableRepository, delegate: TodayActivityVMDelegate) {
+    init(activityRepository: ActivityReadableRepository & ActivityWritableRepository, typeRepository: ActivityTypeReadableRepository, delegate: DayActivityVMDelegate, date: Date) {
+        self.date = date
         self.delegate = delegate
         self.activityRepository = activityRepository
         self.typeRepository = typeRepository
         self.chartDataService = ChartDataServiceIml(typeRepository: typeRepository)
-        activities = activityRepository.fetchActivities(for: .now)
+        activities = activityRepository.fetchActivities(for: date)
         typeSet = .init(typeRepository.types)
         activeTypes = .init(typeRepository.types.filter { $0.isActive })
         typeRepository.typesPublisher
-            .dropFirst()
             .receive(on: DispatchQueue.global())
             .sink { [weak self] newTypes in
                 guard let self else { return }
@@ -49,16 +54,21 @@ final class TodayActivityVM: ObservableObject {
             }
             .store(in: &cancellables)
         
-        Task(priority: .high) {
-            let activities = activities
-            var newActivitiesToReconfigure = Set<Activity.ID>()
-            for activity in activities {
-                let conflicts = detectActivityTimeConflicts(for: activity)
-                newActivitiesToReconfigure = newActivitiesToReconfigure.union(updateConflictDictionary(for: activity, with: conflictActivityDictionary[activity.id, default: conflicts]))
+        activityRepository.activityDidChangedPublisher
+            .receive(on: DispatchQueue.global())
+            .sink { [weak self] _ in
+                guard let self else { return }
+                let newActivities = activityRepository.fetchActivities(for: date)
+                var newActivitiesToReconfigure = Set<Activity.ID>()
+                for activity in newActivities {
+                    let conflicts = self.detectActivityTimeConflicts(for: activity)
+                    newActivitiesToReconfigure = newActivitiesToReconfigure.union(updateConflictDictionary(for: activity, with: conflictActivityDictionary[activity.id, default: conflicts]))
+                }
+                self.activities = newActivities
+                activitiesToReconfigure = newActivitiesToReconfigure
+                updateChartData(activities)
             }
-            activitiesToReconfigure = newActivitiesToReconfigure
-            updateChartData(activities)
-        }
+            .store(in: &cancellables)
     }
     
     // MARK: Intents
@@ -66,7 +76,6 @@ final class TodayActivityVM: ObservableObject {
         if let index = activities.firstIndex(where: { $0.finishDateTime == nil }) {
             activities[index].finishDateTime = .now
             activitiesToReconfigure = [activities[index].id]
-//            updateChartData(activities[index])
         }
         let activity = Activity(description: description, typeID: typeID, startDateTime: .now)
         activities.append(activity)
@@ -176,18 +185,7 @@ final class TodayActivityVM: ObservableObject {
             mutex.withLock {
                 conflictActivityDictionary[activity.id] = conflictSet
             }
-//            for activityID in conflictSet {
-//                if let index = activities.index(matching: activityID) {
-//                    updateChartData(activities[index])
-//                }
-//            }
         }
-        
-//        for activityID in activitiesWithoutConflict {
-//            if let index = activities.index(matching: activityID) {
-//                updateChartData(activities[index])
-//            }
-//        }
         
         for activityID in conflictActivityDictionary.keys {
             if let conflicts = conflictActivityDictionary[activityID], conflicts.contains(activity.id) {
@@ -201,16 +199,11 @@ final class TodayActivityVM: ObservableObject {
                         mutex.withLock {
                             conflictActivityDictionary.removeValue(forKey: activityID)
                         }
-//                        if let index = activities.index(matching: activityID) {
-//                            updateChartData(activities[index])
-//                        }
                     }
                 }
             }
         }
         return activitiesWithoutConflict.union(conflictSet)
-        
-//            .subtracting([activity.id])
     }
     
     private func updateChartData(_ activities: [Activity]) {

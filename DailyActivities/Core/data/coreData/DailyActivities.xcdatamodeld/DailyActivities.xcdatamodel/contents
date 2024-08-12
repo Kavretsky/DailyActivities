@@ -15,10 +15,10 @@
         <relationship name="color" maxCount="1" deletionRule="Cascade" destinationEntity="RGBAColorEntity" inverseName="type" inverseEntity="RGBAColorEntity"/>
     </entity>
     <entity name="RGBAColorEntity" representedClassName="RGBAColorEntity" syncable="YES">
-        <attribute name="alpha" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="blue" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="green" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="red" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="alpha" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="blue" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="green" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="red" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="type" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ActivityTypeEntity" inverseName="color" inverseEntity="ActivityTypeEntity"/>
     </entity>
 </model>

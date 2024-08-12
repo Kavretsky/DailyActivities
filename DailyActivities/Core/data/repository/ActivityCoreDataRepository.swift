@@ -5,8 +5,8 @@
 //  Created by Nikolay Kavretsky on 30.07.2024.
 //
 
-import Foundation
 import CoreData
+import Combine
 
 enum ActivityCoreDataRepositoryError: Error {
     case invalidActivityData
@@ -21,19 +21,31 @@ protocol ActivityWritableRepository {
     func addActivity(_ activity: Activity) async throws
     func updateActivity(_ activity: Activity) async throws
     func deleteActivity(_ activity: Activity) async throws
+    var activityDidChangedPublisher: PassthroughSubject<Bool, Never> { get }
 }
 
 final class ActivityCoreDataRepository: ActivityReadableRepository, ActivityWritableRepository {
     private var cachedActivitiesByDate: [Date: [Activity]] = [:]
+    {
+        didSet {
+            activityDidChangedPublisher.send(true)
+        }
+    }
+    
+    private(set) var activityDidChangedPublisher: PassthroughSubject<Bool, Never> = .init()
     let context: NSManagedObjectContext
     
     init(context: NSManagedObjectContext) {
         self.context = context
-        do {
-            let activities = try fetchActivitiesFromCoreData()
-            cachedActivitiesByDate = Dictionary(grouping: activities, by: { Calendar.current.startOfDay(for: $0.startDateTime) })
-        } catch {
-            print("failed to fetch activities from CoreData: \(error)" )
+        Task.detached(priority: .userInitiated) { [weak self] in
+            guard let self else { return }
+            do {
+                let activities = try fetchActivitiesFromCoreData()
+                    cachedActivitiesByDate = Dictionary(grouping: activities, by: { Calendar.current.startOfDay(for: $0.startDateTime) })
+                
+            } catch {
+                print("failed to fetch activities from CoreData: \(error)" )
+            }
         }
     }
     
@@ -82,8 +94,8 @@ final class ActivityCoreDataRepository: ActivityReadableRepository, ActivityWrit
             entity.typeID = activity.typeID
             try context.save()
         }
-        
         cachedActivitiesByDate[Calendar.current.startOfDay(for: activity.startDateTime)]?[index] = activity
+
     }
     
     func deleteActivity(_ activity: Activity) async throws {

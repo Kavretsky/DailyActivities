@@ -11,7 +11,7 @@ protocol ChartDataService {
     func chartData(for activities: [Activity]) -> [ActivityChartModel]
 }
 
-struct ChartDataServiceIml: ChartDataService {
+class ChartDataServiceIml: ChartDataService {
 
     private let typeRepository: ActivityTypeReadableRepository
     
@@ -25,7 +25,6 @@ struct ChartDataServiceIml: ChartDataService {
             let chartData = chartData(from: activity)
             result.append(contentsOf: chartData)
         }
-        
         return result
     }
     
@@ -53,5 +52,9 @@ struct ChartDataServiceIml: ChartDataService {
         }
         
         return result
+    }
+    
+    deinit {
+        print("\(self) deinit")
     }
 }

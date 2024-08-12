@@ -8,11 +8,11 @@
 import XCTest
 @testable import DailyActivities
 
-final class HistoryViewModelTest: XCTestCase {
-    
+//final class HistoryViewModelTest: XCTestCase {
+//    
 //    var viewModel: HistoryViewModel!
 //    var mockActivityRepository: HistoryRepository!
-//    var 
+//    
 //    
 //
 //    override func setUp() {
@@ -49,5 +49,5 @@ final class HistoryViewModelTest: XCTestCase {
 //        
 //        XCTAssertEqual(expectedYesterdayActivities, yesterdayActivities)
 //    }
-
-}
+//
+//}

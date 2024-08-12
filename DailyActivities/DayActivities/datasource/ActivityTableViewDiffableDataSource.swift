@@ -7,8 +7,8 @@
 
 import UIKit
 
-class ActivityTableViewDiffableDataSource: UITableViewDiffableDataSource<TodayActivitiesViewController.Section, AnyHashable> {
+class ActivityTableViewDiffableDataSource: UITableViewDiffableDataSource<DayActivitiesViewController.Section, AnyHashable> {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return TodayActivitiesViewController.Section(rawValue: section)?.header
+        return DayActivitiesViewController.Section(rawValue: section)?.header
     }
 }

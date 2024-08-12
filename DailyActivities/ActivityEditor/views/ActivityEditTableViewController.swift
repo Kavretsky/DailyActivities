@@ -14,9 +14,9 @@ protocol ActivityEditTableViewControllerDelegate: AnyObject {
 }
 
 final class ActivityEditTableViewController: UITableViewController {
-    private let types: [ActivityType]
-    private let activity: Activity
-    private var activityData: Activity.Data {
+    private var types: [ActivityType] = []
+    private var activity: Activity!
+    private var activityData: Activity.Data! {
         willSet {
             navigationItem.rightBarButtonItem?.isEnabled = !newValue.description.isEmpty
         }
@@ -41,11 +41,19 @@ final class ActivityEditTableViewController: UITableViewController {
         return sheetAlert
     }()
     
-    init(types: [ActivityType], activity: Activity) {
+    init() {
+        super.init(style: .insetGrouped)
+        tableView.register(TextViewTableViewCell.self, forCellReuseIdentifier: "TextViewTableViewCellReuseIdentifier")
+        tableView.register(ActivityTypePickerTableViewCell.self, forCellReuseIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier")
+        tableView.register(TimeStartTableViewCell.self, forCellReuseIdentifier: "TimeStartTableViewCellReuseIdentifier")
+        tableView.register(TimeFinishTableViewCell.self, forCellReuseIdentifier: "TimeFinishTableViewCellReuseIdentifier")
+        
+    }
+    
+    func setupWith(types: [ActivityType], activity: Activity) {
         self.types = types
         self.activity = activity
         activityData = activity.data
-        super.init(style: .insetGrouped)
     }
     
     required init?(coder: NSCoder) {
@@ -54,10 +62,6 @@ final class ActivityEditTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(TextViewTableViewCell.self, forCellReuseIdentifier: "TextViewTableViewCellReuseIdentifier")
-        tableView.register(ActivityTypePickerTableViewCell.self, forCellReuseIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier")
-        tableView.register(TimeStartTableViewCell.self, forCellReuseIdentifier: "TimeStartTableViewCellReuseIdentifier")
-        tableView.register(TimeFinishTableViewCell.self, forCellReuseIdentifier: "TimeFinishTableViewCellReuseIdentifier")
         self.navigationItem.title = "Activity"
         tableView.allowsSelection = false
         setupToolBar()
@@ -122,15 +126,12 @@ final class ActivityEditTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as? TextViewTableViewCell else {
-                fallthrough
-            }
-            
+            let cell = TextViewTableViewCell()
             cell.text = activity.description
             cell.delegate = self
             return cell
         case (0, 1):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityTypePickerTableViewCellReuseIdentifier", for: indexPath) as? ActivityTypePickerTableViewCell else { fallthrough }
+            let cell = ActivityTypePickerTableViewCell()
             cell.types = types
             cell.selectedTypeID = activity.typeID
             cell.delegate = self
@@ -138,13 +139,13 @@ final class ActivityEditTableViewController: UITableViewController {
             return cell
             
         case (1, 0):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TimeStartTableViewCellReuseIdentifier", for: indexPath) as? TimeStartTableViewCell else { fallthrough }
+            let cell = TimeStartTableViewCell()
             cell.time = activity.startDateTime
             cell.delegate = self
             return cell
             
         case (1, 1):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TimeFinishTableViewCellReuseIdentifier", for: indexPath) as? TimeFinishTableViewCell else { fallthrough }
+            let cell = TimeFinishTableViewCell()
             cell.time = activity.finishDateTime
             cell.minimumDate = activity.startDateTime
             cell.delegate = self
@@ -152,8 +153,7 @@ final class ActivityEditTableViewController: UITableViewController {
             return cell
             
         default:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCellReuseIdentifier", for: indexPath) as? TextViewTableViewCell else { return UITableViewCell() }
-            
+            let cell = TextViewTableViewCell()
             cell.text = activity.description
             cell.delegate = self
             return cell
