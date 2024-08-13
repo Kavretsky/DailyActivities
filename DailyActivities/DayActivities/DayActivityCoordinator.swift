@@ -36,12 +36,12 @@ final class DayActivityCoordinator: Coordinator {
     
     func start() {
         Task {
-            let dayActivityVM = DayActivityVM(activityRepository: activityRepository, typeRepository: activityTypeRepository, delegate: self, date: date)
-            let dayActivityVC = await DayActivitiesViewController(activityVM: dayActivityVM)
+            let dayActivityVM =  DayActivityVM(activityRepository: activityRepository, typeRepository: activityTypeRepository, delegate: self, date: date)
+            let dayActivityVC =  await DayActivitiesViewController(activityVM: dayActivityVM)
             if date.isSameDay(with: .now) {
-                await navigationController.setViewControllers([dayActivityVC], animated: false)
+                 await navigationController.setViewControllers([dayActivityVC], animated: false)
             } else {
-                await navigationController.pushViewController(dayActivityVC, animated: true)
+                 await navigationController.pushViewController(dayActivityVC, animated: true)
             }
         }
     }
@@ -57,7 +57,7 @@ extension DayActivityCoordinator: DayActivityVMDelegate {
             coordinator.start()
     }
     
-    func showHistory() {
+    @MainActor func showHistory() {
         guard let historyRepository = activityRepository as? HistoryRepository & ActivityReadableRepository else { return }
         let historyCoordinator = HistoryCoordinator(navigationController: navigationController, activityTypeRepository: activityTypeRepository, activityRepository: historyRepository)
         historyCoordinator.start()

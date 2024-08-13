@@ -78,12 +78,12 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "LIBDISPATCH_COOPERATIVE_POOL"
-            value = "1"
+            value = "0"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "com.apple.CoreData.ConcurrencyDebug"
-            value = "1"
+            value = "0"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

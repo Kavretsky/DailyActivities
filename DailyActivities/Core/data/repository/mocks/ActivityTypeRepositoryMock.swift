@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class ActivityTypeRepositoryMock: ActivityTypeReadableRepository {
     @Published var types: [ActivityType] = mockTypes
@@ -16,24 +17,24 @@ class ActivityTypeRepositoryMock: ActivityTypeReadableRepository {
 extension ActivityTypeRepositoryMock: ActivityTypeWritableRepository {
     func updateType(_ type: ActivityType, with data: ActivityType.Data) async throws {
         if let index = mockTypes.firstIndex(where: { $0.id == type.id }) {
-            mockTypes[index].update(from: type.data)
+            types[index].update(from: type.data)
         }
     }
     
     func addType(with data: ActivityType.Data) async throws -> ActivityType {
         let newType = ActivityType(data: data)
-        mockTypes.append(newType)
+        types.append(newType)
         return newType
     }
     
     func deleteType(_ type: ActivityType) async throws {
         if let index = mockTypes.firstIndex(where: { $0.id == type.id }) {
-            mockTypes[index].isActive = false
+            types[index].isActive = false
         }
     }
 }
 
-fileprivate var mockTypes: [ActivityType] = [
+fileprivate let mockTypes: [ActivityType] = [
     ActivityType(
         id: "8A94FA14-5D6D-4A94-9D61-1A8B16C70D48",
         emoji: "🏃‍♂️",

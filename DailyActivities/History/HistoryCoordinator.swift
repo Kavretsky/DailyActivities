@@ -19,7 +19,7 @@ final class HistoryCoordinator: Coordinator {
         self.activityRepository = activityRepository
     }
     
-    func start() {
+    @MainActor func start() {
         let chartDataService = ChartDataServiceIml(typeRepository: activityTypeRepository)
         let historyVM = HistoryViewModel(historyService: activityRepository, chartDataService: chartDataService)
         historyVM.delegate = self

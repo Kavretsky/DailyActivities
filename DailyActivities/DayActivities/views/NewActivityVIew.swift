@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Combine
 
 protocol NewActivityViewDelegate: AnyObject {
     func addNewActivity(description: String, typeID: String)
@@ -17,18 +16,20 @@ final class NewActivityView: UIView {
     
     private var types: [ActivityType] {
         didSet {
+            guard !types.isEmpty else { return }
             chosenIndex %= types.count
             descriptionTF.placeholder = self.chosenType.description
             typeButton.setTitle(self.chosenType.emoji, for: .normal)
             typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
+            if oldValue.isEmpty {
+                setupUI()
+            }
         }
     }
     private var chosenIndex = 0
     private var chosenType: ActivityType {
         types[chosenIndex]
     }
-    
-    private var cancellables = Set<AnyCancellable>()
     
     weak var delegate: NewActivityViewDelegate?
 
@@ -119,7 +120,9 @@ final class NewActivityView: UIView {
     init(types: [ActivityType]) {
         self.types = types
         super.init(frame: .null)
-        setupUI()
+        if !types.isEmpty {
+            setupUI()
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -222,7 +225,7 @@ final class NewActivityView: UIView {
         typeButton.setTitle(chosenType.emoji, for: .normal)
         descriptionTF.placeholder = chosenType.description
         
-        UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.allowAnimatedContent, .allowUserInteraction]) {
             self.typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
         }
     }
@@ -268,7 +271,6 @@ final class NewActivityView: UIView {
     }
 
     deinit {
-        cancellables.forEach { $0.cancel() }
     }
 }
 

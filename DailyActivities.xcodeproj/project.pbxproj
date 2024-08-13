@@ -89,7 +89,7 @@
 		7630E0432BEBB03F00F41000 /* DailyActivitiesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DailyActivitiesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7630E0452BEBB03F00F41000 /* DailyActivitiesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyActivitiesUITests.swift; sourceTree = "<group>"; };
 		7630E0472BEBB03F00F41000 /* DailyActivitiesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyActivitiesUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		7638BB9C2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityTableViewDiffableDataSource.swift; path = DailyActivities/TodayActivities/datasource/ActivityTableViewDiffableDataSource.swift; sourceTree = SOURCE_ROOT; };
+		7638BB9C2B345D1F004DE36D /* ActivityTableViewDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityTableViewDiffableDataSource.swift; path = DailyActivities/DayActivities/datasource/ActivityTableViewDiffableDataSource.swift; sourceTree = SOURCE_ROOT; };
 		7642D73F2B035B510035E225 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
 		7642D7452B03E0B90035E225 /* TimeStartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStartTableViewCell.swift; sourceTree = "<group>"; };
 		7642D7472B03E8BB0035E225 /* TimeFinishTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFinishTableViewCell.swift; sourceTree = "<group>"; };
@@ -932,6 +932,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kavretsky.DailyActivities;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -961,6 +962,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kavretsky.DailyActivities;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

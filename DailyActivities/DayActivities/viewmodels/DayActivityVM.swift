@@ -13,7 +13,6 @@ protocol DayActivityVMDelegate: AnyObject {
     func showTypeManager()
     func showHistory()
 }
-
 final class DayActivityVM: ObservableObject {
     @Published private(set) var activities = [Activity]()
     @Published private(set) var activeTypes: OrderedSet<ActivityType> = []
@@ -24,14 +23,17 @@ final class DayActivityVM: ObservableObject {
     private var updateLastActivityChartDataTimer: Timer?
     private let delegate: DayActivityVMDelegate
     
-    private(set) var conflictActivityDictionary: [Activity.ID: Set<Activity.ID>] = [:]
+    private var conflictActivitiesID: Set<Activity.ID> = .init()
+    
     @Published private(set) var activitiesToReconfigure = Set<Activity.ID>()
+    let privateQueue: DispatchQueue
     
     private let chartDataService: ChartDataService
     private let activityRepository: ActivityReadableRepository & ActivityWritableRepository
     private let typeRepository: ActivityTypeReadableRepository
     private var cancellables = Set<AnyCancellable>()
-    private let mutex = NSLock()
+    private let conflictActivitiesMutex = NSLock()
+    private let timerMutex = NSRecursiveLock()
     let date: Date
 
     init(activityRepository: ActivityReadableRepository & ActivityWritableRepository, typeRepository: ActivityTypeReadableRepository, delegate: DayActivityVMDelegate, date: Date) {
@@ -40,7 +42,7 @@ final class DayActivityVM: ObservableObject {
         self.activityRepository = activityRepository
         self.typeRepository = typeRepository
         self.chartDataService = ChartDataServiceIml(typeRepository: typeRepository)
-        activities = activityRepository.fetchActivities(for: date)
+        self .privateQueue = DispatchQueue(label: "DayAcitvityVM\(date.formatted())Queue", target: .global(qos: .userInteractive))
         typeSet = .init(typeRepository.types)
         activeTypes = .init(typeRepository.types.filter { $0.isActive })
         typeRepository.typesPublisher
@@ -55,18 +57,23 @@ final class DayActivityVM: ObservableObject {
             .store(in: &cancellables)
         
         activityRepository.activityDidChangedPublisher
-            .receive(on: DispatchQueue.global())
+            .receive(on: privateQueue)
             .sink { [weak self] _ in
                 guard let self else { return }
-                let newActivities = activityRepository.fetchActivities(for: date)
-                var newActivitiesToReconfigure = Set<Activity.ID>()
-                for activity in newActivities {
-                    let conflicts = self.detectActivityTimeConflicts(for: activity)
-                    newActivitiesToReconfigure = newActivitiesToReconfigure.union(updateConflictDictionary(for: activity, with: conflictActivityDictionary[activity.id, default: conflicts]))
-                }
+                var newActivities = activityRepository.fetchActivities(for: date)
+//                guard newActivities != activities else { return }
+                newActivities.sort(by: { $0.startDateTime < $1.startDateTime })
+                var newConflicts = Set<Activity.ID>()
+//                var conflictActivityDictionary: [Activity.ID: Set<Activity.ID>] = [:]
+                newConflicts = Set(getOverlappingActivitiesSet(activities: newActivities).map { $0.id })
                 self.activities = newActivities
-                activitiesToReconfigure = newActivitiesToReconfigure
+                conflictActivitiesMutex.withLock {
+                    let oldConflicts = self.conflictActivitiesID
+                    self.conflictActivitiesID = newConflicts
+                    self.activitiesToReconfigure = newConflicts.union(oldConflicts)
+                }
                 updateChartData(activities)
+                updateTimer()
             }
             .store(in: &cancellables)
     }
@@ -74,20 +81,22 @@ final class DayActivityVM: ObservableObject {
     // MARK: Intents
     func addActivity(description: String, typeID: String) {
         if let index = activities.firstIndex(where: { $0.finishDateTime == nil }) {
-            activities[index].finishDateTime = .now
             activitiesToReconfigure = [activities[index].id]
         }
-        let activity = Activity(description: description, typeID: typeID, startDateTime: .now)
-        activities.append(activity)
-        Task {
+        
+        var activity = Activity(description: description, typeID: typeID, startDateTime: activities.last?.finishDateTime ?? date, finishDateTime: activities.last?.finishDateTime ?? date)
+        if date.isSameDay(with: Date()) {
+            activity.startDateTime = .now
+            activity.finishDateTime = nil
+        }
+        
+        Task { [activity] in
             do {
                 try await activityRepository.addActivity(activity)
             } catch {
                 print("failed to add activity: \(error.localizedDescription)")
             }
         }
-        updateChartData(activities)
-        updateTimer()
     }
     
     func updateActivity(_ activityToUpdate: Activity, with data: Activity.Data) async {
@@ -102,17 +111,13 @@ final class DayActivityVM: ObservableObject {
         } catch {
             print("failed to save activity: \(error.localizedDescription)")
         }
-        var newActivitiesToReconfigure = Set<Activity.ID>()
-        newActivitiesToReconfigure.insert(activityToUpdate.id)
-        
-        if activityToUpdate.startDateTime != data.startDateTime || activityToUpdate.finishDateTime != data.finishDateTime {
-            let detectedConflicts = detectActivityTimeConflicts(for: activities[index])
-            newActivitiesToReconfigure = newActivitiesToReconfigure.union(updateConflictDictionary(for: activityToUpdate, with: detectedConflicts))
+        activitiesToReconfigure = [activityToUpdate.id]
+    }
+    
+    func isConflictActivity(with id: Activity.ID) -> Bool {
+        conflictActivitiesMutex.withLock {
+            conflictActivitiesID.contains(id)
         }
-        activitiesToReconfigure = newActivitiesToReconfigure
-//        updateChartData(activities[activityToUpdate])
-        updateChartData(activities)
-        updateTimer()
     }
     
     func deleteActivity(_ activityToDelete: Activity) async {
@@ -123,104 +128,64 @@ final class DayActivityVM: ObservableObject {
         } catch {
             print("failed delete activity: \(error.localizedDescription)")
         }
+        conflictActivitiesID.remove(activityToDelete.id)
         activities.remove(at: index)
-        var newActivitiesToReconfigure = updateConflictDictionary(for: activityToDelete, with: [])
-        newActivitiesToReconfigure.remove(activityToDelete.id)
-        updateChartData(activities)
-        updateTimer()
-        activitiesToReconfigure = newActivitiesToReconfigure
+//
+//        updateChartData(activities)
+//        updateTimer()
         
     }
     
-    private func deleteActivityChartData(for activity: Activity) {
-        var chartData = chartData
-        chartData.removeAll { $0.activityID == activity.id }
-        self.chartData = chartData
-    }
-    
-    // MARK: Conflicts
-    private func detectActivityTimeConflicts(for activity: Activity) -> Set<Activity.ID> {
-        activities.sort { $0.startDateTime < $1.startDateTime }
-        guard let activityIndex = activities.index(matching: activity) else { return [] }
-        var conflictActivitiesID = Set<Activity.ID>()
-        var currentCheckIndex = activityIndex - 1
-        while currentCheckIndex >= 0 {
-            if activities[currentCheckIndex].finishDateTime ?? .now > activity.startDateTime {
-                
-                conflictActivitiesID.insert(activities[currentCheckIndex].id)
-                currentCheckIndex -= 1
-            } else {
-                break
-            }
-        }
-        currentCheckIndex = activityIndex + 1
-        while currentCheckIndex <= activities.count - 1 {
-            if activities[currentCheckIndex].startDateTime < activity.finishDateTime ?? .now {
-                conflictActivitiesID.insert(activities[currentCheckIndex].id)
-                currentCheckIndex += 1
-            } else {
-                break
-            }
-        }
-        
-        return conflictActivitiesID
-    }
-    
-    private func isActivityConflict(_ lhs: Activity.ID, _ rhs: Activity.ID) -> Bool {
-        guard let lhsActivity = activities.first(where: {$0.id == lhs}),
-              let rhsActivity = activities.first(where: {$0.id == rhs})
-        else { return false }
-        
-        return lhsActivity.finishDateTime ?? .now > rhsActivity.startDateTime && lhsActivity.startDateTime < rhsActivity.finishDateTime ?? .now
-    }
-    
-    private func updateConflictDictionary(for activity: Activity, with conflictSet: Set<Activity.ID>) -> Set<Activity.ID> {
-        let lastConflictActivities = conflictActivityDictionary[activity.id] ?? []
-        var activitiesWithoutConflict = lastConflictActivities.subtracting(conflictSet)
-        mutex.withLock {
-            conflictActivityDictionary.removeValue(forKey: activity.id)
-        }
-        
-        if !conflictSet.isEmpty {
-            mutex.withLock {
-                conflictActivityDictionary[activity.id] = conflictSet
-            }
-        }
-        
-        for activityID in conflictActivityDictionary.keys {
-            if let conflicts = conflictActivityDictionary[activityID], conflicts.contains(activity.id) {
-                if !isActivityConflict(activityID, activity.id) {
-                    if conflictActivityDictionary[activityID]!.count > 1 {
-                        mutex.withLock {
-                            conflictActivityDictionary[activityID]?.remove(activity.id)
-                        }
-                    } else {
-                        activitiesWithoutConflict.insert(activityID)
-                        mutex.withLock {
-                            conflictActivityDictionary.removeValue(forKey: activityID)
-                        }
-                    }
+    func getOverlappingActivitiesSet(activities: [Activity]) -> Set<Activity> {
+        var overlappingActivities: Set<Activity> = []
+
+        let sortedActivities = activities.sorted { $0.startDateTime < $1.startDateTime }
+
+        for currentIndex in 0..<sortedActivities.count {
+            let currentActivity = sortedActivities[currentIndex]
+            let currentEnd = currentActivity.finishDateTime ?? Date.distantFuture
+
+            for nextIndex in currentIndex + 1..<sortedActivities.count {
+                let nextActivity = sortedActivities[nextIndex]
+
+                if nextActivity.startDateTime >= currentEnd {
+                    break
+                }
+
+                let nextEnd = nextActivity.finishDateTime ?? Date.distantFuture
+                if currentActivity.startDateTime < nextEnd {
+                    overlappingActivities.insert(currentActivity)
+                    overlappingActivities.insert(nextActivity)
                 }
             }
         }
-        return activitiesWithoutConflict.union(conflictSet)
+
+        return overlappingActivities
     }
+
     
     private func updateChartData(_ activities: [Activity]) {
-        let activitiesWithoutConflict = activities.filter { activity in conflictActivityDictionary[activity.id] == nil && !conflictActivityDictionary.values.contains(where: { $0.contains(activity.id) }) }
+        var currentConflicts = Set<Activity.ID>()
+        conflictActivitiesMutex.withLock {
+            currentConflicts = conflictActivitiesID
+        }
+
+        let activitiesWithoutConflict = activities.filter { !currentConflicts.contains($0.id) }
         let newChartData = chartDataService.chartData(for: activitiesWithoutConflict)
         
         self.chartData = newChartData
     }
     
     private func updateTimer() {
-        updateLastActivityChartDataTimer?.invalidate()
-        if let activity = activities.first(where: {$0.finishDateTime == nil}) {
-            updateLastActivityChartDataTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: { [weak self] _ in
-                self?.updateChartData([activity])
-            })
-        } else {
+        timerMutex.withLock {
             updateLastActivityChartDataTimer?.invalidate()
+            if let activity = activities.first(where: {$0.finishDateTime == nil}) {
+                updateLastActivityChartDataTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: { [weak self] _ in
+                    self?.updateChartData([activity])
+                })
+            } else {
+                updateLastActivityChartDataTimer?.invalidate()
+            }
         }
     }
     

@@ -69,6 +69,11 @@ final class ActivityEditTableViewController: UITableViewController {
         setupDeleteActivityAlert()
     }
     
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        tableView.reloadData()
+    }
+    
     private func setupDeleteButton() {
         view.addSubview(deleteButton)
         deleteButton.addTarget(nil, action: #selector(showDeleteActivityAlert), for: .touchUpInside)

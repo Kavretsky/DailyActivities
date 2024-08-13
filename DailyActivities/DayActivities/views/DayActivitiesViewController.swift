@@ -171,6 +171,13 @@ final class DayActivitiesViewController: UIViewController {
                     newSnapshot.appendItems(activitiesID, toSection: Section.activities)
                     newSnapshot.appendItems(["DayActivityChart"], toSection: Section.chart)
                     self.dataSource.apply(newSnapshot, animatingDifferences: true)
+                    if self.snapshot.itemIdentifiers.count < newSnapshot.itemIdentifiers.count {
+                        DispatchQueue.main.async {
+                            self.activityTableView.scrollToRow(at: IndexPath(row: activitiesID.count - 1, section: 1), at: .top, animated: true)
+                        }
+                    }
+                    
+                    self.snapshot = newSnapshot
                 }
             }
             .store(in: &cancellables)
@@ -269,8 +276,7 @@ final class DayActivitiesViewController: UIViewController {
                 }
                 
                 var durationAttributedString: NSMutableAttributedString
-                let isConflict = dayActivityVM.conflictActivityDictionary.values.contains(where: {$0.contains(activity.id) }) || dayActivityVM.conflictActivityDictionary.keys.contains(activity.id)
-                
+                let isConflict = dayActivityVM.isConflictActivity(with: activity.id)
                 if isConflict {
                     durationString = "Conflict  " + durationString
                     durationAttributedString = .init(string: durationString)
@@ -355,11 +361,9 @@ extension DayActivitiesViewController: UITableViewDelegate {
         guard Section(rawValue: indexPath.section) == .activities else { return }
         dismissKeyboard()
         lastSelectedIndexPath = indexPath
-        Task {
-            activityEditVC.setupWith(types: dayActivityVM.activeTypes.elements, activity: dayActivityVM.activities[indexPath.row])
-            let activityEditNC = UINavigationController(rootViewController: activityEditVC)
-            self.present(activityEditNC, animated: true)
-        }
+        activityEditVC.setupWith(types: dayActivityVM.activeTypes.elements, activity: dayActivityVM.activities[indexPath.row])
+        let activityEditNC = UINavigationController(rootViewController: activityEditVC)
+        self.present(activityEditNC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) ->

@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import Combine
 
 enum ActivityTypeCoreDataRepositoryError: Error {
     case invalidTypeData
@@ -25,24 +26,19 @@ protocol ActivityTypeWritableRepository {
     func addType(with data: ActivityType.Data) async throws -> ActivityType
 }
 
-final class ActivityTypeCoreDataRepository: ObservableObject, ActivityTypeReadableRepository, ActivityTypeWritableRepository {
+final class ActivityTypeCoreDataRepository: ActivityTypeReadableRepository, ActivityTypeWritableRepository {
     @Published private(set) var types: [ActivityType] = []
     var typesPublisher: Published<[ActivityType]>.Publisher { $types }
     private let context: NSManagedObjectContext
     
     init(context: NSManagedObjectContext) {
         self.context = context
-        Task.detached(priority: .userInitiated) { [weak self] in
-            guard let self else { return }
-            do {
-                types = try fetchTypesFromCoreData()
-                if types.isEmpty {
-                    loadDefaultTypes()
-                }
-            } catch {
-                print("failed to fetch types from CoreData: \(error.localizedDescription)")
-            }
-        }
+        Task { try loadTypes() }
+    }
+    
+    private func loadTypes() throws {
+        let types = try fetchTypesFromCoreData()
+        self.types = types
     }
     
     private func fetchTypesFromCoreData() throws -> [ActivityType] {

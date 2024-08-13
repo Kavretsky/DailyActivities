@@ -55,7 +55,7 @@ class ActivityRepositoryMock: ActivityReadableRepository {
 }
 
 extension ActivityRepositoryMock: ActivityWritableRepository {
-    var activityDidChangedPublisher: PassthroughSubject<Bool, Never> { .init() }
+    var activityDidChangedPublisher: CurrentValueSubject<Bool, Never> { .init(true) }
     
     func addActivity(_ activity: Activity) async throws {
         mockActivities.append(activity)

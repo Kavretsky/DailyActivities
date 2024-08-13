@@ -16,7 +16,7 @@ protocol HistoryRepository {
 protocol HistoryViewModelDelegate: AnyObject {
     func openDayActivityVC(for date: Date)
 }
-
+@MainActor
 final class HistoryViewModel: ObservableObject {
     private let historyService: HistoryRepository
     private let chartDataService: ChartDataService
@@ -62,20 +62,19 @@ final class HistoryViewModel: ObservableObject {
         
     }
     
-    func loadData() {
-        Task {
-            let result = try await historyService.fetchHistoryDates().filter { !$0.isSameDay(with: .now) }
-            
-            for date in result {
-                activityDic[date] = await loadActivities(for: date)
-                chartDataDic[date] = chartDataService.chartData(for: activityDic[date] ?? [])
-            }
-            let dates = Dictionary(grouping: result) { date in
-                return Calendar.current.dateComponents([.year], from: date)
-            }
-                headers = dates.keys.map { $0 }
-                self.dates = dates
-            
+    func loadData() async throws {
+        
+        let result = try await historyService.fetchHistoryDates().filter { !$0.isSameDay(with: .now) }
+        
+        for date in result {
+            activityDic[date] = await loadActivities(for: date)
+            chartDataDic[date] = chartDataService.chartData(for: activityDic[date] ?? [])
         }
+        let dates = Dictionary(grouping: result) { date in
+            return Calendar.current.dateComponents([.year], from: date)
+        }
+        let headers = dates.keys.map { $0 }
+        self.headers = headers
+        self.dates = dates
     }
 }

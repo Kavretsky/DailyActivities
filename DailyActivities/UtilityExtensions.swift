@@ -43,8 +43,8 @@ extension Date {
         Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
     }
     
-    static func startOfDay() -> Date {
-        return Calendar.current.startOfDay(for: Date())
+    static func startOfDay(for date: Date = Date()) -> Date {
+        return Calendar.current.startOfDay(for: date)
     }
 }
 

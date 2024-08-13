@@ -27,7 +27,11 @@ struct Activity: Identifiable, Hashable, Equatable {
     }
     
     static func == (lhs: Activity, rhs: Activity) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id &&
+        lhs.description == rhs.description &&
+        lhs.startDateTime == rhs.startDateTime &&
+        lhs.finishDateTime == rhs.finishDateTime &&
+        lhs.typeID == rhs.typeID
     }
     
     func hash(into hasher: inout Hasher) {
