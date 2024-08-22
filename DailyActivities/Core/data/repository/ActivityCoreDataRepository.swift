@@ -25,8 +25,7 @@ protocol ActivityWritableRepository {
 }
 
 final class ActivityCoreDataRepository: ActivityReadableRepository, ActivityWritableRepository {
-    @Published private var cachedActivitiesByDate: [Date: [Activity]] = [:]
-    {
+    @Published private var cachedActivitiesByDate: [Date: [Activity]] = [:] {
         didSet {
             activityDidChangedPublisher.send(false)
         }
@@ -90,7 +89,9 @@ final class ActivityCoreDataRepository: ActivityReadableRepository, ActivityWrit
     }
     
     func updateActivity(_ activity: Activity) async throws {
-        guard let index = cachedActivitiesByDate[Calendar.current.startOfDay(for: activity.startDateTime)]?.firstIndex(where: { $0.id == activity.id }) else { throw ActivityCoreDataRepositoryError.activityNotFound }
+        guard let index = cachedActivitiesByDate[Calendar.current.startOfDay(for: activity.startDateTime)]?.firstIndex(where: {
+            $0.id == activity.id
+        }) else { throw ActivityCoreDataRepositoryError.activityNotFound }
         guard activity.startDateTime <= activity.finishDateTime ?? .now else { throw ActivityCoreDataRepositoryError.invalidActivityData }
         
         try await context.perform { [weak self] in

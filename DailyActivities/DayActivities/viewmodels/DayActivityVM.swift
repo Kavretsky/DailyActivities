@@ -163,7 +163,6 @@ final class DayActivityVM: ObservableObject {
         return overlappingActivities
     }
 
-    
     private func updateChartData(_ activities: [Activity]) {
         var currentConflicts = Set<Activity.ID>()
         conflictActivitiesMutex.withLock {

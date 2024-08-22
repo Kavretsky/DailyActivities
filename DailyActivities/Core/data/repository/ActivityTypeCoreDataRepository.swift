@@ -38,7 +38,11 @@ final class ActivityTypeCoreDataRepository: ActivityTypeReadableRepository, Acti
     
     private func loadTypes() throws {
         let types = try fetchTypesFromCoreData()
-        self.types = types
+        if types.isEmpty {
+            loadDefaultTypes()
+        } else {
+            self.types = types
+        }
     }
     
     private func fetchTypesFromCoreData() throws -> [ActivityType] {
@@ -80,25 +84,23 @@ final class ActivityTypeCoreDataRepository: ActivityTypeReadableRepository, Acti
         try await context.perform { [weak self] in
             guard let self else { return }
             guard let entity = try getTypeEntity(by: type.id) else { return }
-            entity.id = type.id
-            entity.emoji = type.emoji
-            entity.isActive = type.isActive
-            entity.typeDescription = type.description
+            entity.emoji = data.emoji
+            entity.typeDescription = data.description
             if entity.color == nil {
                 entity.color = RGBAColorEntity(context: context)
             }
-            entity.color?.alpha = type.backgroundRGBA.alpha
-            entity.color?.red = type.backgroundRGBA.red
-            entity.color?.green = type.backgroundRGBA.green
-            entity.color?.blue = type.backgroundRGBA.blue
+            entity.color?.alpha = data.backgroundRGBA.alpha
+            entity.color?.red = data.backgroundRGBA.red
+            entity.color?.green = data.backgroundRGBA.green
+            entity.color?.blue = data.backgroundRGBA.blue
             do {
                 try context.save()
+                types[index].update(from: data)
             } catch {
                 context.rollback()
                 throw error
             }
         }
-        types[index].update(from: data)
     }
     
     func deleteType(_ type: ActivityType) async throws {
