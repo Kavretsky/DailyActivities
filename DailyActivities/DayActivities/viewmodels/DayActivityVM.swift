@@ -80,14 +80,13 @@ final class DayActivityVM: ObservableObject {
     
     // MARK: Intents
     func addActivity(description: String, typeID: String) {
-        if let index = activities.firstIndex(where: { $0.finishDateTime == nil }) {
-            activitiesToReconfigure = [activities[index].id]
-        }
-        
         var activity = Activity(description: description, typeID: typeID, startDateTime: activities.last?.finishDateTime ?? date, finishDateTime: activities.last?.finishDateTime ?? date)
         if date.isSameDay(with: Date()) {
             activity.startDateTime = .now
             activity.finishDateTime = nil
+        }
+        if let index = activities.firstIndex(where: { $0.finishDateTime == nil }) {
+            activitiesToReconfigure = [activities[index].id]
         }
         
         Task { [activity] in
@@ -124,12 +123,11 @@ final class DayActivityVM: ObservableObject {
         guard let index = activities.firstIndex(where: {$0.id == activityToDelete.id}) else { return }
         do {
             try await activityRepository.deleteActivity(activityToDelete)
-            
+//            conflictActivitiesID.remove(activityToDelete.id)
+//            activities.remove(at: index)
         } catch {
             print("failed delete activity: \(error.localizedDescription)")
         }
-        conflictActivitiesID.remove(activityToDelete.id)
-        activities.remove(at: index)
 //
 //        updateChartData(activities)
 //        updateTimer()
