@@ -111,3 +111,10 @@ extension Array where Element: Hashable {
         return buffer
     }
 }
+
+extension Date {
+    static var yesterday: Date {
+        let day = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
+        return .startOfDay(for: day)
+    }
+}

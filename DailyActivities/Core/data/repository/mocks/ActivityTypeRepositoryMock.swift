@@ -12,6 +12,9 @@ class ActivityTypeRepositoryMock: ActivityTypeReadableRepository {
     @Published var types: [ActivityType] = mockTypes
     
     var typesPublisher: Published<[ActivityType]>.Publisher { $types }
+    init() {
+        types = mockTypes
+    }
 }
 
 extension ActivityTypeRepositoryMock: ActivityTypeWritableRepository {

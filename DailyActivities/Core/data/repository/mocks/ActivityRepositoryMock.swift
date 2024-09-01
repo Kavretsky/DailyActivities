@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 class ActivityRepositoryMock: ActivityReadableRepository {
+    var shouldThrowError = false
     private(set) var mockActivities: [Activity] = [
         Activity(
             description: "Run with dog",
@@ -73,6 +74,9 @@ extension ActivityRepositoryMock: ActivityWritableRepository {
 
 extension ActivityRepositoryMock: HistoryRepository {
     func fetchHistoryDates() async throws -> [Date] {
+        if shouldThrowError {
+            throw NSError(domain: "TestError", code: 1, userInfo: nil)
+        }
         return mockActivities.map { Calendar.current.startOfDay(for: $0.startDateTime )}.uniqued().sorted(by: >)
     }
 }

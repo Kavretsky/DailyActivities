@@ -42,6 +42,8 @@
 		767CEDF32AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */; };
 		767CEDF52B024822009CEA4D /* ActivityTypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */; };
 		768A1AED2A914D48008C4CAC /* TypeManagerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */; };
+		768BAF852C84854A00DFD3A8 /* MockChartDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768BAF842C84854A00DFD3A8 /* MockChartDataService.swift */; };
+		768BAF872C84CE6600DFD3A8 /* MockHistoryVMDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768BAF862C84CE6600DFD3A8 /* MockHistoryVMDelegate.swift */; };
 		76A2C4C42C5BA3F00026F810 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 76A2C4C32C5BA3F00026F810 /* Collections */; };
 		76B0896C2BEB68FB00EA63D1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 76B0896B2BEB68FB00EA63D1 /* README.md */; };
 		76CA332E2C5C2C4200AC3B92 /* HistoryViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CA332D2C5C2C4200AC3B92 /* HistoryViewModelTest.swift */; };
@@ -119,6 +121,8 @@
 		767CEDF22AFD63FD009CEA4D /* ActivityTypePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypePickerTableViewCell.swift; sourceTree = "<group>"; };
 		767CEDF42B024822009CEA4D /* ActivityTypeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTypeCollectionViewCell.swift; sourceTree = "<group>"; };
 		768A1AEC2A914D48008C4CAC /* TypeManagerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManagerTableViewCell.swift; sourceTree = "<group>"; };
+		768BAF842C84854A00DFD3A8 /* MockChartDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockChartDataService.swift; sourceTree = "<group>"; };
+		768BAF862C84CE6600DFD3A8 /* MockHistoryVMDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryVMDelegate.swift; sourceTree = "<group>"; };
 		76B0896B2BEB68FB00EA63D1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		76CA33212C5C2BE200AC3B92 /* DailyActivitiesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DailyActivitiesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		76CA332D2C5C2C4200AC3B92 /* HistoryViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModelTest.swift; sourceTree = "<group>"; };
@@ -409,6 +413,15 @@
 			path = model;
 			sourceTree = "<group>";
 		};
+		768BAF832C8484F700DFD3A8 /* mocks */ = {
+			isa = PBXGroup;
+			children = (
+				768BAF842C84854A00DFD3A8 /* MockChartDataService.swift */,
+				768BAF862C84CE6600DFD3A8 /* MockHistoryVMDelegate.swift */,
+			);
+			path = mocks;
+			sourceTree = "<group>";
+		};
 		76CA331A2C5C25FF00AC3B92 /* History */ = {
 			isa = PBXGroup;
 			children = (
@@ -440,6 +453,7 @@
 		76CA33222C5C2BE200AC3B92 /* DailyActivitiesTests */ = {
 			isa = PBXGroup;
 			children = (
+				768BAF832C8484F700DFD3A8 /* mocks */,
 				76CA332B2C5C2C0E00AC3B92 /* History */,
 			);
 			path = DailyActivitiesTests;
@@ -710,6 +724,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				768BAF852C84854A00DFD3A8 /* MockChartDataService.swift in Sources */,
+				768BAF872C84CE6600DFD3A8 /* MockHistoryVMDelegate.swift in Sources */,
 				76CA332E2C5C2C4200AC3B92 /* HistoryViewModelTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

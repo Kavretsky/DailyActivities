@@ -88,3 +88,10 @@ class HistoryTableViewController: UITableViewController {
         print("HistoryTableView deinit")
     }
 }
+
+#Preview {
+    let historyService = ActivityRepositoryMock()
+    let chartDataService = ChartDataServiceIml(typeRepository: ActivityTypeRepositoryMock())
+    let historyVM = HistoryViewModel(historyService: historyService, chartDataService: chartDataService)
+    return HistoryTableViewController(historyVM: historyVM)
+}

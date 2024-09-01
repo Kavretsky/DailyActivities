@@ -44,15 +44,6 @@ final class HistoryViewModel: ObservableObject {
         print("HistoryViewModel deinit")
     }
     
-    private func loadHistoryDates() async -> [Date] {
-        do {
-            return try await historyService.fetchHistoryDates()
-        } catch {
-            print("failed to load history dates: \(error.localizedDescription)")
-        }
-        return []
-    }
-    
     func didSelectRowAt(_ indexPath: IndexPath) async {
         let key = headers[indexPath.section]
         let daysArray = dates[key, default: []]

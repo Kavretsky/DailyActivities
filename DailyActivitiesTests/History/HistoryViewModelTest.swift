@@ -8,46 +8,61 @@
 import XCTest
 @testable import DailyActivities
 
-//final class HistoryViewModelTest: XCTestCase {
-//    
-//    var viewModel: HistoryViewModel!
-//    var mockActivityRepository: HistoryRepository!
-//    
-//    
-//
-//    override func setUp() {
-//        super.setUp()
-//        mockActivityRepository = ActivityRepositoryMock()
-//        viewModel = HistoryViewModel(historyService: mockActivityRepository)
-//    }
-//
-//    override func tearDown()  {
-//        mockActivityRepository = nil
-//        viewModel = nil
-//        super.tearDown()
-//    }
-//
-//    func testLoadHistoryDates() async {
-//        let dates = await viewModel.loadHistoryDates()
-//        let expectedDates = try? await mockActivityRepository.fetchHistoryDates()
-//        
-//        XCTAssertEqual(dates, expectedDates)
-//    }
-//    
-//    func testLoadActivitiesForDate() async {
-//        let today = Date()
-//        let expectedTodayActivities = try? await mockActivityRepository.fetchActivities(for: today)
-//        let todayActivities = await viewModel.loadActivities(for: today)
-//        
-//        XCTAssertEqual(expectedTodayActivities, todayActivities)
-//        
-//        
-//        
-//        let yesterday = Date().addingTimeInterval(-86400)
-//        let expectedYesterdayActivities = try? await mockActivityRepository.fetchActivities(for: yesterday)
-//        let yesterdayActivities = await viewModel.loadActivities(for: yesterday)
-//        
-//        XCTAssertEqual(expectedYesterdayActivities, yesterdayActivities)
-//    }
-//
-//}
+@MainActor
+final class HistoryViewModelTest: XCTestCase {
+    
+    var viewModel: HistoryViewModel!
+    var mockActivityRepository: ActivityRepositoryMock!
+    var chartDataService: ChartDataService!
+    var delegate: MockHistoryVMDelegate!
+    
+
+    override func setUp() {
+        super.setUp()
+        mockActivityRepository = ActivityRepositoryMock()
+        chartDataService = MockChartDataService()
+        viewModel = HistoryViewModel(historyService: mockActivityRepository, chartDataService: chartDataService)
+        delegate = MockHistoryVMDelegate()
+        viewModel.delegate = delegate
+    }
+
+    override func tearDown()  {
+        mockActivityRepository = nil
+        viewModel = nil
+        super.tearDown()
+    }
+
+    func testLoadDataSuccess() async {
+        try? await viewModel.loadData()
+
+        XCTAssertEqual(viewModel.headers.count, 1)
+        XCTAssertEqual(viewModel.headers.first!, Calendar.current.dateComponents([.year], from: .now))
+        let key = viewModel.dates.keys.first!
+        XCTAssertEqual(viewModel.dates.keys.count, 1)
+        XCTAssertEqual(key, Calendar.current.dateComponents([.year], from: .now))
+        
+        XCTAssertEqual(viewModel.dates[key]?.count, 1)
+        XCTAssertEqual(viewModel.dates[key]!.first, .yesterday)
+    }
+    
+    func testLoadDataFailure() async {
+        mockActivityRepository.shouldThrowError = true
+        
+        do {
+            try await viewModel.loadData()
+            XCTFail("Expected an error to be thrown, but it wasn't.")
+        } catch {
+            XCTAssertTrue(error is NSError)
+        }
+    }
+    
+    func testDidSelectRowAt() async {
+        try? await viewModel.loadData()
+        
+        await viewModel.didSelectRowAt(IndexPath(item: 0, section: 0))
+        
+        XCTAssertEqual(delegate.date, .yesterday)
+        
+    }
+
+}
