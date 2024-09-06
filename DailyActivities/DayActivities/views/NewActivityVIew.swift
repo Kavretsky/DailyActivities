@@ -42,14 +42,12 @@ final class NewActivityView: UIView {
             }
             
             var typeSelectionActions = [UIAction]()
-            types.forEach { [weak self] type in
-                guard let self else { return }
+            types.forEach {  type in
                 let action = UIAction(title: type.emoji + " " + type.description,
                                       image: type == self.chosenType ? UIImage(systemName: "checkmark") : nil
                 ) { [weak self]  _ in
-                    guard let self else { return }
-                    self.chosenIndex = self.types.firstIndex(of: type) ?? 0
-                    self.animateTypeChange()
+                    self?.chosenIndex = self?.types.firstIndex(of: type) ?? 0
+                    self?.animateTypeChange()
                 }
                 typeSelectionActions.append(action)
             }
@@ -271,6 +269,22 @@ final class NewActivityView: UIView {
     
     func reconfigure(with newTypes: [ActivityType]) {
         self.types = newTypes
+        
+        var typeSelectionActions = [UIAction]()
+        newTypes.forEach { [weak self] type in
+            guard let self else { return }
+            let action = UIAction(title: type.emoji + " " + type.description,
+                                  image: type == self.chosenType ? UIImage(systemName: "checkmark") : nil
+            ) {  [weak self] _ in
+                self?.chosenIndex = self?.types.firstIndex(of: type) ?? 0
+                self?.animateTypeChange()
+            }
+            typeSelectionActions.append(action)
+        }
+        
+        let goToMenu = UIMenu(title: "Go to", children: typeSelectionActions)
+        menu = UIMenu(title: "", children: [menu.children.first!, goToMenu])
+        
     }
 
     deinit {
