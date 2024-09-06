@@ -31,7 +31,34 @@ final class NewActivityView: UIView {
         types[chosenIndex]
     }
     
-    weak var delegate: NewActivityViewDelegate?
+    weak var delegate: NewActivityViewDelegate? {
+        didSet {
+            guard oldValue == nil else { return }
+            let managerAction = UIAction(
+                title: NSLocalizedString("Type Manager", comment: ""),
+                image: UIImage(systemName: "slider.vertical.3")
+            ) { [weak self] _ in
+                self?.delegate?.showTypeManager()
+            }
+            
+            var typeSelectionActions = [UIAction]()
+            types.forEach { [weak self] type in
+                guard let self else { return }
+                let action = UIAction(title: type.emoji + " " + type.description,
+                                      image: type == self.chosenType ? UIImage(systemName: "checkmark") : nil
+                ) { [weak self]  _ in
+                    guard let self else { return }
+                    self.chosenIndex = self.types.firstIndex(of: type) ?? 0
+                    self.animateTypeChange()
+                }
+                typeSelectionActions.append(action)
+            }
+            
+            let goToMenu = UIMenu(title: "Go to", children: typeSelectionActions)
+            
+            self.menu = UIMenu(title: "", children: [managerAction, goToMenu])
+        }
+    }
 
     private var typeButton: UIButton = {
         let typeButton = UIButton(type: .custom)
@@ -91,31 +118,7 @@ final class NewActivityView: UIView {
     }()
     private var newActivitySV = UIStackView()
     
-    private lazy var menu: UIMenu = {
-        let managerAction = UIAction(
-            title: NSLocalizedString("Type Manager", comment: ""),
-            image: UIImage(systemName: "slider.vertical.3")
-        ) { [weak self] _ in
-            self?.delegate?.showTypeManager()
-        }
-        
-        var typeSelectionActions = [UIAction]()
-        types.forEach { [weak self] type in
-            guard let self else { return }
-            let action = UIAction(title: type.emoji + " " + type.description,
-                                  image: type == self.chosenType ? UIImage(systemName: "checkmark") : nil
-            ) { [weak self]  _ in
-                guard let self else { return }
-                self.chosenIndex = self.types.firstIndex(of: type) ?? 0
-                self.animateTypeChange()
-            }
-            typeSelectionActions.append(action)
-        }
-        
-        let goToMenu = UIMenu(title: "Go to", children: typeSelectionActions)
-        
-        return UIMenu(title: "", children: [managerAction, goToMenu])
-    }()
+    private var menu: UIMenu!
     
     init(types: [ActivityType]) {
         self.types = types
