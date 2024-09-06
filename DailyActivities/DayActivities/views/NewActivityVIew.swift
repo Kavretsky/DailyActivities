@@ -226,7 +226,7 @@ final class NewActivityView: UIView {
         typeButton.setTitle(chosenType.emoji, for: .normal)
         descriptionTF.placeholder = chosenType.description
         
-        UIView.animate(withDuration: 0.3, delay: 0, options: [.allowAnimatedContent, .allowUserInteraction]) {
+        UIView.animate(withDuration: 0.1, delay: 0, options: [.allowAnimatedContent, .allowUserInteraction]) {
             self.typeButtonBackground.backgroundColor = UIColor(rgbaColor: self.chosenType.backgroundRGBA)
         }
     }
