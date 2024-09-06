@@ -30,13 +30,13 @@ final class DayActivityVM: ObservableObject {
     
     private let chartDataService: ChartDataService
     private let activityRepository: ActivityReadableRepository & ActivityWritableRepository
-    private let typeRepository: ActivityTypeReadableRepository
+    private let typeRepository: ActivityTypeReadableRepository & ActivityTypePublisher
     private var cancellables = Set<AnyCancellable>()
     private let conflictActivitiesMutex = NSLock()
     private let timerMutex = NSRecursiveLock()
     let date: Date
 
-    init(activityRepository: ActivityReadableRepository & ActivityWritableRepository, typeRepository: ActivityTypeReadableRepository, delegate: DayActivityVMDelegate, date: Date) {
+    init(activityRepository: ActivityReadableRepository & ActivityWritableRepository, typeRepository: ActivityTypeReadableRepository & ActivityTypePublisher, delegate: DayActivityVMDelegate, date: Date) {
         self.date = date
         self.delegate = delegate
         self.activityRepository = activityRepository

@@ -10,10 +10,10 @@ import Combine
 
 class TypeManagerVM {
     @Published private(set) var types: [ActivityType] = []
-    private let typeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository
+    private let typeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository & ActivityTypePublisher
     private var cancellables = Set<AnyCancellable>()
     
-    init(activityTypeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository) {
+    init(activityTypeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository & ActivityTypePublisher) {
         self.typeRepository = activityTypeRepository
         types = typeRepository.types.filter { $0.isActive }
         typeRepository.typesPublisher

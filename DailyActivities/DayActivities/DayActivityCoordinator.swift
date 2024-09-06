@@ -9,13 +9,13 @@ import UIKit
 
 final class DayActivityCoordinator: Coordinator {
     let navigationController: UINavigationController
-    let activityTypeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository
+    let activityTypeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository & ActivityTypePublisher
     let activityRepository: ActivityReadableRepository & ActivityWritableRepository
     let date: Date
     
     init(navigationController: UINavigationController, 
          date: Date, 
-         activityTypeRepository: (ActivityTypeReadableRepository & ActivityTypeWritableRepository)? = nil,
+         activityTypeRepository: (ActivityTypeReadableRepository & ActivityTypeWritableRepository & ActivityTypePublisher)? = nil,
          activityRepository: (ActivityReadableRepository & ActivityWritableRepository)? = nil
     ) {
         self.date = date

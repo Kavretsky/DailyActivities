@@ -33,7 +33,7 @@ final class HistoryCoordinator: Coordinator {
 extension HistoryCoordinator: HistoryViewModelDelegate {
     func openDayActivityVC(for date: Date) {
         guard let activityRepository = activityRepository as? ActivityReadableRepository & ActivityWritableRepository,
-              let activityTypeRepository = activityTypeRepository as? ActivityTypeReadableRepository & ActivityTypeWritableRepository
+              let activityTypeRepository = activityTypeRepository as? ActivityTypeReadableRepository & ActivityTypeWritableRepository & ActivityTypePublisher
         else { return }
         let dayCoordinator = DayActivityCoordinator(navigationController: historyNC, date: date, activityTypeRepository: activityTypeRepository, activityRepository: activityRepository)
         dayCoordinator.start()

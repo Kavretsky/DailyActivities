@@ -50,6 +50,7 @@
 		76CA33302C5C2C5900AC3B92 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CA332F2C5C2C5900AC3B92 /* HistoryViewModel.swift */; };
 		76CA33332C5CD3E700AC3B92 /* ActivityCoreDataRepository+HistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CA33322C5CD3E700AC3B92 /* ActivityCoreDataRepository+HistoryRepository.swift */; };
 		76CA33362C5D25A600AC3B92 /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CA33352C5D25A600AC3B92 /* HistoryTableViewController.swift */; };
+		76E739E02C8B4D6C00D99780 /* ChartDataServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E739DF2C8B4D6C00D99780 /* ChartDataServiceTest.swift */; };
 		76F764FC2AFCE8210086C269 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */; };
 		76F8B7B82C4C42C5002B4B27 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */; };
 		76F8B7B92C4C42C5002B4B27 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */; };
@@ -129,6 +130,7 @@
 		76CA332F2C5C2C5900AC3B92 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
 		76CA33322C5CD3E700AC3B92 /* ActivityCoreDataRepository+HistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActivityCoreDataRepository+HistoryRepository.swift"; sourceTree = "<group>"; };
 		76CA33352C5D25A600AC3B92 /* HistoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
+		76E739DF2C8B4D6C00D99780 /* ChartDataServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDataServiceTest.swift; sourceTree = "<group>"; };
 		76F764FB2AFCE8210086C269 /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
 		76F8B7B72C4C42C5002B4B27 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		76F8B7C52C50371F002B4B27 /* DailyActivities.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DailyActivities.xcdatamodel; sourceTree = "<group>"; };
@@ -453,6 +455,7 @@
 		76CA33222C5C2BE200AC3B92 /* DailyActivitiesTests */ = {
 			isa = PBXGroup;
 			children = (
+				76E739DE2C8B4CEA00D99780 /* DayChart */,
 				768BAF832C8484F700DFD3A8 /* mocks */,
 				76CA332B2C5C2C0E00AC3B92 /* History */,
 			);
@@ -482,6 +485,14 @@
 				76F8B7E72C5A9A6E002B4B27 /* ActivityRepositoryMock.swift */,
 			);
 			path = mocks;
+			sourceTree = "<group>";
+		};
+		76E739DE2C8B4CEA00D99780 /* DayChart */ = {
+			isa = PBXGroup;
+			children = (
+				76E739DF2C8B4D6C00D99780 /* ChartDataServiceTest.swift */,
+			);
+			path = DayChart;
 			sourceTree = "<group>";
 		};
 		76F8B7BA2C4EC9F9002B4B27 /* coreData */ = {
@@ -726,6 +737,7 @@
 			files = (
 				768BAF852C84854A00DFD3A8 /* MockChartDataService.swift in Sources */,
 				768BAF872C84CE6600DFD3A8 /* MockHistoryVMDelegate.swift in Sources */,
+				76E739E02C8B4D6C00D99780 /* ChartDataServiceTest.swift in Sources */,
 				76CA332E2C5C2C4200AC3B92 /* HistoryViewModelTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

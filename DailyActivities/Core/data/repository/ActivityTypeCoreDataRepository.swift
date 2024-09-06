@@ -17,6 +17,9 @@ enum ActivityTypeCoreDataRepositoryError: Error {
 
 protocol ActivityTypeReadableRepository {
     var types: [ActivityType] { get }
+}
+
+protocol ActivityTypePublisher {
     var typesPublisher: Published<[ActivityType]>.Publisher { get }
 }
 
@@ -26,7 +29,7 @@ protocol ActivityTypeWritableRepository {
     func addType(with data: ActivityType.Data) async throws -> ActivityType
 }
 
-final class ActivityTypeCoreDataRepository: ActivityTypeReadableRepository, ActivityTypeWritableRepository {
+final class ActivityTypeCoreDataRepository: ActivityTypeReadableRepository, ActivityTypeWritableRepository, ActivityTypePublisher {
     @Published private(set) var types: [ActivityType] = []
     var typesPublisher: Published<[ActivityType]>.Publisher { $types }
     private let context: NSManagedObjectContext

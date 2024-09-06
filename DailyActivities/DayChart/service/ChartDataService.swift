@@ -11,7 +11,7 @@ protocol ChartDataService {
     func chartData(for activities: [Activity]) -> [ActivityChartModel]
 }
 
-class ChartDataServiceIml: ChartDataService {
+final class ChartDataServiceIml: ChartDataService {
 
     private let typeRepository: ActivityTypeReadableRepository
     

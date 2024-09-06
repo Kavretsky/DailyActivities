@@ -8,9 +8,9 @@ import UIKit
 
 final class TypeManagerCoordinator: Coordinator {
     private var navigationController: UINavigationController
-    private let activityTypeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository
+    private let activityTypeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository & ActivityTypePublisher
     
-    init(navigationController: UINavigationController, activityTypeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository) {
+    init(navigationController: UINavigationController, activityTypeRepository: ActivityTypeReadableRepository & ActivityTypeWritableRepository & ActivityTypePublisher) {
         self.navigationController = navigationController
         self.activityTypeRepository = activityTypeRepository
     }
